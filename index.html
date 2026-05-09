@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#4DB6AC">
+    <meta name="color-scheme" content="light">
+    <meta name="description" content="전운보초 5일 운전 연습 커리큘럼">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="전운보초">
+    <link rel="manifest" href="/public/manifest.json">
+    <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
+    <link rel="icon" href="/public/icons/favicon.ico" sizes="any">
+    <link rel="icon" href="/public/icons/favicon-32.png" type="image/png">
+    <link rel="stylesheet" href="/styles.css">
+    <title>전운보초</title>
+  </head>
+  <body>
+    <div class="app-shell">
+      <main class="phone">
+        <section class="screen screen--active" data-screen="curriculum">
+          <section class="hero-summary">
+            <div class="hero-summary__intro">
+              <span>전운보초 5일 코스</span>
+              <h1>오늘의 연수를 시작할까요?</h1>
+              <p>PASS를 모으면 다음 Day가 열립니다.</p>
+            </div>
+            <div class="hero-member-filter" id="hero-day-filter" aria-label="커리큘럼 빠른 이동"></div>
+            <div class="hero-summary__body">
+              <div class="hero-summary__flow">
+                <article class="metric-block metric-block--expense">
+                  <span>완료 레슨</span>
+                  <strong><span id="completed-count">0</span>/<span id="total-count">0</span></strong>
+                </article>
+                <article class="metric-block metric-block--income">
+                  <span>마스터 Day</span>
+                  <strong id="completed-days-count">0/5</strong>
+                </article>
+                <article class="metric-block metric-block--investment">
+                  <span>세이브</span>
+                  <strong id="save-status-label">로컬 저장</strong>
+                </article>
+              </div>
+              <div class="hero-summary__balance">
+                <div class="balance-block">
+                  <p>전체 진행률</p>
+                  <strong id="progress-percent">0%</strong>
+                </div>
+                <div class="progress-track" aria-hidden="true">
+                  <span id="progress-fill"></span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="list-panel curriculum-panel">
+            <div class="selected-date-box">
+                <strong id="app-title">학습 패스</strong>
+                <p id="records-caption" class="muted">Day 카드를 눌러 세부 레슨을 확인하고 완료 상태를 체크하세요.</p>
+            </div>
+            <div id="curriculum-list" class="records-list"></div>
+            <div class="status-panel" aria-live="polite">
+              <span class="status-dot" id="connection-dot" aria-hidden="true"></span>
+              <span id="connection-status">연결 상태 확인 중</span>
+            </div>
+          </section>
+        </section>
+
+        <section class="screen" data-screen="settings">
+          <header class="subscreen-header">
+            <div class="subscreen-header__title">
+              <h2>설정</h2>
+              <p>앱 설치와 학습 상태를 관리합니다.</p>
+            </div>
+          </header>
+          <section class="panel panel--settings">
+            <div class="settings-list">
+              <article class="settings-row">
+                <div class="stack">
+                  <strong>홈 화면에 추가</strong>
+                  <p>생성한 자동차 뒷범퍼 아이콘으로 설치됩니다.</p>
+                </div>
+                <button class="primary-button" id="open-install-dialog-button" type="button">설치 안내</button>
+              </article>
+              <article class="settings-row">
+                <div class="stack">
+                  <strong>전체 진척도</strong>
+                  <p id="settings-progress-label">0/28 항목 완료</p>
+                </div>
+                <div class="asset-progress" aria-label="전체 진척도">
+                  <span id="settings-progress-fill"></span>
+                </div>
+              </article>
+              <article class="settings-row settings-row--danger">
+                <div class="stack">
+                  <strong>진척도 초기화</strong>
+                  <p>저장된 체크 상태를 모두 지웁니다.</p>
+                </div>
+                <button class="secondary-button" id="reset-progress-button" type="button">초기화</button>
+              </article>
+            </div>
+          </section>
+        </section>
+
+        <button class="fab" id="complete-next-button" type="button" aria-label="다음 PASS">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 5v14"></path>
+            <path d="M5 12h14"></path>
+          </svg>
+        </button>
+
+        <nav class="tabbar" aria-label="주요 메뉴">
+          <button class="tabbar-button is-active" type="button" data-screen-target="curriculum" aria-label="홈">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M3 10.5 12 3l9 7.5"></path>
+              <path d="M5 10v10h14V10"></path>
+              <path d="M9 20v-6h6v6"></path>
+            </svg>
+          </button>
+          <button class="tabbar-button" type="button" data-screen-target="settings" aria-label="설정">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.52a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.52a2 2 0 0 1 1-1.72l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"></path>
+              <circle cx="12" cy="12" r="3"></circle>
+            </svg>
+          </button>
+        </nav>
+      </main>
+    </div>
+
+    <dialog class="install-dialog" id="install-dialog">
+      <form method="dialog" class="install-dialog__content">
+        <p class="section-label">Install</p>
+        <h2>홈 화면에 추가하여 앱처럼 사용하세요</h2>
+        <p id="install-description">설치 가능한 브라우저에서는 바로 설치를 시작합니다. iOS에서는 공유 버튼을 사용하세요.</p>
+        <ol class="install-steps" id="install-steps">
+          <li>브라우저 메뉴를 엽니다.</li>
+          <li>홈 화면에 추가 또는 앱 설치를 선택합니다.</li>
+          <li>전운보초 아이콘을 확인하고 추가합니다.</li>
+        </ol>
+        <div class="entry-form__actions">
+          <button class="secondary-button" value="cancel">닫기</button>
+          <button class="primary-button" id="install-action-button" value="default">설치 시도</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="guide-viewer" id="guide-viewer" aria-labelledby="guide-viewer-title">
+      <div class="guide-viewer__shell">
+        <header class="guide-viewer__header">
+          <div>
+            <p id="guide-viewer-day">Guide</p>
+            <h2 id="guide-viewer-title">가이드 자료</h2>
+          </div>
+          <button class="guide-viewer__close" id="guide-viewer-close" type="button" aria-label="닫기">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M18 6 6 18"></path>
+              <path d="m6 6 12 12"></path>
+            </svg>
+          </button>
+        </header>
+        <section class="guide-viewer__stage">
+          <button class="guide-viewer__nav guide-viewer__nav--prev" id="guide-viewer-prev" type="button" aria-label="이전 자료">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m15 18-6-6 6-6"></path>
+            </svg>
+          </button>
+          <div class="guide-carousel" id="guide-carousel" tabindex="0" aria-label="가이드 자료 캐러셀"></div>
+          <button class="guide-viewer__nav guide-viewer__nav--next" id="guide-viewer-next" type="button" aria-label="다음 자료">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m9 18 6-6-6-6"></path>
+            </svg>
+          </button>
+        </section>
+        <footer class="guide-viewer__footer">
+          <div class="guide-viewer__progress">
+            <span id="guide-page-label">1/1</span>
+            <div class="guide-dots" id="guide-dots" aria-hidden="true"></div>
+          </div>
+          <button class="guide-pass-button" id="guide-pass-button" type="button">학습 완료 PASS</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <script src="/app.js" defer></script>
+  </body>
+</html>
