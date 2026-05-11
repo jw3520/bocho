@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bocho-pwa-v14";
+const CACHE_VERSION = "bocho-pwa-v21";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",
@@ -16,7 +16,6 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches.open(CACHE_VERSION).then((cache) => cache.addAll(APP_SHELL_ASSETS)),
   );
-  self.skipWaiting();
 });
 
 self.addEventListener("activate", (event) => {
@@ -57,4 +56,10 @@ self.addEventListener("fetch", (event) => {
       return cachedResponse || networkResponse;
     }),
   );
+});
+
+self.addEventListener("message", (event) => {
+  if (event.data?.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });

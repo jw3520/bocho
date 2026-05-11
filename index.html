@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#4DB6AC">
+    <meta name="theme-color" content="#58CC02">
     <meta name="color-scheme" content="light">
     <meta name="description" content="전운보초 5일 운전 연습 커리큘럼">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,14 +17,90 @@
     <title>전운보초</title>
   </head>
   <body>
-    <div class="app-shell">
+    <div class="onboarding-flow" id="onboarding-flow" aria-live="polite">
+      <section class="onboarding-screen is-active" data-onboarding-step="welcome">
+        <div class="onboarding-visual onboarding-visual--welcome">
+          <img src="/public/icons/jeonwoon-bocho-bumper.png" alt="" aria-hidden="true">
+        </div>
+        <div class="onboarding-copy">
+          <p class="onboarding-kicker">전운보초</p>
+          <h1>체계적으로 운전을 배우거나 가르칠 수 있어요</h1>
+          <p>5일 코스로 기본 조작부터 실전 주행까지 차근차근 익혀보세요.</p>
+        </div>
+        <div class="onboarding-actions">
+          <button class="onboarding-primary" type="button" data-onboarding-next="role">시작하기</button>
+          <button class="onboarding-link" type="button" id="mock-login-button">이미 계정이 있다면? 로그인</button>
+        </div>
+      </section>
+
+      <section class="onboarding-screen" data-onboarding-step="role">
+        <div class="onboarding-step-header">
+          <span>1/3</span>
+          <h2>어떤 목적으로 시작하시나요?</h2>
+          <p>언제든지 설정을 바꿀 수 있으니 편하게 선택해 주세요.</p>
+        </div>
+        <div class="choice-list">
+          <button class="choice-card" type="button" data-role-option="closet">
+            <span class="choice-card__badge">장롱면허 · 완전 기초형</span>
+            <strong>면허는 있지만 아직은 겁나요</strong>
+            <p>기초 조작법부터 차근차근 다시 배우고 싶어요.</p>
+          </button>
+          <button class="choice-card" type="button" data-role-option="beginner">
+            <span class="choice-card__badge">초보운전 · 실전 주행형</span>
+            <strong>혼자서도 당당하게 운전하고 싶어요</strong>
+            <p>주행 경험은 있지만, 실전 노하우와 자신감이 필요해요.</p>
+          </button>
+          <button class="choice-card" type="button" data-role-option="coach">
+            <span class="choice-card__badge">지도자 · 서포터형</span>
+            <strong>안전한 운전 습관을 길러주고 싶어요</strong>
+            <p>지인이나 가족에게 나만의 운전 노하우를 공유하고 싶어요.</p>
+          </button>
+        </div>
+      </section>
+
+      <section class="onboarding-screen" data-onboarding-step="gender">
+        <div class="onboarding-step-header">
+          <span>2/3</span>
+          <h2>성별이 어떻게 되시나요?</h2>
+          <p>프로필에 맞는 말투와 추천 문구를 구성할게요.</p>
+        </div>
+        <div class="gender-grid">
+          <button class="gender-card" type="button" data-gender-option="male">
+            <span>♂</span>
+            <strong>남성</strong>
+          </button>
+          <button class="gender-card" type="button" data-gender-option="female">
+            <span>♀</span>
+            <strong>여성</strong>
+          </button>
+        </div>
+      </section>
+
+      <section class="onboarding-screen" data-onboarding-step="nickname">
+        <div class="onboarding-step-header">
+          <span>3/3</span>
+          <h2>닉네임을 입력해주세요.</h2>
+          <p>홈 화면에서 부를 이름이에요.</p>
+        </div>
+        <div class="nickname-panel">
+          <label for="nickname-input">닉네임</label>
+          <input id="nickname-input" type="text" maxlength="14" placeholder="예: 도로연습러" autocomplete="nickname">
+          <button class="suggestion-chip" id="nickname-suggest-button" type="button">추천 "도로연습러"</button>
+        </div>
+        <div class="onboarding-actions">
+          <button class="onboarding-primary" id="finish-onboarding-button" type="button" disabled>완료 / 시작하기</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="app-shell" id="app-shell" hidden>
       <main class="phone">
         <section class="screen screen--active" data-screen="curriculum">
           <section class="hero-summary">
             <div class="hero-summary__intro">
-              <span>전운보초 5일 코스</span>
-              <h1>오늘의 연수를 시작할까요?</h1>
-              <p>PASS를 모으면 다음 Day가 열립니다.</p>
+              <span id="home-role-label">전운보초 5일 코스</span>
+              <h1 id="home-greeting">오늘의 연수를 시작할까요?</h1>
+              <p id="home-subtitle">오늘도 하나씩 눌러가며 실전 감각을 올려봐요.</p>
             </div>
             <div class="hero-member-filter" id="hero-day-filter" aria-label="커리큘럼 빠른 이동"></div>
             <div class="hero-summary__body">
@@ -54,10 +130,21 @@
             </div>
           </section>
 
+          <section class="update-banner is-hidden" id="main-update-banner" aria-live="polite">
+            <div class="update-banner__body">
+              <strong>새 버전이 준비됐어요</strong>
+              <p>업데이트하면 최신 수정사항이 바로 반영됩니다.</p>
+            </div>
+            <div class="update-banner__actions">
+              <button class="secondary-button" id="dismiss-update-banner-button" type="button">나중에</button>
+              <button class="primary-button" id="apply-update-banner-button" type="button">업데이트</button>
+            </div>
+          </section>
+
           <section class="list-panel curriculum-panel">
             <div class="selected-date-box">
                 <strong id="app-title">학습 패스</strong>
-                <p id="records-caption" class="muted">Day 카드를 눌러 세부 레슨을 확인하고 완료 상태를 체크하세요.</p>
+                <p id="records-caption" class="muted">동그란 Day 노드를 눌러 세부 레슨을 열고 PASS를 모으세요.</p>
             </div>
             <div id="curriculum-list" class="records-list"></div>
             <div class="status-panel" aria-live="polite">
@@ -76,6 +163,14 @@
           </header>
           <section class="panel panel--settings">
             <div class="settings-list">
+              <article class="settings-row settings-row--update">
+                <div class="stack">
+                  <strong>앱 최신버전 업데이트</strong>
+                  <p id="update-version-label">ver 1.00.00</p>
+                  <p id="update-time-label">마지막 확인: 아직 기록이 없어요.</p>
+                </div>
+                <button class="secondary-button" id="clear-web-cache-button" type="button">업데이트</button>
+              </article>
               <article class="settings-row">
                 <div class="stack">
                   <strong>홈 화면에 추가</strong>
@@ -99,6 +194,13 @@
                 </div>
                 <button class="secondary-button" id="reset-progress-button" type="button">초기화</button>
               </article>
+              <article class="settings-row settings-row--danger">
+                <div class="stack">
+                  <strong>로그아웃</strong>
+                  <p>프로필과 진척도는 이 기기에 남겨두고 시작 화면으로 돌아갑니다.</p>
+                </div>
+                <button class="secondary-button secondary-button--danger" id="logout-button" type="button">로그아웃</button>
+              </article>
             </div>
           </section>
         </section>
@@ -119,6 +221,7 @@
             </svg>
           </button>
           <button class="tabbar-button" type="button" data-screen-target="settings" aria-label="설정">
+            <span class="tabbar-button__badge update-badge" id="settings-update-badge" hidden></span>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.52a2 2 0 0 1-1 1.72l-.15.1a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.38a2 2 0 0 0-.73-2.73l-.15-.1a2 2 0 0 1-1-1.72v-.52a2 2 0 0 1 1-1.72l.15-.1a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2Z"></path>
               <circle cx="12" cy="12" r="3"></circle>

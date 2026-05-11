@@ -1,4 +1,12 @@
 const STORAGE_KEY = "jeonwoon-bocho-progress-v1";
+const ONBOARDING_KEY = "jeonwoon-bocho-onboarding-v1";
+const SESSION_KEY = "jeonwoon-bocho-session-v1";
+const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
+const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
+const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
+const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
+const APP_VERSION = "1.00.21";
+const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
   {
@@ -92,6 +100,14 @@ const elements = {
   screens: [...document.querySelectorAll("[data-screen]")],
   completeNextButton: document.querySelector("#complete-next-button"),
   resetProgressButton: document.querySelector("#reset-progress-button"),
+  logoutButton: document.querySelector("#logout-button"),
+  mainUpdateBanner: document.querySelector("#main-update-banner"),
+  applyUpdateBannerButton: document.querySelector("#apply-update-banner-button"),
+  dismissUpdateBannerButton: document.querySelector("#dismiss-update-banner-button"),
+  clearWebCacheButton: document.querySelector("#clear-web-cache-button"),
+  settingsUpdateBadge: document.querySelector("#settings-update-badge"),
+  updateVersionLabel: document.querySelector("#update-version-label"),
+  updateTimeLabel: document.querySelector("#update-time-label"),
   installDialog: document.querySelector("#install-dialog"),
   openInstallDialogButton: document.querySelector("#open-install-dialog-button"),
   installActionButton: document.querySelector("#install-action-button"),
@@ -107,6 +123,19 @@ const elements = {
   guidePrevButton: document.querySelector("#guide-viewer-prev"),
   guideNextButton: document.querySelector("#guide-viewer-next"),
   guidePassButton: document.querySelector("#guide-pass-button"),
+  onboardingFlow: document.querySelector("#onboarding-flow"),
+  appShell: document.querySelector("#app-shell"),
+  onboardingScreens: [...document.querySelectorAll("[data-onboarding-step]")],
+  startButton: document.querySelector("[data-onboarding-next='role']"),
+  mockLoginButton: document.querySelector("#mock-login-button"),
+  roleButtons: [...document.querySelectorAll("[data-role-option]")],
+  genderButtons: [...document.querySelectorAll("[data-gender-option]")],
+  nicknameInput: document.querySelector("#nickname-input"),
+  nicknameSuggestButton: document.querySelector("#nickname-suggest-button"),
+  finishOnboardingButton: document.querySelector("#finish-onboarding-button"),
+  homeRoleLabel: document.querySelector("#home-role-label"),
+  homeGreeting: document.querySelector("#home-greeting"),
+  homeSubtitle: document.querySelector("#home-subtitle"),
 };
 
 const totalItems = curriculum.reduce((sum, day) => sum + day.items.length, 0);
@@ -115,8 +144,53 @@ let expandedDayId = null;
 let deferredInstallPrompt = null;
 let celebratedTaskId = null;
 let activeGuideTaskId = null;
+let swRegistrationRef = null;
+let reloadingForServiceWorker = false;
+let onboardingDraft = loadOnboarding() || {
+  step: "welcome",
+  role: "",
+  gender: "",
+  nickname: "",
+  completed: false,
+};
+const pwaUpdateState = {
+  updateAvailable: localStorage.getItem(UPDATE_SEEN_STORAGE_KEY) === "1",
+  updateToken: localStorage.getItem(UPDATE_BANNER_TOKEN_STORAGE_KEY) || "",
+  lastUpdateCheckedAt: Number(localStorage.getItem(LAST_UPDATE_CHECK_STORAGE_KEY) || 0),
+  currentScreen: "curriculum",
+};
 
-const dayIcons = ["🚗", "🛣️", "🅿️", "🚦", "🏁"];
+const dayNumbers = ["1", "2", "3", "4", "5"];
+const roleCopy = {
+  closet: {
+    label: "장롱면허 · 완전 기초형",
+    title: "기초부터 다시 잡는 연수 코스",
+    subtitle: "조작법과 감각을 천천히 되찾는 흐름으로 준비했어요.",
+  },
+  beginner: {
+    label: "초보운전 · 실전 주행형",
+    title: "오늘도 한 단계 더 당당하게",
+    subtitle: "실전 주행에서 바로 쓸 수 있는 감각을 쌓아보세요.",
+  },
+  coach: {
+    label: "지도자 · 서포터형",
+    title: "연수 지도 가이드를 시작해볼까요?",
+    subtitle: "초보 운전자가 안전하게 익힐 수 있도록 단계별로 확인하세요.",
+  },
+  guest: {
+    label: "게스트 모드",
+    title: "오늘의 연수를 시작할까요?",
+    subtitle: "오늘도 하나씩 눌러가며 실전 감각을 올려봐요.",
+  },
+};
+const nicknameSuggestions = [
+  "도로연습러",
+  "차선연습러",
+  "주차연습러",
+  "안전주행러",
+  "실전연습러",
+  "도로적응중",
+];
 const GUIDE_CONTENTS = {
   "day1-item1": [
     "guide/guide/Day1/Item1_운전자세/Content1.png",
@@ -177,6 +251,42 @@ function loadProgress() {
   }
 }
 
+function loadOnboarding() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(ONBOARDING_KEY));
+    return saved && typeof saved === "object" ? saved : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveOnboarding() {
+  localStorage.setItem(ONBOARDING_KEY, JSON.stringify(onboardingDraft));
+}
+
+function hasSavedProfile() {
+  const profile = loadOnboarding();
+  return Boolean(profile?.completed && profile.nickname);
+}
+
+function hasActiveSession() {
+  try {
+    const session = JSON.parse(localStorage.getItem(SESSION_KEY));
+    return Boolean(session?.active);
+  } catch {
+    return false;
+  }
+}
+
+function setActiveSession(active) {
+  if (active) {
+    localStorage.setItem(SESSION_KEY, JSON.stringify({ active: true, updatedAt: Date.now() }));
+    return;
+  }
+
+  localStorage.removeItem(SESSION_KEY);
+}
+
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progressState));
 }
@@ -219,12 +329,23 @@ function renderCurriculum() {
   elements.totalCount.textContent = totalItems;
   renderDayFilter();
   elements.list.innerHTML = curriculum.map(renderDay).join("");
+  elements.startButton.addEventListener("click", startNewProfile);
+  elements.mockLoginButton.addEventListener("click", loginWithSavedProfile);
+  elements.roleButtons.forEach((button) => button.addEventListener("click", handleRoleSelect));
+  elements.genderButtons.forEach((button) => button.addEventListener("click", handleGenderSelect));
+  elements.nicknameSuggestButton.addEventListener("click", suggestNickname);
+  elements.finishOnboardingButton.addEventListener("click", finishOnboarding);
+  elements.nicknameInput.addEventListener("input", handleNicknameInput);
   elements.list.addEventListener("change", handleChecklistChange);
   elements.dayFilter.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
   elements.completeNextButton.addEventListener("click", completeNextTask);
   elements.resetProgressButton.addEventListener("click", resetProgress);
+  elements.logoutButton.addEventListener("click", logout);
+  elements.dismissUpdateBannerButton.addEventListener("click", dismissMainUpdateBanner);
+  elements.applyUpdateBannerButton.addEventListener("click", openSettingsForUpdate);
+  elements.clearWebCacheButton.addEventListener("click", clearWebCacheAndReload);
   elements.openInstallDialogButton.addEventListener("click", openInstallGuide);
   elements.installActionButton.addEventListener("click", handleInstallAction);
   elements.guideViewerClose.addEventListener("click", closeGuideViewer);
@@ -235,7 +356,200 @@ function renderCurriculum() {
   elements.guideNextButton.addEventListener("click", () => moveGuideSlide(1));
   elements.guidePassButton.addEventListener("click", completeActiveGuideTask);
   window.addEventListener("keydown", handleGuideKeydown);
+  initOnboarding();
+  syncUpdateUi();
   updateProgress();
+}
+
+function initOnboarding() {
+  if (hasSavedProfile() && hasActiveSession()) {
+    onboardingDraft = loadOnboarding();
+    showAppShell();
+    return;
+  }
+
+  setActiveSession(false);
+  elements.appShell.hidden = true;
+  elements.onboardingFlow.hidden = false;
+  onboardingDraft = loadOnboarding() || onboardingDraft;
+  updateWelcomeActions();
+  reflectOnboardingDraft();
+  showOnboardingStep("welcome");
+}
+
+function reflectOnboardingDraft() {
+  elements.roleButtons.forEach((button) =>
+    button.classList.toggle("is-selected", button.dataset.roleOption === onboardingDraft.role),
+  );
+  elements.genderButtons.forEach((button) =>
+    button.classList.toggle("is-selected", button.dataset.genderOption === onboardingDraft.gender),
+  );
+  elements.nicknameInput.value = onboardingDraft.nickname || "";
+  handleNicknameInput();
+}
+
+function showOnboardingStep(step) {
+  onboardingDraft.step = step;
+  elements.onboardingScreens.forEach((screen) => {
+    screen.classList.toggle("is-active", screen.dataset.onboardingStep === step);
+  });
+  saveOnboarding();
+}
+
+function updateWelcomeActions() {
+  const hasProfile = hasSavedProfile();
+
+  elements.startButton.textContent = hasProfile ? "시작하기(새로 만들기)" : "시작하기";
+  elements.mockLoginButton.textContent = hasProfile
+    ? "저장된 계정으로 로그인"
+    : "이미 계정이 있다면? 로그인";
+}
+
+function handleRoleSelect(event) {
+  onboardingDraft.role = event.currentTarget.dataset.roleOption;
+  elements.roleButtons.forEach((button) =>
+    button.classList.toggle("is-selected", button === event.currentTarget),
+  );
+  showOnboardingStep("gender");
+}
+
+function handleGenderSelect(event) {
+  onboardingDraft.gender = event.currentTarget.dataset.genderOption;
+  elements.genderButtons.forEach((button) =>
+    button.classList.toggle("is-selected", button === event.currentTarget),
+  );
+  showOnboardingStep("nickname");
+  elements.nicknameInput.focus();
+}
+
+function handleNicknameInput() {
+  onboardingDraft.nickname = elements.nicknameInput.value.trim();
+  elements.finishOnboardingButton.disabled = onboardingDraft.nickname.length < 2;
+  saveOnboarding();
+}
+
+function resetOnboardingDraft() {
+  onboardingDraft = {
+    step: "welcome",
+    role: "",
+    gender: "",
+    nickname: "",
+    completed: false,
+  };
+  elements.nicknameInput.value = "";
+  reflectOnboardingDraft();
+}
+
+function startNewProfile() {
+  if (hasSavedProfile()) {
+    const confirmed = window.confirm(
+      "기존 저장된 데이터가 있습니다. 새로 시작하면 기존 데이터가 삭제됩니다. 계속하시겠습니까?",
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    localStorage.removeItem(ONBOARDING_KEY);
+    localStorage.removeItem(STORAGE_KEY);
+    setActiveSession(false);
+    progressState = {};
+    resetOnboardingDraft();
+    updateWelcomeActions();
+    updateProgress();
+  }
+
+  showOnboardingStep("role");
+}
+
+function loginWithSavedProfile() {
+  const savedProfile = loadOnboarding();
+
+  if (!savedProfile?.completed) {
+    window.alert("저장된 계정 정보가 없습니다. 새로 시작해주세요.");
+    return;
+  }
+
+  onboardingDraft = savedProfile;
+  progressState = loadProgress();
+  setActiveSession(true);
+  showAppShell();
+}
+
+function suggestNickname() {
+  const roleIndex = ["closet", "beginner", "coach"].indexOf(onboardingDraft.role);
+  const genderOffset = onboardingDraft.gender === "female" ? 1 : 0;
+  const suggestion = nicknameSuggestions[Math.max(roleIndex, 0) + genderOffset] || nicknameSuggestions[0];
+
+  elements.nicknameInput.value = suggestion;
+  elements.nicknameInput.dispatchEvent(new Event("input"));
+  elements.nicknameInput.focus();
+}
+
+function finishOnboarding() {
+  const nickname = elements.nicknameInput.value.trim();
+
+  if (!onboardingDraft.role || !onboardingDraft.gender || nickname.length < 2) {
+    return;
+  }
+
+  onboardingDraft.nickname = nickname;
+  onboardingDraft.completed = true;
+  onboardingDraft.step = "done";
+  saveOnboarding();
+  setActiveSession(true);
+  showAppShell();
+}
+
+function skipOnboarding() {
+  onboardingDraft = {
+    role: "guest",
+    gender: "unknown",
+    nickname: "게스트",
+    completed: true,
+    step: "done",
+  };
+  saveOnboarding();
+  setActiveSession(true);
+  showAppShell();
+}
+
+function showAppShell() {
+  elements.onboardingFlow.hidden = true;
+  elements.appShell.hidden = false;
+  updateHomeProfile();
+  updateProgress();
+}
+
+function logout() {
+  setActiveSession(false);
+  closeGuideViewerIfOpen();
+  elements.screens.forEach((screen) =>
+    screen.classList.toggle("screen--active", screen.dataset.screen === "curriculum"),
+  );
+  elements.tabButtons.forEach((button) =>
+    button.classList.toggle("is-active", button.dataset.screenTarget === "curriculum"),
+  );
+  elements.appShell.hidden = true;
+  elements.onboardingFlow.hidden = false;
+  updateWelcomeActions();
+  showOnboardingStep("welcome");
+}
+
+function closeGuideViewerIfOpen() {
+  if (elements.guideViewer.open) {
+    closeGuideViewer();
+  }
+}
+
+function updateHomeProfile() {
+  const profile = loadOnboarding() || onboardingDraft;
+  const copy = roleCopy[profile.role] || roleCopy.guest;
+  const nickname = profile.nickname || "운전자";
+
+  elements.homeRoleLabel.textContent = copy.label;
+  elements.homeGreeting.textContent = `${nickname}님, ${copy.title}`;
+  elements.homeSubtitle.textContent = copy.subtitle;
 }
 
 function renderDayFilter() {
@@ -275,8 +589,11 @@ function renderDay(day) {
   return `
     <section class="course-card${stateClass}${doneClass}${selectedClass}" data-day-id="${day.id}" data-day-state="${state}">
       <button class="course-card__button" type="button" data-day-open="${day.id}" aria-expanded="${isExpanded}">
-        <div class="course-node" aria-hidden="true">
-          <span class="course-node__icon">${state === "completed" ? "✓" : dayIcons[index]}</span>
+        <div class="course-node-wrap">
+          <div class="course-node" aria-hidden="true">
+            <span class="course-node__icon">${state === "completed" ? "✓" : dayNumbers[index]}</span>
+          </div>
+          <span class="course-node-wrap__label">${status.completed}/${status.total}</span>
         </div>
         <div class="course-card__copy">
           <span class="day-chip">${day.day} · ${stateLabel}</span>
@@ -395,12 +712,14 @@ function handleTabClick(event) {
   const button = event.currentTarget;
   const target = button.dataset.screenTarget;
 
+  pwaUpdateState.currentScreen = target;
   elements.tabButtons.forEach((tabButton) =>
     tabButton.classList.toggle("is-active", tabButton === button),
   );
   elements.screens.forEach((screen) =>
     screen.classList.toggle("screen--active", screen.dataset.screen === target),
   );
+  syncUpdateUi();
 }
 
 function completeNextTask() {
@@ -411,8 +730,14 @@ function completeNextTask() {
   }
 
   progressState[nextTask.id] = true;
+  celebratedTaskId = nextTask.id;
   saveProgress();
   updateProgress();
+
+  window.setTimeout(() => {
+    celebratedTaskId = null;
+    updateProgress();
+  }, 680);
 }
 
 function resetProgress() {
@@ -589,19 +914,312 @@ function updateConnectionStatus() {
   elements.connectionDot.classList.toggle("is-offline", !isOnline);
 }
 
+function ensureUpdateToken() {
+  if (pwaUpdateState.updateToken) {
+    return pwaUpdateState.updateToken;
+  }
+
+  const stored = localStorage.getItem(UPDATE_BANNER_TOKEN_STORAGE_KEY);
+  if (stored) {
+    pwaUpdateState.updateToken = stored;
+    return stored;
+  }
+
+  const nextToken = `update-${Date.now()}`;
+  pwaUpdateState.updateToken = nextToken;
+  localStorage.setItem(UPDATE_BANNER_TOKEN_STORAGE_KEY, nextToken);
+  return nextToken;
+}
+
+function shouldShowMainUpdateBanner() {
+  if (!pwaUpdateState.updateAvailable) {
+    return false;
+  }
+
+  if (pwaUpdateState.currentScreen !== "curriculum") {
+    return false;
+  }
+
+  const dismissedToken = localStorage.getItem(UPDATE_BANNER_DISMISSED_STORAGE_KEY);
+  return !dismissedToken || dismissedToken !== pwaUpdateState.updateToken;
+}
+
+function showUpdateAvailableUI() {
+  ensureUpdateToken();
+  setUpdateAvailable(true);
+}
+
+function hideUpdateAvailableUI() {
+  pwaUpdateState.updateToken = "";
+  localStorage.removeItem(UPDATE_BANNER_TOKEN_STORAGE_KEY);
+  localStorage.removeItem(UPDATE_BANNER_DISMISSED_STORAGE_KEY);
+  setUpdateAvailable(false);
+}
+
+function setUpdateAvailable(isAvailable) {
+  pwaUpdateState.updateAvailable = Boolean(isAvailable);
+
+  if (pwaUpdateState.updateAvailable) {
+    localStorage.setItem(UPDATE_SEEN_STORAGE_KEY, "1");
+  } else {
+    localStorage.removeItem(UPDATE_SEEN_STORAGE_KEY);
+  }
+
+  syncUpdateUi();
+}
+
+function syncUpdateUi() {
+  if (elements.settingsUpdateBadge) {
+    elements.settingsUpdateBadge.hidden = !pwaUpdateState.updateAvailable;
+  }
+
+  if (elements.mainUpdateBanner) {
+    elements.mainUpdateBanner.classList.toggle("is-hidden", !shouldShowMainUpdateBanner());
+  }
+
+  if (elements.clearWebCacheButton) {
+    elements.clearWebCacheButton.classList.toggle("primary-button", pwaUpdateState.updateAvailable);
+    elements.clearWebCacheButton.classList.toggle("secondary-button", !pwaUpdateState.updateAvailable);
+    elements.clearWebCacheButton.classList.toggle(
+      "is-pulsing",
+      pwaUpdateState.updateAvailable && pwaUpdateState.currentScreen === "settings",
+    );
+  }
+
+  elements.applyUpdateBannerButton?.classList.toggle("is-pulsing", shouldShowMainUpdateBanner());
+  syncUpdateTimestampUi();
+}
+
+function syncUpdateTimestampUi() {
+  if (elements.updateVersionLabel) {
+    elements.updateVersionLabel.textContent = `ver ${APP_VERSION}`;
+  }
+
+  if (!elements.updateTimeLabel) {
+    return;
+  }
+
+  elements.updateTimeLabel.textContent = pwaUpdateState.lastUpdateCheckedAt
+    ? `마지막 확인: ${formatRelativeTime(pwaUpdateState.lastUpdateCheckedAt)}`
+    : "마지막 확인: 아직 기록이 없어요.";
+}
+
+function formatRelativeTime(timestamp) {
+  const seconds = Math.max(0, Math.round((Date.now() - timestamp) / 1000));
+
+  if (seconds < 60) {
+    return "방금 전";
+  }
+
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) {
+    return `${minutes}분 전`;
+  }
+
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) {
+    return `${hours}시간 전`;
+  }
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    month: "short",
+    day: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(timestamp);
+}
+
+function markUpdateChecked() {
+  pwaUpdateState.lastUpdateCheckedAt = Date.now();
+  localStorage.setItem(LAST_UPDATE_CHECK_STORAGE_KEY, String(pwaUpdateState.lastUpdateCheckedAt));
+  syncUpdateTimestampUi();
+}
+
+function dismissMainUpdateBanner() {
+  const token = ensureUpdateToken();
+  localStorage.setItem(UPDATE_BANNER_DISMISSED_STORAGE_KEY, token);
+  syncUpdateUi();
+}
+
+function openSettingsForUpdate() {
+  const settingsButton = elements.tabButtons.find((button) => button.dataset.screenTarget === "settings");
+  settingsButton?.click();
+  window.setTimeout(() => elements.clearWebCacheButton?.focus(), 120);
+}
+
+async function detectCachedAssetUpdate() {
+  if (!("caches" in window)) {
+    return false;
+  }
+
+  for (const asset of UPDATE_CHECK_ASSETS) {
+    try {
+      const [cachedResponse, networkResponse] = await Promise.all([
+        caches.match(asset),
+        fetch(`${asset}${asset.includes("?") ? "&" : "?"}t=${Date.now()}`, { cache: "no-store" }),
+      ]);
+
+      if (!cachedResponse || !networkResponse.ok) {
+        continue;
+      }
+
+      const [cachedText, networkText] = await Promise.all([cachedResponse.text(), networkResponse.text()]);
+      if (cachedText !== networkText) {
+        return true;
+      }
+    } catch {
+      // Keep the existing update UI if a transient check fails.
+    }
+  }
+
+  return false;
+}
+
+async function clearAppCaches() {
+  if (!("caches" in window)) {
+    return;
+  }
+
+  const keys = await caches.keys();
+  await Promise.all(keys.map((key) => caches.delete(key)));
+}
+
+async function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) {
+    console.warn("[PWA] serviceWorker not supported in this browser.");
+    return;
+  }
+
+  try {
+    const hadPendingUpdate = localStorage.getItem(UPDATE_SEEN_STORAGE_KEY) === "1";
+
+    if (hadPendingUpdate) {
+      showUpdateAvailableUI();
+    }
+
+    const registration = await navigator.serviceWorker.register("/service-worker.js");
+    swRegistrationRef = registration;
+
+    if (registration.waiting) {
+      showUpdateAvailableUI();
+      markUpdateChecked();
+    }
+
+    registration.addEventListener("updatefound", () => {
+      const installingWorker = registration.installing;
+      if (!installingWorker) {
+        return;
+      }
+
+      installingWorker.addEventListener("statechange", () => {
+        if (installingWorker.state === "installed" && navigator.serviceWorker.controller) {
+          showUpdateAvailableUI();
+          markUpdateChecked();
+        }
+      });
+    });
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (reloadingForServiceWorker) {
+        return;
+      }
+
+      reloadingForServiceWorker = true;
+      hideUpdateAvailableUI();
+      window.location.reload();
+    });
+
+    await registration.update();
+
+    if (registration.waiting) {
+      showUpdateAvailableUI();
+      markUpdateChecked();
+      return;
+    }
+
+    if (hadPendingUpdate) {
+      markUpdateChecked();
+      return;
+    }
+
+    const hasAssetUpdate = await detectCachedAssetUpdate();
+    if (hasAssetUpdate) {
+      showUpdateAvailableUI();
+    } else {
+      hideUpdateAvailableUI();
+    }
+    markUpdateChecked();
+  } catch (error) {
+    console.error("[PWA] service worker registration failed:", error);
+  }
+}
+
+async function clearWebCacheAndReload() {
+  const originalText = elements.clearWebCacheButton.textContent;
+  elements.clearWebCacheButton.textContent = "확인 중...";
+  elements.clearWebCacheButton.disabled = true;
+
+  try {
+    const shouldActivateWaitingWorker = pwaUpdateState.updateAvailable && Boolean(swRegistrationRef?.waiting);
+
+    if (shouldActivateWaitingWorker) {
+      hideUpdateAvailableUI();
+      markUpdateChecked();
+      swRegistrationRef.waiting.postMessage({ type: "SKIP_WAITING" });
+      window.setTimeout(() => {
+        if (!reloadingForServiceWorker) {
+          window.location.reload();
+        }
+      }, 300);
+      return;
+    }
+
+    if (swRegistrationRef) {
+      await swRegistrationRef.update();
+      markUpdateChecked();
+
+      if (swRegistrationRef.waiting) {
+        showUpdateAvailableUI();
+        swRegistrationRef.waiting.postMessage({ type: "SKIP_WAITING" });
+        window.setTimeout(() => {
+          if (!reloadingForServiceWorker) {
+            window.location.reload();
+          }
+        }, 300);
+        return;
+      }
+    }
+
+    const hasAssetUpdate = await detectCachedAssetUpdate();
+    if (hasAssetUpdate || pwaUpdateState.updateAvailable) {
+      hideUpdateAvailableUI();
+      await clearAppCaches();
+      window.location.reload();
+      return;
+    }
+
+    elements.clearWebCacheButton.textContent = "최신 상태";
+    hideUpdateAvailableUI();
+    window.setTimeout(() => {
+      elements.clearWebCacheButton.textContent = originalText;
+      elements.clearWebCacheButton.disabled = false;
+      syncUpdateUi();
+    }, 900);
+  } catch (error) {
+    console.error("[PWA] failed to apply update:", error);
+    elements.clearWebCacheButton.textContent = "다시 시도";
+    elements.clearWebCacheButton.disabled = false;
+    syncUpdateUi();
+  }
+}
+
 renderCurriculum();
 
 window.addEventListener("online", updateConnectionStatus);
 window.addEventListener("offline", updateConnectionStatus);
 updateConnectionStatus();
 
-if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker.register("/service-worker.js").catch((error) => {
-      console.error("Service worker registration failed:", error);
-    });
-  });
-}
+window.addEventListener("load", registerServiceWorker);
 
 window.addEventListener("beforeinstallprompt", (event) => {
   event.preventDefault();
