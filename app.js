@@ -5,7 +5,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.21";
+const APP_VERSION = "1.00.22";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -328,7 +328,7 @@ function getDayState(day) {
 function renderCurriculum() {
   elements.totalCount.textContent = totalItems;
   renderDayFilter();
-  elements.list.innerHTML = curriculum.map(renderDay).join("");
+  elements.list.innerHTML = renderRoadExperience();
   elements.startButton.addEventListener("click", startNewProfile);
   elements.mockLoginButton.addEventListener("click", loginWithSavedProfile);
   elements.roleButtons.forEach((button) => button.addEventListener("click", handleRoleSelect));
@@ -553,6 +553,7 @@ function updateHomeProfile() {
 }
 
 function renderDayFilter() {
+  ensureSelectedDay();
   elements.dayFilter.innerHTML = curriculum
     .map((day, index) => {
       const state = getDayState(day);
@@ -563,7 +564,40 @@ function renderDayFilter() {
     .join("");
 }
 
-function renderDay(day) {
+function ensureSelectedDay() {
+  if (expandedDayId && curriculum.some((day) => day.id === expandedDayId)) {
+    return;
+  }
+
+  expandedDayId = curriculum[getFirstIncompleteIndex()]?.id || curriculum[0]?.id || null;
+}
+
+function renderRoadExperience() {
+  ensureSelectedDay();
+  const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
+  const currentDayIndex = getFirstIncompleteIndex();
+
+  return `
+    <section class="road-course" aria-label="Day별 주행 코스">
+      <div class="road-course__hint">
+        <span>Swipe road</span>
+        <strong>원하는 Day를 언제든 선택하세요</strong>
+      </div>
+      <div class="road-scroll" tabindex="0" aria-label="좌우로 스와이프 가능한 도로">
+        <div class="road-track" style="--car-index:${currentDayIndex}">
+          <div class="road-lane" aria-hidden="true"></div>
+          <div class="progress-car" aria-hidden="true">🚕</div>
+          <div class="road-nodes">
+            ${curriculum.map(renderRoadDayNode).join("")}
+          </div>
+        </div>
+      </div>
+    </section>
+    ${renderSelectedDayPanel(selectedDay)}
+  `;
+}
+
+function renderRoadDayNode(day, index) {
   const status = getDayCompletion(day);
   const state = getDayState(day);
   const doneClass = status.isDone ? " is-complete" : "";
@@ -571,45 +605,61 @@ function renderDay(day) {
   const selectedClass = isExpanded ? " is-selected" : "";
   const stateClass = ` course-card--${state}`;
   const ratio = Math.round((status.completed / status.total) * 100);
-  const detail = isExpanded
-    ? `<div class="course-detail">${day.items.map((task) => renderTask(task)).join("")}</div>`
-    : "";
   const stateLabel = {
     completed: "완료됨",
     active: status.completed > 0 ? "진행중" : "시작 가능",
     available: "열람 가능",
   }[state];
-  const actionLabel = {
-    completed: isExpanded ? "접기" : "복습하기",
-    active: isExpanded ? "접기" : status.completed > 0 ? "계속하기" : "시작하기",
-    available: isExpanded ? "접기" : "살펴보기",
-  }[state];
-  const index = curriculum.findIndex((entry) => entry.id === day.id);
 
   return `
-    <section class="course-card${stateClass}${doneClass}${selectedClass}" data-day-id="${day.id}" data-day-state="${state}">
-      <button class="course-card__button" type="button" data-day-open="${day.id}" aria-expanded="${isExpanded}">
+    <article class="course-card road-day${stateClass}${doneClass}${selectedClass}" data-day-id="${day.id}" data-day-state="${state}">
+      <button class="course-card__button road-day__button" type="button" data-day-open="${day.id}" aria-pressed="${isExpanded}">
         <div class="course-node-wrap">
           <div class="course-node" aria-hidden="true">
             <span class="course-node__icon">${state === "completed" ? "✓" : dayNumbers[index]}</span>
           </div>
           <span class="course-node-wrap__label">${status.completed}/${status.total}</span>
         </div>
-        <div class="course-card__copy">
-          <span class="day-chip">${day.day} · ${stateLabel}</span>
-          <h3>${day.title}</h3>
-          <p>${day.goal}</p>
-          <span class="course-cta">${actionLabel}</span>
-        </div>
         <div class="course-ring" style="--progress:${ratio * 3.6}deg" aria-label="${ratio}% 완료">
           <span>${ratio}%</span>
         </div>
       </button>
+      <div class="road-day__caption">
+        <span class="day-chip">${day.day}</span>
+        <strong>${day.title}</strong>
+        <small>${stateLabel}</small>
+      </div>
+    </article>
+  `;
+}
+
+function renderSelectedDayPanel(day) {
+  const status = getDayCompletion(day);
+  const state = getDayState(day);
+  const ratio = Math.round((status.completed / status.total) * 100);
+  const stateLabel = {
+    completed: "완료됨",
+    active: status.completed > 0 ? "진행중" : "시작 가능",
+    available: "열람 가능",
+  }[state];
+
+  return `
+    <section class="drive-detail-panel" data-selected-day="${day.id}">
+      <div class="drive-detail-panel__header">
+        <div>
+          <span class="day-chip">${day.day} · ${stateLabel}</span>
+          <h3>${day.title}</h3>
+          <p>${day.goal}</p>
+        </div>
+        <div class="course-ring" style="--progress:${ratio * 3.6}deg" aria-label="${ratio}% 완료">
+          <span>${ratio}%</span>
+        </div>
+      </div>
       <div class="course-card__meta">
         <span class="day-status" data-day-status="${day.id}">${status.completed}/${status.total} PASS</span>
-        <span>${status.isDone ? "완료" : "진행 중"}</span>
+        <span>모든 Day 열람 가능</span>
       </div>
-      ${detail}
+      <div class="course-detail">${day.items.map((task) => renderTask(task)).join("")}</div>
     </section>
   `;
 }
@@ -677,11 +727,12 @@ function handleDayFilterClick(event) {
   elements.dayFilter
     .querySelectorAll("[data-day-filter]")
     .forEach((filterButton) => filterButton.classList.toggle("is-active", filterButton === button));
-  expandedDayId = expandedDayId === button.dataset.dayFilter ? null : button.dataset.dayFilter;
+  expandedDayId = button.dataset.dayFilter;
   updateProgress();
   document.querySelector(`[data-day-id="${button.dataset.dayFilter}"]`)?.scrollIntoView({
     behavior: "smooth",
-    block: "start",
+    inline: "center",
+    block: "nearest",
   });
 }
 
@@ -699,13 +750,18 @@ function handleDayCardClick(event) {
     return;
   }
 
-  expandedDayId = expandedDayId === button.dataset.dayOpen ? null : button.dataset.dayOpen;
+  expandedDayId = button.dataset.dayOpen;
   elements.dayFilter
     .querySelectorAll("[data-day-filter]")
     .forEach((filterButton) =>
       filterButton.classList.toggle("is-active", filterButton.dataset.dayFilter === expandedDayId),
     );
   updateProgress();
+  document.querySelector(`[data-day-id="${button.dataset.dayOpen}"]`)?.scrollIntoView({
+    behavior: "smooth",
+    inline: "center",
+    block: "nearest",
+  });
 }
 
 function handleTabClick(event) {
@@ -903,7 +959,7 @@ function updateProgress() {
   elements.saveStatusLabel.textContent = completed > 0 ? "저장 완료" : "로컬 저장";
 
   renderDayFilter();
-  elements.list.innerHTML = curriculum.map(renderDay).join("");
+  elements.list.innerHTML = renderRoadExperience();
 }
 
 function updateConnectionStatus() {
