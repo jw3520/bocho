@@ -1,11 +1,12 @@
 const STORAGE_KEY = "jeonwoon-bocho-progress-v1";
+const PASS_DATE_STORAGE_KEY = "jeonwoon-bocho-pass-dates-v1";
 const ONBOARDING_KEY = "jeonwoon-bocho-onboarding-v1";
 const SESSION_KEY = "jeonwoon-bocho-session-v1";
 const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.35";
+const APP_VERSION = "1.00.36";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -147,6 +148,7 @@ const elements = {
 
 const totalItems = curriculum.reduce((sum, day) => sum + day.items.length, 0);
 let progressState = loadProgress();
+let passDateState = loadPassDates();
 let expandedDayId = null;
 let isCalendarExpanded = false;
 let calendarDisplayDate = new Date();
@@ -293,6 +295,15 @@ function loadProgress() {
   }
 }
 
+function loadPassDates() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(PASS_DATE_STORAGE_KEY));
+    return saved && typeof saved === "object" ? saved : {};
+  } catch {
+    return {};
+  }
+}
+
 function loadOnboarding() {
   try {
     const saved = JSON.parse(localStorage.getItem(ONBOARDING_KEY));
@@ -333,8 +344,21 @@ function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progressState));
 }
 
+function savePassDates() {
+  localStorage.setItem(PASS_DATE_STORAGE_KEY, JSON.stringify(passDateState));
+}
+
 function isComplete(itemId) {
   return progressState[itemId] === true;
+}
+
+function syncTaskPassDate(taskId, isPassed) {
+  if (isPassed) {
+    passDateState[taskId] = passDateState[taskId] || toDateInputValue(new Date());
+    return;
+  }
+
+  delete passDateState[taskId];
 }
 
 function getDayCompletion(day) {
@@ -501,8 +525,10 @@ function startNewProfile() {
 
     localStorage.removeItem(ONBOARDING_KEY);
     localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(PASS_DATE_STORAGE_KEY);
     setActiveSession(false);
     progressState = {};
+    passDateState = {};
     resetOnboardingDraft();
     updateWelcomeActions();
     updateProgress();
@@ -521,6 +547,7 @@ function loginWithSavedProfile() {
 
   onboardingDraft = savedProfile;
   progressState = loadProgress();
+  passDateState = loadPassDates();
   setActiveSession(true);
   showAppShell();
 }
@@ -659,6 +686,7 @@ function renderCalendar() {
   const title = `${baseMonth.getFullYear()}년 ${baseMonth.getMonth() + 1}월`;
 
   elements.calendarTitle.textContent = title;
+  elements.calendarTitle.hidden = !isCalendarExpanded;
   elements.calendarKicker.textContent = getCalendarKicker(baseMonth, today);
   elements.calendarToggle?.setAttribute("aria-expanded", String(isCalendarExpanded));
   elements.calendarToggle?.setAttribute("aria-label", isCalendarExpanded ? "달력 접기" : "달력 펼치기");
@@ -691,13 +719,21 @@ function getCalendarKicker(baseDate, today) {
 function renderCalendarDay(date, baseMonth, today) {
   const isCurrentMonth = date.getMonth() === baseMonth.getMonth();
   const isToday = isSameDate(date, today);
+  const dateValue = toDateInputValue(date);
+  const hasPassMark = hasPassOnDate(dateValue);
   const dateLabel = `${date.getMonth() + 1}월 ${date.getDate()}일`;
 
   return `
-    <time class="calendar-day${isToday ? " is-today" : ""}${isCurrentMonth ? "" : " is-muted"}" datetime="${toDateInputValue(date)}" aria-label="${dateLabel}">
+    <time class="calendar-day${isToday ? " is-today" : ""}${isCurrentMonth ? "" : " is-muted"}${hasPassMark ? " has-pass-mark" : ""}" datetime="${dateValue}" aria-label="${dateLabel}${hasPassMark ? " PASS 기록 있음" : ""}">
       <span>${date.getDate()}</span>
     </time>
   `;
+}
+
+function hasPassOnDate(dateValue) {
+  return curriculum.some((day) =>
+    day.items.some((task) => isComplete(task.id) && passDateState[task.id] === dateValue),
+  );
 }
 
 function getWeekDates(baseDate) {
@@ -962,15 +998,18 @@ function handleChecklistChange(event) {
     return;
   }
 
-  progressState[checkbox.dataset.taskCheckbox] = checkbox.checked;
-  celebratedTaskId = checkbox.checked ? checkbox.dataset.taskCheckbox : null;
+  const taskId = checkbox.dataset.taskCheckbox;
+  progressState[taskId] = checkbox.checked;
+  syncTaskPassDate(taskId, checkbox.checked);
+  savePassDates();
+  celebratedTaskId = checkbox.checked ? taskId : null;
   saveProgress();
-  updateProgressWithoutRerender(checkbox.dataset.taskCheckbox);
+  updateProgressWithoutRerender(taskId);
 
   if (celebratedTaskId) {
     window.setTimeout(() => {
       celebratedTaskId = null;
-      updateTaskCardUi(checkbox.dataset.taskCheckbox);
+      updateTaskCardUi(taskId);
     }, 680);
   }
 }
@@ -1048,7 +1087,9 @@ function completeNextTask() {
   }
 
   progressState[nextTask.id] = true;
+  syncTaskPassDate(nextTask.id, true);
   celebratedTaskId = nextTask.id;
+  savePassDates();
   saveProgress();
   updateProgress();
 
@@ -1060,7 +1101,9 @@ function completeNextTask() {
 
 function resetProgress() {
   progressState = {};
+  passDateState = {};
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(PASS_DATE_STORAGE_KEY);
   updateProgress();
 }
 
@@ -1178,7 +1221,9 @@ function completeActiveGuideTask() {
   }
 
   progressState[activeGuideTaskId] = true;
+  syncTaskPassDate(activeGuideTaskId, true);
   celebratedTaskId = activeGuideTaskId;
+  savePassDates();
   saveProgress();
   elements.guidePassButton.textContent = "PASS 완료됨";
   elements.guidePassButton.classList.add("is-complete");
@@ -1206,6 +1251,7 @@ function handleGuideKeydown(event) {
 
 function updateProgress() {
   updateProgressMetrics();
+  renderCalendar();
   renderDayFilter();
   elements.list.innerHTML = renderRoadExperience();
 }
@@ -1253,6 +1299,7 @@ function updateProgressWithoutRerender(taskId) {
   updateProgressMetrics();
   updateRoadMapUi();
   updateSelectedDayPanelUi();
+  renderCalendar();
 
   if (taskId) {
     updateTaskCardUi(taskId);
