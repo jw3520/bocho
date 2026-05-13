@@ -5,7 +5,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.31";
+const APP_VERSION = "1.00.32";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -721,7 +721,7 @@ function renderRoadDayNode(day, index, point) {
   const status = getDayCompletion(day);
   const state = getDayState(day);
   const ratio = Math.round((status.completed / status.total) * 100);
-  const ringColor = ratio === 100 ? "#4db6ac" : ratio >= 50 ? "#8ccf5e" : "#f2c94c";
+  const ringColor = getDayRingColor(ratio);
   const doneClass = status.isDone ? " is-complete" : "";
   const isExpanded = day.id === expandedDayId;
   const selectedClass = isExpanded ? " is-selected" : "";
@@ -735,6 +735,14 @@ function renderRoadDayNode(day, index, point) {
       <small>${day.day}</small>
     </article>
   `;
+}
+
+function getDayRingColor(ratio) {
+  if (ratio === 100) {
+    return "#4db6ac";
+  }
+
+  return ratio >= 50 ? "#8ccf5e" : "#f2c94c";
 }
 
 function renderSelectedDayPanel(day) {
@@ -809,12 +817,12 @@ function handleChecklistChange(event) {
   progressState[checkbox.dataset.taskCheckbox] = checkbox.checked;
   celebratedTaskId = checkbox.checked ? checkbox.dataset.taskCheckbox : null;
   saveProgress();
-  updateProgressPreservingScroll();
+  updateProgressWithoutRerender(checkbox.dataset.taskCheckbox);
 
   if (celebratedTaskId) {
     window.setTimeout(() => {
       celebratedTaskId = null;
-      updateProgressPreservingScroll();
+      updateTaskCardUi(checkbox.dataset.taskCheckbox);
     }, 680);
   }
 }
@@ -1026,11 +1034,11 @@ function completeActiveGuideTask() {
   saveProgress();
   elements.guidePassButton.textContent = "PASS 완료됨";
   elements.guidePassButton.classList.add("is-complete");
-  updateProgressPreservingScroll();
+  updateProgressWithoutRerender(activeGuideTaskId);
 
   window.setTimeout(() => {
     celebratedTaskId = null;
-    updateProgressPreservingScroll();
+    updateTaskCardUi(activeGuideTaskId);
   }, 680);
 }
 
@@ -1049,6 +1057,12 @@ function handleGuideKeydown(event) {
 }
 
 function updateProgress() {
+  updateProgressMetrics();
+  renderDayFilter();
+  elements.list.innerHTML = renderRoadExperience();
+}
+
+function updateProgressMetrics() {
   const completed = curriculum.reduce(
     (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
     0,
@@ -1064,25 +1078,139 @@ function updateProgress() {
   elements.settingsProgressFill.style.width = `${percent}%`;
   elements.saveStatusLabel.textContent = completed > 0 ? "저장 완료" : "로컬 저장";
 
-  renderDayFilter();
-  elements.list.innerHTML = renderRoadExperience();
+  return { completed, percent, completedDays };
 }
 
-function updateProgressPreservingScroll() {
-  const scrollY = window.scrollY;
-  const detail = elements.list.querySelector(".course-detail");
-  const detailScrollTop = detail?.scrollTop || 0;
+function updateProgressWithoutRerender(taskId) {
+  updateProgressMetrics();
+  updateRoadMapUi();
+  updateSelectedDayPanelUi();
 
-  updateProgress();
+  if (taskId) {
+    updateTaskCardUi(taskId);
+  }
+}
 
-  window.requestAnimationFrame(() => {
-    window.scrollTo(window.scrollX, scrollY);
-    const nextDetail = elements.list.querySelector(".course-detail");
+function updateRoadMapUi() {
+  const completedItems = curriculum.reduce(
+    (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
+    0,
+  );
+  const totalProgress = Math.round((completedItems / totalItems) * 100);
+  const roadProgress = Math.max(4, totalProgress);
+  const carPosition = getRoadPathPosition(totalProgress);
+  const stage = elements.list.querySelector(".progress-map-stage");
+  const roadProgressPath = elements.list.querySelector(".progress-map-road__progress");
 
-    if (nextDetail) {
-      nextDetail.scrollTop = detailScrollTop;
+  if (stage) {
+    stage.style.setProperty("--car-x", `${carPosition.x}%`);
+    stage.style.setProperty("--car-y", `${carPosition.y}%`);
+    stage.style.setProperty("--car-angle", `${carPosition.angle}deg`);
+  }
+
+  if (roadProgressPath) {
+    roadProgressPath.style.strokeDasharray = `${roadProgress} 100`;
+  }
+
+  curriculum.forEach((day) => {
+    const node = elements.list.querySelector(`[data-map-day-id="${day.id}"]`);
+
+    if (!node) {
+      return;
+    }
+
+    const status = getDayCompletion(day);
+    const state = getDayState(day);
+    const ratio = Math.round((status.completed / status.total) * 100);
+    const button = node.querySelector(".progress-map-node__button");
+    const percentLabel = node.querySelector(".day-progress-circle");
+
+    node.classList.toggle("is-complete", status.isDone);
+    node.classList.toggle("progress-map-node--completed", state === "completed");
+    node.classList.toggle("progress-map-node--active", state === "active");
+    node.classList.toggle("progress-map-node--available", state === "available");
+    node.style.setProperty("--day-progress", `${ratio * 3.6}deg`);
+    node.style.setProperty("--day-ring-color", getDayRingColor(ratio));
+
+    if (button) {
+      button.setAttribute("aria-pressed", String(day.id === expandedDayId));
+    }
+
+    if (percentLabel) {
+      percentLabel.textContent = `${ratio}%`;
     }
   });
+}
+
+function updateSelectedDayPanelUi() {
+  const selectedDay = curriculum.find((day) => day.id === expandedDayId);
+
+  if (!selectedDay) {
+    return;
+  }
+
+  const status = getDayCompletion(selectedDay);
+  const state = getDayState(selectedDay);
+  const ratio = Math.round((status.completed / status.total) * 100);
+  const stateLabel = {
+    completed: "완료됨",
+    active: status.completed > 0 ? "진행중" : "시작 가능",
+    available: "열람 가능",
+  }[state];
+  const chip = elements.list.querySelector(".drive-detail-panel__header .day-chip");
+  const progressText = elements.list.querySelector(".day-progress-text");
+  const dayStatus = elements.list.querySelector(`[data-day-status="${selectedDay.id}"]`);
+
+  if (chip) {
+    chip.textContent = `${selectedDay.day} · ${stateLabel}`;
+  }
+
+  if (progressText) {
+    progressText.textContent = `${ratio}% 완료`;
+    progressText.setAttribute("aria-label", `${ratio}% 완료`);
+  }
+
+  if (dayStatus) {
+    dayStatus.textContent = `${status.completed}/${status.total} PASS`;
+  }
+}
+
+function updateTaskCardUi(taskId) {
+  const card = elements.list.querySelector(`[data-task-id="${taskId}"]`);
+
+  if (!card) {
+    return;
+  }
+
+  const passed = isComplete(taskId);
+  const checkbox = card.querySelector("[data-task-checkbox]");
+  const passButton = card.querySelector(".pass-button");
+  const passText = passButton?.querySelector("span");
+  const category = card.querySelector(".record-card__category");
+  const meta = card.querySelector(".record-card__meta");
+
+  card.classList.toggle("is-passed", passed);
+  card.classList.toggle("is-celebrating", celebratedTaskId === taskId);
+
+  if (checkbox) {
+    checkbox.checked = passed;
+  }
+
+  if (passButton) {
+    passButton.classList.toggle("is-passed", passed);
+  }
+
+  if (passText) {
+    passText.textContent = passed ? "DONE" : "PASS";
+  }
+
+  if (category) {
+    category.textContent = passed ? "PASS 완료" : "가이드 항목";
+  }
+
+  if (meta) {
+    meta.textContent = passed ? "통과 처리됨" : "자료 확인 후 PASS를 누르세요";
+  }
 }
 
 function updateConnectionStatus() {
