@@ -4102,22 +4102,42 @@ textarea {
 }
 
 .calendar-panel__header {
-  display: flex;
+  display: block;
+}
+
+.calendar-actions {
+  display: grid;
+  width: 100%;
+  grid-template-columns: minmax(0, 1fr) 38px;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
+}
+
+.calendar-heading {
+  min-width: 0;
+  text-align: center;
+}
+
+.calendar-period-row {
+  display: inline-grid;
+  grid-template-columns: 34px auto 34px 34px;
+  align-items: center;
+  gap: 5px;
+  max-width: 100%;
 }
 
 .calendar-panel__header span {
   display: block;
-  margin-bottom: 5px;
+  min-width: 56px;
   color: var(--primary-dark);
   font-size: 12px;
   font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .calendar-panel__header h1 {
-  margin: 0;
+  margin: 8px 0 0;
   color: var(--text);
   font-size: 24px;
   font-weight: 950;
@@ -4125,38 +4145,46 @@ textarea {
   line-height: 1.1;
 }
 
-.calendar-actions {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.calendar-month-button,
+.calendar-nav-button,
+.calendar-today-button,
 .calendar-toggle {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 34px;
+  height: 34px;
   flex: 0 0 auto;
   place-items: center;
   border: 0;
-  border-radius: 14px;
+  border-radius: 12px;
   background: #eef7f6;
   color: var(--primary-dark);
 }
 
-.calendar-month-button {
+.calendar-toggle {
+  width: 38px;
+  height: 38px;
+  border-radius: 14px;
+}
+
+.calendar-nav-button,
+.calendar-today-button {
   background: #f4f6f8;
   color: #5f6b75;
 }
 
-.calendar-month-button[hidden] {
-  display: none;
+.calendar-today-button {
+  color: #4b8f83;
 }
 
-.calendar-month-button svg,
+.calendar-nav-button svg,
+.calendar-today-button svg,
 .calendar-toggle svg {
-  width: 20px;
-  height: 20px;
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
   transition: transform 0.18s ease;
 }
 

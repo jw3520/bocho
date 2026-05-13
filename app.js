@@ -5,7 +5,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.34";
+const APP_VERSION = "1.00.35";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -88,8 +88,9 @@ const elements = {
   calendarKicker: document.querySelector("#calendar-kicker"),
   calendarTitle: document.querySelector("#calendar-title"),
   calendarToggle: document.querySelector("#calendar-toggle"),
-  calendarPrevMonth: document.querySelector("#calendar-prev-month"),
-  calendarNextMonth: document.querySelector("#calendar-next-month"),
+  calendarPrevPeriod: document.querySelector("#calendar-prev-period"),
+  calendarNextPeriod: document.querySelector("#calendar-next-period"),
+  calendarTodayButton: document.querySelector("#calendar-today-button"),
   calendarGrid: document.querySelector("#calendar-grid"),
   dayFilter: document.querySelector("#hero-day-filter"),
   completedCount: document.querySelector("#completed-count"),
@@ -148,7 +149,7 @@ const totalItems = curriculum.reduce((sum, day) => sum + day.items.length, 0);
 let progressState = loadProgress();
 let expandedDayId = null;
 let isCalendarExpanded = false;
-let calendarDisplayMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
+let calendarDisplayDate = new Date();
 let deferredInstallPrompt = null;
 let celebratedTaskId = null;
 let activeGuideTaskId = null;
@@ -382,8 +383,9 @@ function renderCurriculum() {
   elements.nicknameInput.addEventListener("input", handleNicknameInput);
   elements.list.addEventListener("change", handleChecklistChange);
   elements.calendarToggle?.addEventListener("click", toggleCalendar);
-  elements.calendarPrevMonth?.addEventListener("click", () => moveCalendarMonth(-1));
-  elements.calendarNextMonth?.addEventListener("click", () => moveCalendarMonth(1));
+  elements.calendarPrevPeriod?.addEventListener("click", () => moveCalendarPeriod(-1));
+  elements.calendarNextPeriod?.addEventListener("click", () => moveCalendarPeriod(1));
+  elements.calendarTodayButton?.addEventListener("click", resetCalendarToToday);
   elements.dayFilter?.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
@@ -625,25 +627,24 @@ function renderDayFilter() {
 
 function toggleCalendar() {
   isCalendarExpanded = !isCalendarExpanded;
-
-  if (isCalendarExpanded) {
-    const today = new Date();
-    calendarDisplayMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-  }
-
   renderCalendar();
 }
 
-function moveCalendarMonth(direction) {
-  if (!isCalendarExpanded) {
-    return;
+function moveCalendarPeriod(direction) {
+  const nextDate = new Date(calendarDisplayDate);
+
+  if (isCalendarExpanded) {
+    nextDate.setMonth(nextDate.getMonth() + direction, 1);
+  } else {
+    nextDate.setDate(nextDate.getDate() + direction * 7);
   }
 
-  calendarDisplayMonth = new Date(
-    calendarDisplayMonth.getFullYear(),
-    calendarDisplayMonth.getMonth() + direction,
-    1,
-  );
+  calendarDisplayDate = nextDate;
+  renderCalendar();
+}
+
+function resetCalendarToToday() {
+  calendarDisplayDate = new Date();
   renderCalendar();
 }
 
@@ -653,24 +654,38 @@ function renderCalendar() {
   }
 
   const today = new Date();
-  const baseMonth = isCalendarExpanded ? calendarDisplayMonth : today;
-  const visibleDates = isCalendarExpanded ? getMonthDates(baseMonth) : getWeekDates(today);
+  const baseMonth = calendarDisplayDate;
+  const visibleDates = isCalendarExpanded ? getMonthDates(baseMonth) : getWeekDates(calendarDisplayDate);
   const title = `${baseMonth.getFullYear()}년 ${baseMonth.getMonth() + 1}월`;
 
   elements.calendarTitle.textContent = title;
-  elements.calendarKicker.textContent = isCalendarExpanded ? "이번 달" : "이번 주";
+  elements.calendarKicker.textContent = getCalendarKicker(baseMonth, today);
   elements.calendarToggle?.setAttribute("aria-expanded", String(isCalendarExpanded));
   elements.calendarToggle?.setAttribute("aria-label", isCalendarExpanded ? "달력 접기" : "달력 펼치기");
   elements.calendarToggle?.classList.toggle("is-expanded", isCalendarExpanded);
-  if (elements.calendarPrevMonth) {
-    elements.calendarPrevMonth.hidden = !isCalendarExpanded;
+
+  if (elements.calendarPrevPeriod) {
+    elements.calendarPrevPeriod.setAttribute("aria-label", isCalendarExpanded ? "이전 달" : "이전 주");
   }
 
-  if (elements.calendarNextMonth) {
-    elements.calendarNextMonth.hidden = !isCalendarExpanded;
+  if (elements.calendarNextPeriod) {
+    elements.calendarNextPeriod.setAttribute("aria-label", isCalendarExpanded ? "다음 달" : "다음 주");
   }
+
   elements.calendarGrid.classList.toggle("is-month", isCalendarExpanded);
   elements.calendarGrid.innerHTML = visibleDates.map((date) => renderCalendarDay(date, baseMonth, today)).join("");
+}
+
+function getCalendarKicker(baseDate, today) {
+  if (isCalendarExpanded) {
+    return baseDate.getFullYear() === today.getFullYear() && baseDate.getMonth() === today.getMonth()
+      ? "이번 달"
+      : "월간";
+  }
+
+  const currentWeekStart = getWeekDates(today)[0];
+  const visibleWeekStart = getWeekDates(baseDate)[0];
+  return isSameDate(currentWeekStart, visibleWeekStart) ? "이번 주" : "주간";
 }
 
 function renderCalendarDay(date, baseMonth, today) {
