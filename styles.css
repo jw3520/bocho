@@ -1519,7 +1519,7 @@ svg {
   }
 }
 
-/* Duolingo-style gamified theme */
+/* Legacy gamified base theme; the final mint rules below define the active palette. */
 :root {
   --bg: #f2fbff;
   --bg-deep: #dff5ff;
@@ -2765,5 +2765,1288 @@ button:active {
 
   .road-day__caption {
     min-height: 96px;
+  }
+}
+
+/* Declutter pass: compact road nodes and indicator-only car */
+.road-course {
+  gap: 8px;
+}
+
+.road-course__hint {
+  padding: 0 4px;
+}
+
+.road-scroll {
+  padding: 8px 16px 14px;
+  scroll-padding-inline: 42px;
+}
+
+.road-track {
+  --road-width: 980px;
+  --node-step: 186px;
+  height: 190px;
+  padding: 0 56px;
+  border-bottom-width: 6px;
+  border-radius: 28px;
+}
+
+.road-lane {
+  top: 42px;
+  right: 48px;
+  left: 48px;
+  height: 52px;
+  border-width: 4px;
+  border-bottom-width: 6px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 30px,
+      rgba(255, 255, 255, 0.95) 30px 46px,
+      transparent 46px 76px
+    ) center / 100% 5px no-repeat,
+    linear-gradient(180deg, #454d55 0%, #303840 100%);
+}
+
+.road-lane::before,
+.road-lane::after {
+  display: none;
+}
+
+.progress-car {
+  top: 26px;
+  left: calc(78px + (var(--car-index) * var(--node-step)));
+  z-index: 4;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  color: inherit;
+  font-size: 25px;
+  line-height: 1;
+  pointer-events: none;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.12), 0 0 0 #ffc800;
+  transform: translateX(-50%) rotate(2deg);
+}
+
+.road-nodes {
+  display: grid;
+  grid-template-columns: repeat(5, 72px);
+  gap: 114px;
+  height: auto;
+  padding-top: 108px;
+  align-items: start;
+}
+
+.road-day,
+.road-day:nth-child(2),
+.road-day:nth-child(3),
+.road-day:nth-child(4) {
+  width: 72px;
+  gap: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  align-self: start;
+}
+
+.road-day .course-card__button,
+.road-day:nth-child(odd) .course-card__button,
+.road-day:nth-child(even) .course-card__button {
+  width: 72px;
+  min-height: 72px;
+  border-radius: 50%;
+}
+
+.road-day .course-node-wrap,
+.road-day:nth-child(odd) .course-node-wrap,
+.road-day:nth-child(even) .course-node-wrap {
+  gap: 0;
+}
+
+.road-day .course-node {
+  width: 54px;
+  height: 54px;
+  border-bottom-width: 5px;
+  box-shadow: 0 0 0 5px #fff;
+}
+
+.road-day.is-selected .course-node {
+  box-shadow: 0 0 0 5px #fff, 0 0 0 9px var(--yellow);
+  transform: translateY(-2px);
+}
+
+.road-day .course-node__icon {
+  font-size: 22px;
+}
+
+.road-day .course-ring,
+.road-day__caption {
+  display: none;
+}
+
+.course-node-wrap__label {
+  display: none;
+}
+
+@media (max-width: 374px) {
+  .road-track {
+    --road-width: 900px;
+    --node-step: 170px;
+    height: 184px;
+    padding: 0 50px;
+  }
+
+  .progress-car {
+    left: calc(72px + (var(--car-index) * var(--node-step)));
+    font-size: 23px;
+  }
+
+  .road-nodes {
+    grid-template-columns: repeat(5, 68px);
+    gap: 102px;
+    padding-top: 106px;
+  }
+
+  .road-day,
+  .road-day:nth-child(2),
+  .road-day:nth-child(3),
+  .road-day:nth-child(4) {
+    width: 68px;
+  }
+
+  .road-day .course-card__button,
+  .road-day:nth-child(odd) .course-card__button,
+  .road-day:nth-child(even) .course-card__button {
+    width: 68px;
+    min-height: 68px;
+  }
+
+  .road-day .course-node {
+    width: 50px;
+    height: 50px;
+  }
+}
+
+/* Elegant winding stage map */
+:root {
+  --stage-bg: #fffdf8;
+  --stage-surface: #ffffff;
+  --stage-line: #d9dee7;
+  --stage-line-soft: #edf0f4;
+  --stage-text: #3f4652;
+  --stage-muted: #818996;
+  --stage-accent: #7aa7d9;
+  --stage-accent-dark: #527da9;
+  --stage-gold: #d9aa3f;
+  --stage-gold-soft: #fff4d8;
+}
+
+.road-course__hint span {
+  border-color: #dce7f3;
+  border-bottom-color: #b6c8db;
+  background: #f7fafc;
+  color: var(--stage-accent-dark);
+  text-transform: none;
+}
+
+.road-course__hint strong {
+  color: var(--stage-text);
+  font-weight: 900;
+}
+
+.road-scroll {
+  padding: 14px 16px 18px;
+  scroll-padding-inline: 44px;
+}
+
+.road-track {
+  --road-width: 980px;
+  --node-step: 186px;
+  height: 218px;
+  padding: 0 56px;
+  overflow: hidden;
+  border: 1px solid #e6e9ee;
+  border-bottom: 5px solid #d9dee7;
+  border-radius: 32px;
+  background:
+    radial-gradient(circle at 18% 18%, rgba(122, 167, 217, 0.1), transparent 24%),
+    radial-gradient(circle at 76% 74%, rgba(217, 170, 63, 0.1), transparent 22%),
+    linear-gradient(180deg, #fffdf8 0%, #f8fafc 100%);
+}
+
+.road-track::after {
+  position: absolute;
+  right: 24px;
+  bottom: 20px;
+  left: 24px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217, 222, 231, 0.9), transparent);
+  content: "";
+}
+
+.road-lane {
+  position: absolute;
+  top: 36px;
+  right: 62px;
+  left: 62px;
+  height: 142px;
+  border: 0;
+  background: none;
+  box-shadow: none;
+}
+
+.road-lane::before {
+  display: block;
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='860' height='142' viewBox='0 0 860 142' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M18 76 C105 18 198 18 292 76 S482 134 578 74 S742 18 842 74' stroke='%23D9DEE7' stroke-width='18' stroke-linecap='round'/%3E%3Cpath d='M18 76 C105 18 198 18 292 76 S482 134 578 74 S742 18 842 74' stroke='%23FFFFFF' stroke-width='5' stroke-linecap='round' stroke-dasharray='18 24'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  content: "";
+}
+
+.road-lane::after {
+  display: none;
+}
+
+.progress-car {
+  top: calc(68px + var(--car-y));
+  left: calc(92px + (var(--car-index) * var(--node-step)));
+  z-index: 5;
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(217, 170, 63, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 250, 235, 0.82);
+  box-shadow: 0 8px 18px rgba(63, 70, 82, 0.12);
+  font-size: 20px;
+  pointer-events: none;
+  text-shadow: none;
+  transform: translate(-50%, -52%) rotate(2deg);
+  transition: left 0.3s ease, top 0.3s ease;
+}
+
+.road-nodes {
+  grid-template-columns: repeat(5, 72px);
+  gap: 114px;
+  padding-top: 74px;
+}
+
+.road-day,
+.road-day:nth-child(2),
+.road-day:nth-child(3),
+.road-day:nth-child(4) {
+  transform: translateY(0);
+}
+
+.road-day:nth-child(2) {
+  transform: translateY(-30px);
+}
+
+.road-day:nth-child(3) {
+  transform: translateY(32px);
+}
+
+.road-day:nth-child(4) {
+  transform: translateY(-18px);
+}
+
+.road-day:nth-child(5) {
+  transform: translateY(24px);
+}
+
+.road-day .course-card__button,
+.road-day:nth-child(odd) .course-card__button,
+.road-day:nth-child(even) .course-card__button {
+  width: 72px;
+  min-height: 72px;
+}
+
+.road-day .course-node {
+  width: 50px;
+  height: 50px;
+  border: 1px solid #dce2ea;
+  border-bottom: 4px solid #c9d1dc;
+  background: #fff;
+  color: var(--stage-text);
+  box-shadow: 0 5px 14px rgba(63, 70, 82, 0.09);
+}
+
+.road-day .course-node__icon {
+  font-size: 20px;
+  font-weight: 950;
+}
+
+.road-day.course-card--completed .course-node {
+  border-color: #cfe1f2;
+  border-bottom-color: var(--stage-accent-dark);
+  background: #f3f8fd;
+  color: var(--stage-accent-dark);
+}
+
+.road-day.course-card--active .course-node {
+  border-color: #d8e7f6;
+  border-bottom-color: var(--stage-accent-dark);
+  background: #f7fbff;
+  color: var(--stage-accent-dark);
+}
+
+.road-day.course-card--available .course-node {
+  border-color: #e1e5eb;
+  border-bottom-color: #cfd6df;
+  background: #fff;
+  color: #7e8794;
+}
+
+.road-day.is-selected .course-node {
+  border-color: var(--stage-gold);
+  border-bottom-color: #b98722;
+  background: var(--stage-gold-soft);
+  color: #765714;
+  box-shadow: 0 0 0 5px rgba(217, 170, 63, 0.14), 0 7px 16px rgba(63, 70, 82, 0.1);
+  transform: translateY(-2px);
+}
+
+.road-day.course-card--active:not(.is-complete) .course-node {
+  animation: none;
+}
+
+.drive-detail-panel {
+  border-color: #e6e9ee;
+  border-bottom-color: #d4dae3;
+  background: #fff;
+}
+
+.drive-detail-panel__header h3 {
+  color: var(--stage-text);
+}
+
+.drive-detail-panel__header p {
+  color: var(--stage-muted);
+}
+
+@media (max-width: 374px) {
+  .road-track {
+    --road-width: 900px;
+    --node-step: 170px;
+    height: 212px;
+    padding: 0 50px;
+  }
+
+  .road-lane {
+    right: 56px;
+    left: 56px;
+  }
+
+  .progress-car {
+    left: calc(84px + (var(--car-index) * var(--node-step)));
+    font-size: 19px;
+  }
+
+  .road-nodes {
+    grid-template-columns: repeat(5, 68px);
+    gap: 102px;
+    padding-top: 76px;
+  }
+
+  .road-day .course-card__button,
+  .road-day:nth-child(odd) .course-card__button,
+  .road-day:nth-child(even) .course-card__button {
+    width: 68px;
+    min-height: 68px;
+  }
+
+  .road-day .course-node {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Compact pastel progress map on the home screen */
+.road-course {
+  display: grid;
+  gap: 10px;
+}
+
+.road-course__hint {
+  align-items: center;
+  padding: 0 2px;
+}
+
+.road-course__hint span {
+  border: 0;
+  border-radius: 999px;
+  background: rgba(62, 175, 158, 0.12);
+  color: #267f73;
+  text-transform: none;
+  box-shadow: none;
+}
+
+.road-course__hint strong {
+  color: #4b5563;
+  font-size: 12px;
+  line-height: 1.25;
+  text-align: right;
+}
+
+.progress-map-card {
+  overflow: hidden;
+  border: 1px solid rgba(203, 213, 225, 0.78);
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(115, 154, 255, 0.18), transparent 30%),
+    radial-gradient(circle at 88% 20%, rgba(62, 175, 158, 0.18), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #eff8f6 100%);
+  box-shadow: 0 14px 32px rgba(49, 66, 88, 0.1);
+}
+
+.progress-map-stage {
+  position: relative;
+  height: 254px;
+  min-height: 254px;
+}
+
+.progress-map-stage::before,
+.progress-map-stage::after {
+  position: absolute;
+  z-index: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 18px 2px 0 rgba(255, 255, 255, 0.62), 36px -4px 0 rgba(255, 255, 255, 0.52);
+  content: "";
+}
+
+.progress-map-stage::before {
+  top: 28px;
+  left: 22px;
+  width: 48px;
+  height: 18px;
+}
+
+.progress-map-stage::after {
+  right: 50px;
+  bottom: 42px;
+  width: 54px;
+  height: 20px;
+}
+
+.progress-map-road {
+  position: absolute;
+  inset: 4px 8px 0;
+  z-index: 1;
+  width: calc(100% - 16px);
+  height: calc(100% - 4px);
+  pointer-events: none;
+}
+
+.progress-map-road__shadow,
+.progress-map-road__base,
+.progress-map-road__progress,
+.progress-map-road__dash {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.progress-map-road__shadow {
+  stroke: rgba(15, 23, 42, 0.08);
+  stroke-width: 62;
+  transform: translateY(7px);
+}
+
+.progress-map-road__base {
+  stroke: #edf3f6;
+  stroke-width: 56;
+}
+
+.progress-map-road__progress {
+  stroke: url(#homeRoadProgress);
+  stroke-width: 56;
+  transition: stroke-dasharray 0.34s ease;
+}
+
+.progress-map-road__dash {
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 4;
+  stroke-dasharray: 14 18;
+}
+
+.progress-map-nodes {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+
+.progress-map-node {
+  position: absolute;
+  left: var(--node-x);
+  top: var(--node-y);
+  display: grid;
+  width: 72px;
+  justify-items: center;
+  gap: 8px;
+  transform: translate(-50%, -50%);
+}
+
+.progress-map-node__button {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff 0%, #f3f8fa 100%);
+  color: #94a3b8;
+  box-shadow: 0 7px 0 #d3dde5, 0 13px 22px rgba(42, 60, 74, 0.12);
+}
+
+.progress-map-node__button span {
+  font-size: 20px;
+  font-weight: 1000;
+  line-height: 1;
+}
+
+.progress-map-node__button:active {
+  transform: translateY(4px);
+  box-shadow: 0 3px 0 #d3dde5, 0 8px 14px rgba(42, 60, 74, 0.1);
+}
+
+.progress-map-node small {
+  display: block;
+  min-height: 22px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 1000;
+  line-height: 1.1;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+}
+
+.progress-map-node--completed .progress-map-node__button,
+.progress-map-node.is-complete .progress-map-node__button {
+  background: linear-gradient(180deg, #72d5c9 0%, #3eaf9e 100%);
+  color: #fff;
+  box-shadow: 0 7px 0 #2b8e80, 0 14px 24px rgba(62, 175, 158, 0.2);
+}
+
+.progress-map-node--active .progress-map-node__button {
+  background: linear-gradient(180deg, #94b2ff 0%, #739aff 100%);
+  color: #fff;
+  box-shadow: 0 7px 0 #557de5, 0 14px 24px rgba(115, 154, 255, 0.24);
+}
+
+.progress-map-node.is-selected .progress-map-node__button {
+  background: linear-gradient(180deg, #ff8a8a 0%, #ff6868 100%);
+  color: #fff;
+  box-shadow: 0 8px 0 #dc4d4d, 0 15px 28px rgba(255, 104, 104, 0.28);
+  transform: translateY(-3px);
+}
+
+.progress-map-node.is-selected small {
+  color: #b93838;
+}
+
+.progress-map-car {
+  position: absolute;
+  left: var(--car-x);
+  top: calc(var(--car-y) - 13%);
+  z-index: 4;
+  display: grid;
+  width: 46px;
+  height: 38px;
+  place-items: center;
+  border-radius: 16px;
+  background: #ffd76a;
+  font-size: 24px;
+  line-height: 1;
+  box-shadow: 0 0 0 5px #fff, 0 12px 22px rgba(165, 125, 28, 0.18);
+  transform: translate(-50%, -50%);
+  transition: left 0.28s ease, top 0.28s ease;
+}
+
+.drive-detail-panel {
+  border: 1px solid rgba(203, 213, 225, 0.86);
+  border-bottom: 1px solid rgba(203, 213, 225, 0.86);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+}
+
+.drive-detail-panel__header h3 {
+  color: var(--text);
+  font-size: 23px;
+  letter-spacing: 0;
+}
+
+.drive-detail-panel__header p {
+  color: var(--muted);
+  font-weight: 720;
+}
+
+.drive-detail-panel > .course-card__meta {
+  padding: 0;
+}
+
+@media (max-width: 374px) {
+  .progress-map-stage {
+    height: 236px;
+    min-height: 236px;
+  }
+
+  .progress-map-node {
+    width: 62px;
+  }
+
+  .progress-map-node__button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .progress-map-node__button span {
+    font-size: 18px;
+  }
+
+  .progress-map-car {
+    width: 42px;
+    height: 34px;
+    font-size: 22px;
+  }
+}
+
+
+
+/* Home progress map QA refinements */
+.progress-map-stage {
+  height: 258px;
+  min-height: 258px;
+  padding-bottom: 16px;
+}
+
+.progress-map-node__button {
+  width: 54px;
+  height: 54px;
+}
+
+.progress-map-node small {
+  min-height: 20px;
+  padding: 4px 8px;
+}
+
+.progress-map-car {
+  top: calc(var(--car-y) - 22%);
+  width: 42px;
+  height: 34px;
+  font-size: 21px;
+}
+
+.progress-map-road {
+  inset: -2px 6px 10px;
+  width: calc(100% - 12px);
+  height: calc(100% - 8px);
+}
+
+.drive-detail-panel .course-detail {
+  max-height: min(34dvh, 360px);
+}
+
+@media (max-width: 374px) {
+  .progress-map-stage {
+    height: 238px;
+    min-height: 238px;
+  }
+}
+
+/* Donnaga-inspired mint theme refinement */
+:root {
+  --bg: #f2f4f6;
+  --bg-deep: #dfe5e8;
+  --surface: #ffffff;
+  --surface-soft: #f5fbfa;
+  --text: #1f2328;
+  --muted: #7f8993;
+  --line: #e7ecef;
+  --primary: #4db6ac;
+  --primary-dark: #2f958b;
+  --primary-soft: #e6f7f5;
+  --mint: #4db6ac;
+  --mint-dark: #2f958b;
+  --mint-soft: #e6f7f5;
+  --blue: #6fa7c8;
+  --blue-dark: #4f819f;
+  --blue-soft: #e8f4f8;
+  --yellow: #f5c05f;
+  --yellow-dark: #c99130;
+  --orange: #ff7043;
+  --danger: #ef5350;
+  --gray-press: #d7dee2;
+  --shadow: 0 4px 12px rgba(46, 87, 86, 0.08);
+  --shadow-soft: 0 3px 10px rgba(46, 87, 86, 0.06);
+  --shadow-pop: 0 14px 26px rgba(77, 182, 172, 0.18);
+  font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Pretendard", system-ui, sans-serif;
+}
+
+html,
+body {
+  background: #dfe5e8;
+}
+
+.onboarding-flow,
+.phone,
+.screen,
+.onboarding-screen:not([data-onboarding-step="welcome"]) {
+  background: var(--bg);
+}
+
+.onboarding-visual,
+.hero-summary,
+.progress-map-card {
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(232, 247, 245, 0.96) 100%);
+}
+
+.onboarding-visual::before,
+.hero-summary::before,
+.progress-map-stage::before,
+.progress-map-stage::after {
+  display: none;
+}
+
+.hero-summary,
+.choice-card,
+.gender-card,
+.nickname-panel,
+.selected-date-box,
+.update-banner,
+.settings-row,
+.status-panel,
+.install-dialog,
+.record-card,
+.drive-detail-panel,
+.progress-map-card {
+  border: 1px solid rgba(225, 233, 236, 0.95);
+  border-bottom: 1px solid rgba(225, 233, 236, 0.95);
+  box-shadow: var(--shadow);
+}
+
+.onboarding-primary,
+.primary-button,
+.guide-pass-button,
+.course-cta,
+.fab,
+.tabbar-button.is-active,
+.pass-button.is-passed {
+  border-bottom-color: var(--primary-dark);
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(77, 182, 172, 0.18);
+}
+
+.secondary-button,
+.onboarding-link,
+.suggestion-chip,
+.guide-link,
+.pass-button {
+  border-color: rgba(225, 233, 236, 0.95);
+  border-bottom-color: rgba(207, 216, 221, 0.95);
+  background: #fff;
+  color: var(--primary-dark);
+}
+
+.onboarding-kicker,
+.onboarding-step-header span,
+.hero-summary__intro span,
+.section-label,
+.day-chip,
+.road-course__hint span,
+.day-status {
+  border: 0;
+  background: rgba(77, 182, 172, 0.12);
+  color: var(--primary-dark);
+  box-shadow: none;
+}
+
+.hero-member-filter,
+.progress-track,
+.asset-progress {
+  border-color: rgba(199, 229, 226, 0.95);
+  background: #e9f2f3;
+}
+
+.hero-member-filter__button.is-active {
+  border-bottom-color: var(--primary-dark);
+  background: var(--primary);
+  color: #fff;
+}
+
+#progress-fill,
+.asset-progress span {
+  background: linear-gradient(90deg, var(--primary), #73d0c7);
+}
+
+.metric-block,
+.hero-summary__balance {
+  border-color: rgba(225, 233, 236, 0.95);
+  border-bottom-color: rgba(213, 224, 226, 0.95);
+}
+
+.metric-block--expense strong,
+.metric-block--income strong,
+.metric-block--investment strong,
+.balance-block strong {
+  color: var(--primary-dark);
+}
+
+.progress-map-card {
+  box-shadow: 0 14px 30px rgba(46, 87, 86, 0.12);
+}
+
+.progress-map-road__base {
+  stroke: #e6eef0;
+}
+
+.progress-map-road__progress {
+  stroke: var(--primary);
+}
+
+.progress-map-node__button {
+  background: #ffffff;
+  color: #71808b;
+  box-shadow: 0 6px 16px rgba(46, 87, 86, 0.12);
+}
+
+.progress-map-node--completed .progress-map-node__button,
+.progress-map-node.is-complete .progress-map-node__button,
+.progress-map-node--active .progress-map-node__button,
+.progress-map-node.is-selected .progress-map-node__button {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(77, 182, 172, 0.2);
+}
+
+.progress-map-node.is-selected .progress-map-node__button {
+  transform: translateY(-2px);
+}
+
+.progress-map-node.is-selected small {
+  color: var(--primary-dark);
+}
+
+.progress-map-car {
+  top: var(--car-y);
+  z-index: 2;
+  display: block;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  font-size: 25px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 5px rgba(31, 35, 40, 0.2));
+  transform: translate(-50%, -50%) rotate(3deg);
+}
+
+.drive-detail-panel__header {
+  position: relative;
+  align-items: start;
+  padding-right: 78px;
+}
+
+.day-progress-text {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.drive-detail-panel .course-ring {
+  display: none;
+}
+
+@media (max-width: 374px) {
+  .progress-map-car {
+    width: auto;
+    height: auto;
+    font-size: 22px;
+  }
+
+  .drive-detail-panel__header {
+    padding-right: 68px;
+  }
+
+  .day-progress-text {
+    font-size: 12px;
+  }
+}
+
+/* Welcome screen copy and primary action refinement */
+.onboarding-screen[data-onboarding-step="welcome"] {
+  grid-template-rows: minmax(310px, 1fr) auto auto;
+  gap: 24px;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy {
+  gap: 12px;
+  text-align: left;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy h1 {
+  max-width: 340px;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 1.12;
+  text-align: center;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy h1 span {
+  display: block;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy p {
+  max-width: 300px;
+  margin: 0 auto;
+  color: #5f6b75;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.52;
+  text-align: center;
+  word-break: keep-all;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-primary {
+  min-height: 56px;
+  border: 0;
+  border-radius: 16px;
+  background: #1f2328;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(31, 35, 40, 0.12);
+  text-transform: none;
+}
+
+.onboarding-screen[data-onboarding-step="welcome"] .onboarding-primary:active {
+  border: 0;
+  transform: scale(0.98);
+}
+
+@media (max-width: 374px) {
+  .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy h1 {
+    max-width: 310px;
+    font-size: 32px;
+  }
+
+  .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy p {
+    max-width: 286px;
+    font-size: 15px;
+  }
+}
+
+/* Road map progress: gray road, percent nodes, yellow practice car */
+.progress-map-card {
+  background:
+    radial-gradient(circle at 14% 16%, rgba(255, 255, 255, 0.82), transparent 28%),
+    linear-gradient(180deg, #ffffff 0%, #f4f7f8 100%);
+}
+
+.progress-map-stage {
+  height: 270px;
+  min-height: 270px;
+}
+
+.progress-map-road {
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.progress-map-road__shadow {
+  stroke: rgba(31, 35, 40, 0.1);
+  stroke-width: 64;
+  transform: translateY(7px);
+}
+
+.progress-map-road__base {
+  stroke: #d9dee3;
+  stroke-width: 54;
+}
+
+.progress-map-road__progress {
+  stroke: #8f9aa3;
+  stroke-width: 54;
+  transition: stroke-dasharray 0.34s ease;
+}
+
+.progress-map-road__dash {
+  stroke: rgba(255, 255, 255, 0.88);
+  stroke-width: 4;
+  stroke-dasharray: 13 17;
+}
+
+.progress-map-node {
+  z-index: 4;
+  width: 68px;
+  gap: 6px;
+}
+
+.progress-map-node__button {
+  width: 52px;
+  height: 52px;
+  border: 3px solid #ffffff;
+  border-radius: 50%;
+  background: #f7f9fa;
+  color: #65717c;
+  box-shadow: 0 8px 18px rgba(31, 35, 40, 0.12);
+}
+
+.day-progress-circle {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.progress-map-node small {
+  min-height: 18px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #5f6b75;
+  box-shadow: 0 4px 10px rgba(31, 35, 40, 0.08);
+}
+
+.progress-map-node--completed .progress-map-node__button,
+.progress-map-node.is-complete .progress-map-node__button {
+  background: #4db6ac;
+  color: #fff;
+  box-shadow: 0 9px 18px rgba(77, 182, 172, 0.2);
+}
+
+.progress-map-node--active .progress-map-node__button {
+  background: #fff;
+  color: #2f958b;
+  box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.13), 0 9px 18px rgba(31, 35, 40, 0.12);
+}
+
+.progress-map-node.is-selected .progress-map-node__button {
+  background: #1f2328;
+  color: #fff;
+  box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.16), 0 10px 20px rgba(31, 35, 40, 0.18);
+  transform: translateY(-2px);
+}
+
+.progress-map-node.is-selected small {
+  color: #1f2328;
+}
+
+.progress-map-car {
+  top: var(--car-y);
+  left: var(--car-x);
+  z-index: 3;
+  display: grid;
+  width: 44px;
+  height: 34px;
+  place-items: center;
+  border: 2px solid #f4c85c;
+  border-bottom: 4px solid #c99523;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #ffe58a 0%, #f6c84f 100%);
+  box-shadow: 0 7px 14px rgba(31, 35, 40, 0.18);
+  font-size: 21px;
+  line-height: 1;
+  filter: none;
+  transform: translate(-50%, -50%) rotate(2deg);
+  transition: left 0.34s ease, top 0.34s ease;
+}
+
+.progress-map-finish {
+  position: absolute;
+  left: var(--flag-x);
+  top: var(--flag-y);
+  z-index: 5;
+  color: #ef5350;
+  font-size: 34px;
+  line-height: 1;
+  text-shadow: 0 3px 8px rgba(31, 35, 40, 0.18);
+  transform: translate(-26%, -100%);
+}
+
+@media (max-width: 374px) {
+  .progress-map-stage {
+    height: 250px;
+    min-height: 250px;
+  }
+
+  .progress-map-node {
+    width: 62px;
+  }
+
+  .progress-map-node__button {
+    width: 48px;
+    height: 48px;
+  }
+
+  .day-progress-circle {
+    font-size: 14px;
+  }
+
+  .progress-map-car {
+    width: 40px;
+    height: 31px;
+    font-size: 19px;
+  }
+
+  .progress-map-finish {
+    font-size: 30px;
+  }
+}
+
+/* Road map node rings and directional vehicle refinement */
+.progress-map-node__button {
+  position: relative;
+  width: 54px;
+  height: 54px;
+  padding: 4px;
+  border: 0;
+  background:
+    radial-gradient(circle at center, #ffffff 0 57%, transparent 58%),
+    conic-gradient(var(--day-ring-color) var(--day-progress), #e3e8eb 0);
+  color: #54616c;
+  box-shadow: 0 7px 16px rgba(31, 35, 40, 0.12);
+}
+
+.progress-map-node__button::before {
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: inset 0 0 0 1px rgba(217, 224, 228, 0.9);
+  content: "";
+}
+
+.progress-map-node__button span.day-progress-circle {
+  position: relative;
+  z-index: 1;
+  color: #56636e;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.progress-map-node--completed .progress-map-node__button,
+.progress-map-node.is-complete .progress-map-node__button,
+.progress-map-node--active .progress-map-node__button,
+.progress-map-node.is-selected .progress-map-node__button {
+  background:
+    radial-gradient(circle at center, #ffffff 0 57%, transparent 58%),
+    conic-gradient(var(--day-ring-color) var(--day-progress), #e3e8eb 0);
+  color: #54616c;
+}
+
+.progress-map-node.is-selected .progress-map-node__button {
+  box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.14), 0 9px 18px rgba(31, 35, 40, 0.13);
+  transform: translateY(-2px);
+}
+
+.progress-map-node.is-selected small {
+  color: var(--primary-dark);
+}
+
+.progress-map-car {
+  width: 42px;
+  height: 24px;
+  border: 0;
+  border-radius: 18px 10px 10px 18px;
+  background:
+    linear-gradient(90deg, #d99d24 0 10%, transparent 10%),
+    linear-gradient(180deg, #ffe487 0%, #f6c54b 60%, #dca12a 100%);
+  box-shadow: 0 6px 12px rgba(31, 35, 40, 0.22);
+  transform: translate(-50%, -50%) rotate(var(--car-angle));
+  transform-origin: center;
+}
+
+.progress-map-car::before,
+.progress-map-car::after {
+  position: absolute;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  content: "";
+}
+
+.progress-map-car::before {
+  top: 6px;
+}
+
+.progress-map-car::after {
+  bottom: 6px;
+}
+
+.progress-map-car__cabin {
+  position: absolute;
+  top: 5px;
+  left: 13px;
+  width: 16px;
+  height: 14px;
+  border-radius: 8px 5px 5px 8px;
+  background: rgba(255, 245, 190, 0.88);
+  box-shadow: inset 0 0 0 1px rgba(196, 139, 28, 0.18);
+}
+
+.progress-map-car__wheel {
+  position: absolute;
+  width: 9px;
+  height: 5px;
+  border-radius: 999px;
+  background: #2f363d;
+}
+
+.progress-map-car__wheel--front-left,
+.progress-map-car__wheel--front-right {
+  right: 7px;
+}
+
+.progress-map-car__wheel--rear-left,
+.progress-map-car__wheel--rear-right {
+  left: 7px;
+}
+
+.progress-map-car__wheel--front-left,
+.progress-map-car__wheel--rear-left {
+  top: -3px;
+}
+
+.progress-map-car__wheel--front-right,
+.progress-map-car__wheel--rear-right {
+  bottom: -3px;
+}
+
+@media (max-width: 374px) {
+  .progress-map-node__button {
+    width: 50px;
+    height: 50px;
+  }
+
+  .progress-map-node__button span.day-progress-circle {
+    font-size: 11px;
+  }
+
+  .progress-map-car {
+    width: 38px;
+    height: 22px;
   }
 }

@@ -5,7 +5,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.23";
+const APP_VERSION = "1.00.31";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -161,6 +161,39 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
+const ROAD_VIEWBOX = { width: 360, height: 250 };
+const ROAD_PATH_SEGMENTS = [
+  {
+    start: { x: 64, y: 62 },
+    control1: { x: 126, y: 36 },
+    control2: { x: 220, y: 42 },
+    end: { x: 268, y: 68 },
+  },
+  {
+    start: { x: 268, y: 68 },
+    control1: { x: 226, y: 98 },
+    control2: { x: 142, y: 100 },
+    end: { x: 94, y: 122 },
+  },
+  {
+    start: { x: 94, y: 122 },
+    control1: { x: 132, y: 148 },
+    control2: { x: 224, y: 142 },
+    end: { x: 274, y: 155 },
+  },
+  {
+    start: { x: 274, y: 155 },
+    control1: { x: 244, y: 184 },
+    control2: { x: 204, y: 200 },
+    end: { x: 172, y: 205 },
+  },
+  {
+    start: { x: 172, y: 205 },
+    control1: { x: 218, y: 222 },
+    control2: { x: 262, y: 224 },
+    end: { x: 310, y: 218 },
+  },
+];
 const roleCopy = {
   closet: {
     label: "장롱면허 · 완전 기초형",
@@ -399,9 +432,9 @@ function showOnboardingStep(step) {
 function updateWelcomeActions() {
   const hasProfile = hasSavedProfile();
 
-  elements.startButton.textContent = hasProfile ? "시작하기(새로 만들기)" : "시작하기";
+  elements.startButton.textContent = hasProfile ? "새로 시작하기" : "시작하기";
   elements.mockLoginButton.textContent = hasProfile
-    ? "저장된 계정으로 로그인"
+    ? "이어서 로그인"
     : "이미 계정이 있다면? 로그인";
 }
 
@@ -575,20 +608,49 @@ function ensureSelectedDay() {
 function renderRoadExperience() {
   ensureSelectedDay();
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
-  const currentDayIndex = getFirstIncompleteIndex();
+  const mapPoints = [
+    { x: 18, y: 25 },
+    { x: 74, y: 27 },
+    { x: 26, y: 50 },
+    { x: 76, y: 62 },
+    { x: 48, y: 82 },
+  ];
+  const finishPoint = {
+    x: (310 / ROAD_VIEWBOX.width) * 100,
+    y: (218 / ROAD_VIEWBOX.height) * 100,
+  };
+  const completedItems = curriculum.reduce(
+    (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
+    0,
+  );
+  const totalProgress = Math.round((completedItems / totalItems) * 100);
+  const roadProgress = Math.max(4, totalProgress);
+  const carPosition = getRoadPathPosition(totalProgress);
 
   return `
     <section class="road-course" aria-label="Day별 주행 코스">
       <div class="road-course__hint">
-        <span>Swipe road</span>
-        <strong>원하는 Day를 언제든 선택하세요</strong>
+        <span>Road map</span>
+        <strong>Day를 선택하면 아래에 상세 내역이 표시됩니다</strong>
       </div>
-      <div class="road-scroll" tabindex="0" aria-label="좌우로 스와이프 가능한 도로">
-        <div class="road-track" style="--car-index:${currentDayIndex}">
-          <div class="road-lane" aria-hidden="true"></div>
-          <div class="progress-car" aria-hidden="true">🚕</div>
-          <div class="road-nodes">
-            ${curriculum.map(renderRoadDayNode).join("")}
+      <div class="progress-map-card">
+        <div class="progress-map-stage" style="--car-x:${carPosition.x}%; --car-y:${carPosition.y}%; --car-angle:${carPosition.angle}deg; --flag-x:${finishPoint.x}%; --flag-y:${finishPoint.y}%;">
+          <svg class="progress-map-road" viewBox="0 0 360 250" aria-hidden="true">
+            <path class="progress-map-road__shadow" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
+            <path class="progress-map-road__base" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
+            <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${roadProgress} 100" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
+            <path class="progress-map-road__dash" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
+          </svg>
+          <div class="progress-map-finish" aria-hidden="true">⚑</div>
+          <div class="progress-map-car" aria-hidden="true">
+            <span class="progress-map-car__cabin"></span>
+            <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>
+            <span class="progress-map-car__wheel progress-map-car__wheel--front-right"></span>
+            <span class="progress-map-car__wheel progress-map-car__wheel--rear-left"></span>
+            <span class="progress-map-car__wheel progress-map-car__wheel--rear-right"></span>
+          </div>
+          <div class="progress-map-nodes">
+            ${curriculum.map((day, index) => renderRoadDayNode(day, index, mapPoints[index])).join("")}
           </div>
         </div>
       </div>
@@ -597,38 +659,80 @@ function renderRoadExperience() {
   `;
 }
 
-function renderRoadDayNode(day, index) {
+function getRoadPathPosition(progress) {
+  const samples = sampleRoadPath();
+  const clamped = Math.max(0, Math.min(progress, 100));
+  const targetLength = samples.totalLength * (clamped / 100);
+  const target =
+    samples.points.find((point) => point.length >= targetLength) ||
+    samples.points[samples.points.length - 1];
+  const previous = samples.points[Math.max(0, samples.points.indexOf(target) - 1)] || target;
+  const deltaX = target.x - previous.x;
+  const deltaY = target.y - previous.y;
+  const angle = Math.atan2(deltaY, deltaX) * (180 / Math.PI);
+
+  return {
+    x: (target.x / ROAD_VIEWBOX.width) * 100,
+    y: (target.y / ROAD_VIEWBOX.height) * 100,
+    angle,
+  };
+}
+
+function sampleRoadPath() {
+  const points = [];
+  let totalLength = 0;
+  let previous = ROAD_PATH_SEGMENTS[0].start;
+  points.push({ ...previous, length: 0 });
+
+  for (const segment of ROAD_PATH_SEGMENTS) {
+    for (let step = 1; step <= 60; step += 1) {
+      const point = getCubicBezierPoint(segment, step / 60);
+      totalLength += Math.hypot(point.x - previous.x, point.y - previous.y);
+      points.push({ ...point, length: totalLength });
+      previous = point;
+    }
+  }
+
+  return { points, totalLength };
+}
+
+function getCubicBezierPoint(segment, t) {
+  const oneMinusT = 1 - t;
+  const startWeight = oneMinusT ** 3;
+  const control1Weight = 3 * oneMinusT ** 2 * t;
+  const control2Weight = 3 * oneMinusT * t ** 2;
+  const endWeight = t ** 3;
+
+  return {
+    x:
+      startWeight * segment.start.x +
+      control1Weight * segment.control1.x +
+      control2Weight * segment.control2.x +
+      endWeight * segment.end.x,
+    y:
+      startWeight * segment.start.y +
+      control1Weight * segment.control1.y +
+      control2Weight * segment.control2.y +
+      endWeight * segment.end.y,
+  };
+}
+
+function renderRoadDayNode(day, index, point) {
   const status = getDayCompletion(day);
   const state = getDayState(day);
+  const ratio = Math.round((status.completed / status.total) * 100);
+  const ringColor = ratio === 100 ? "#4db6ac" : ratio >= 50 ? "#8ccf5e" : "#f2c94c";
   const doneClass = status.isDone ? " is-complete" : "";
   const isExpanded = day.id === expandedDayId;
   const selectedClass = isExpanded ? " is-selected" : "";
-  const stateClass = ` course-card--${state}`;
-  const ratio = Math.round((status.completed / status.total) * 100);
-  const stateLabel = {
-    completed: "완료됨",
-    active: status.completed > 0 ? "진행중" : "시작 가능",
-    available: "열람 가능",
-  }[state];
+  const stateClass = ` progress-map-node--${state}`;
 
   return `
-    <article class="course-card road-day${stateClass}${doneClass}${selectedClass}" data-day-id="${day.id}" data-day-state="${state}">
-      <button class="course-card__button road-day__button" type="button" data-day-open="${day.id}" aria-pressed="${isExpanded}">
-        <div class="course-node-wrap">
-          <div class="course-node" aria-hidden="true">
-            <span class="course-node__icon">${state === "completed" ? "✓" : dayNumbers[index]}</span>
-          </div>
-          <span class="course-node-wrap__label">${status.completed}/${status.total}</span>
-        </div>
-        <div class="course-ring" style="--progress:${ratio * 3.6}deg" aria-label="${ratio}% 완료">
-          <span>${ratio}%</span>
-        </div>
+    <article class="progress-map-node${stateClass}${doneClass}${selectedClass}" data-map-day-id="${day.id}" style="--node-x:${point.x}%; --node-y:${point.y}%; --day-progress:${ratio * 3.6}deg; --day-ring-color:${ringColor};">
+      <button class="progress-map-node__button" type="button" data-day-open="${day.id}" aria-pressed="${isExpanded}" aria-label="${day.day} ${day.title}">
+        <span class="day-progress-circle">${ratio}%</span>
       </button>
-      <div class="road-day__caption">
-        <span class="day-chip">${day.day}</span>
-        <strong>${day.title}</strong>
-        <small>${stateLabel}</small>
-      </div>
+      <small>${day.day}</small>
     </article>
   `;
 }
@@ -648,12 +752,10 @@ function renderSelectedDayPanel(day) {
       <div class="drive-detail-panel__header">
         <div>
           <span class="day-chip">${day.day} · ${stateLabel}</span>
-          <h3>${day.title}</h3>
+          <h3>${day.day}: ${day.title}</h3>
           <p>${day.goal}</p>
         </div>
-        <div class="course-ring" style="--progress:${ratio * 3.6}deg" aria-label="${ratio}% 완료">
-          <span>${ratio}%</span>
-        </div>
+        <span class="day-progress-text" aria-label="${ratio}% 완료">${ratio}% 완료</span>
       </div>
       <div class="course-card__meta">
         <span class="day-status" data-day-status="${day.id}">${status.completed}/${status.total} PASS</span>
@@ -707,12 +809,12 @@ function handleChecklistChange(event) {
   progressState[checkbox.dataset.taskCheckbox] = checkbox.checked;
   celebratedTaskId = checkbox.checked ? checkbox.dataset.taskCheckbox : null;
   saveProgress();
-  updateProgress();
+  updateProgressPreservingScroll();
 
   if (celebratedTaskId) {
     window.setTimeout(() => {
       celebratedTaskId = null;
-      updateProgress();
+      updateProgressPreservingScroll();
     }, 680);
   }
 }
@@ -729,11 +831,7 @@ function handleDayFilterClick(event) {
     .forEach((filterButton) => filterButton.classList.toggle("is-active", filterButton === button));
   expandedDayId = button.dataset.dayFilter;
   updateProgress();
-  document.querySelector(`[data-day-id="${button.dataset.dayFilter}"]`)?.scrollIntoView({
-    behavior: "smooth",
-    inline: "center",
-    block: "nearest",
-  });
+  scrollRoadDayIntoView(button.dataset.dayFilter);
 }
 
 function handleDayCardClick(event) {
@@ -757,10 +855,18 @@ function handleDayCardClick(event) {
       filterButton.classList.toggle("is-active", filterButton.dataset.dayFilter === expandedDayId),
     );
   updateProgress();
-  document.querySelector(`[data-day-id="${button.dataset.dayOpen}"]`)?.scrollIntoView({
-    behavior: "smooth",
-    inline: "center",
-    block: "nearest",
+  scrollRoadDayIntoView(button.dataset.dayOpen);
+}
+
+function scrollRoadDayIntoView(dayId) {
+  window.requestAnimationFrame(() => {
+    const day = document.querySelector(`[data-map-day-id="${dayId}"]`);
+
+    if (!day) {
+      return;
+    }
+
+    day.scrollIntoView({ block: "nearest", inline: "nearest", behavior: "smooth" });
   });
 }
 
@@ -920,11 +1026,11 @@ function completeActiveGuideTask() {
   saveProgress();
   elements.guidePassButton.textContent = "PASS 완료됨";
   elements.guidePassButton.classList.add("is-complete");
-  updateProgress();
+  updateProgressPreservingScroll();
 
   window.setTimeout(() => {
     celebratedTaskId = null;
-    updateProgress();
+    updateProgressPreservingScroll();
   }, 680);
 }
 
@@ -960,6 +1066,23 @@ function updateProgress() {
 
   renderDayFilter();
   elements.list.innerHTML = renderRoadExperience();
+}
+
+function updateProgressPreservingScroll() {
+  const scrollY = window.scrollY;
+  const detail = elements.list.querySelector(".course-detail");
+  const detailScrollTop = detail?.scrollTop || 0;
+
+  updateProgress();
+
+  window.requestAnimationFrame(() => {
+    window.scrollTo(window.scrollX, scrollY);
+    const nextDetail = elements.list.querySelector(".course-detail");
+
+    if (nextDetail) {
+      nextDetail.scrollTop = detailScrollTop;
+    }
+  });
 }
 
 function updateConnectionStatus() {
