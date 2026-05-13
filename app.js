@@ -5,7 +5,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.32";
+const APP_VERSION = "1.00.33";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -85,6 +85,10 @@ function item(id, title, cover, preview) {
 
 const elements = {
   list: document.querySelector("#curriculum-list"),
+  calendarKicker: document.querySelector("#calendar-kicker"),
+  calendarTitle: document.querySelector("#calendar-title"),
+  calendarToggle: document.querySelector("#calendar-toggle"),
+  calendarGrid: document.querySelector("#calendar-grid"),
   dayFilter: document.querySelector("#hero-day-filter"),
   completedCount: document.querySelector("#completed-count"),
   totalCount: document.querySelector("#total-count"),
@@ -141,6 +145,7 @@ const elements = {
 const totalItems = curriculum.reduce((sum, day) => sum + day.items.length, 0);
 let progressState = loadProgress();
 let expandedDayId = null;
+let isCalendarExpanded = false;
 let deferredInstallPrompt = null;
 let celebratedTaskId = null;
 let activeGuideTaskId = null;
@@ -359,7 +364,10 @@ function getDayState(day) {
 }
 
 function renderCurriculum() {
-  elements.totalCount.textContent = totalItems;
+  if (elements.totalCount) {
+    elements.totalCount.textContent = totalItems;
+  }
+  renderCalendar();
   renderDayFilter();
   elements.list.innerHTML = renderRoadExperience();
   elements.startButton.addEventListener("click", startNewProfile);
@@ -370,7 +378,8 @@ function renderCurriculum() {
   elements.finishOnboardingButton.addEventListener("click", finishOnboarding);
   elements.nicknameInput.addEventListener("input", handleNicknameInput);
   elements.list.addEventListener("change", handleChecklistChange);
-  elements.dayFilter.addEventListener("click", handleDayFilterClick);
+  elements.calendarToggle?.addEventListener("click", toggleCalendar);
+  elements.dayFilter?.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
   elements.completeNextButton.addEventListener("click", completeNextTask);
@@ -580,13 +589,25 @@ function updateHomeProfile() {
   const copy = roleCopy[profile.role] || roleCopy.guest;
   const nickname = profile.nickname || "운전자";
 
-  elements.homeRoleLabel.textContent = copy.label;
-  elements.homeGreeting.textContent = `${nickname}님, ${copy.title}`;
-  elements.homeSubtitle.textContent = copy.subtitle;
+  if (elements.homeRoleLabel) {
+    elements.homeRoleLabel.textContent = copy.label;
+  }
+
+  if (elements.homeGreeting) {
+    elements.homeGreeting.textContent = `${nickname}님, ${copy.title}`;
+  }
+
+  if (elements.homeSubtitle) {
+    elements.homeSubtitle.textContent = copy.subtitle;
+  }
 }
 
 function renderDayFilter() {
   ensureSelectedDay();
+  if (!elements.dayFilter) {
+    return;
+  }
+
   elements.dayFilter.innerHTML = curriculum
     .map((day, index) => {
       const state = getDayState(day);
@@ -595,6 +616,90 @@ function renderDayFilter() {
       return `<button class="hero-member-filter__button${isActive ? " is-active" : ""}" type="button" data-day-filter="${day.id}">${index + 1}일</button>`;
     })
     .join("");
+}
+
+function toggleCalendar() {
+  isCalendarExpanded = !isCalendarExpanded;
+  renderCalendar();
+}
+
+function renderCalendar() {
+  if (!elements.calendarGrid) {
+    return;
+  }
+
+  const today = new Date();
+  const visibleDates = isCalendarExpanded ? getMonthDates(today) : getWeekDates(today);
+  const title = `${today.getFullYear()}년 ${today.getMonth() + 1}월`;
+
+  elements.calendarTitle.textContent = title;
+  elements.calendarKicker.textContent = isCalendarExpanded ? "이번 달" : "이번 주";
+  elements.calendarToggle?.setAttribute("aria-expanded", String(isCalendarExpanded));
+  elements.calendarToggle?.setAttribute("aria-label", isCalendarExpanded ? "달력 접기" : "달력 펼치기");
+  elements.calendarToggle?.classList.toggle("is-expanded", isCalendarExpanded);
+  elements.calendarGrid.classList.toggle("is-month", isCalendarExpanded);
+  elements.calendarGrid.innerHTML = visibleDates.map((date) => renderCalendarDay(date, today)).join("");
+}
+
+function renderCalendarDay(date, today) {
+  const isCurrentMonth = date.getMonth() === today.getMonth();
+  const isToday = isSameDate(date, today);
+  const dateLabel = `${date.getMonth() + 1}월 ${date.getDate()}일`;
+
+  return `
+    <time class="calendar-day${isToday ? " is-today" : ""}${isCurrentMonth ? "" : " is-muted"}" datetime="${toDateInputValue(date)}" aria-label="${dateLabel}">
+      <span>${date.getDate()}</span>
+    </time>
+  `;
+}
+
+function getWeekDates(baseDate) {
+  const monday = new Date(baseDate);
+  const day = monday.getDay() || 7;
+  monday.setDate(monday.getDate() - day + 1);
+
+  return Array.from({ length: 7 }, (_, index) => {
+    const date = new Date(monday);
+    date.setDate(monday.getDate() + index);
+    return date;
+  });
+}
+
+function getMonthDates(baseDate) {
+  const firstDay = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
+  const lastDay = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0);
+  const start = new Date(firstDay);
+  const firstWeekday = start.getDay() || 7;
+  start.setDate(start.getDate() - firstWeekday + 1);
+
+  const end = new Date(lastDay);
+  const lastWeekday = end.getDay() || 7;
+  end.setDate(end.getDate() + (7 - lastWeekday));
+
+  const dates = [];
+  const cursor = new Date(start);
+
+  while (cursor <= end) {
+    dates.push(new Date(cursor));
+    cursor.setDate(cursor.getDate() + 1);
+  }
+
+  return dates;
+}
+
+function isSameDate(date, otherDate) {
+  return (
+    date.getFullYear() === otherDate.getFullYear() &&
+    date.getMonth() === otherDate.getMonth() &&
+    date.getDate() === otherDate.getDate()
+  );
+}
+
+function toDateInputValue(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
 
 function ensureSelectedDay() {
@@ -629,10 +734,6 @@ function renderRoadExperience() {
 
   return `
     <section class="road-course" aria-label="Day별 주행 코스">
-      <div class="road-course__hint">
-        <span>Road map</span>
-        <strong>Day를 선택하면 아래에 상세 내역이 표시됩니다</strong>
-      </div>
       <div class="progress-map-card">
         <div class="progress-map-stage" style="--car-x:${carPosition.x}%; --car-y:${carPosition.y}%; --car-angle:${carPosition.angle}deg; --flag-x:${finishPoint.x}%; --flag-y:${finishPoint.y}%;">
           <svg class="progress-map-road" viewBox="0 0 360 250" aria-hidden="true">
@@ -1070,13 +1171,33 @@ function updateProgressMetrics() {
   const percent = Math.round((completed / totalItems) * 100);
   const completedDays = curriculum.filter((day) => getDayCompletion(day).isDone).length;
 
-  elements.completedCount.textContent = completed;
-  elements.completedDaysCount.textContent = `${completedDays}/${curriculum.length}`;
-  elements.progressPercent.textContent = `${percent}%`;
-  elements.progressFill.style.width = `${percent}%`;
-  elements.settingsProgressLabel.textContent = `${completed}/${totalItems} 항목 완료`;
-  elements.settingsProgressFill.style.width = `${percent}%`;
-  elements.saveStatusLabel.textContent = completed > 0 ? "저장 완료" : "로컬 저장";
+  if (elements.completedCount) {
+    elements.completedCount.textContent = completed;
+  }
+
+  if (elements.completedDaysCount) {
+    elements.completedDaysCount.textContent = `${completedDays}/${curriculum.length}`;
+  }
+
+  if (elements.progressPercent) {
+    elements.progressPercent.textContent = `${percent}%`;
+  }
+
+  if (elements.progressFill) {
+    elements.progressFill.style.width = `${percent}%`;
+  }
+
+  if (elements.settingsProgressLabel) {
+    elements.settingsProgressLabel.textContent = `${completed}/${totalItems} 항목 완료`;
+  }
+
+  if (elements.settingsProgressFill) {
+    elements.settingsProgressFill.style.width = `${percent}%`;
+  }
+
+  if (elements.saveStatusLabel) {
+    elements.saveStatusLabel.textContent = completed > 0 ? "저장 완료" : "로컬 저장";
+  }
 
   return { completed, percent, completedDays };
 }

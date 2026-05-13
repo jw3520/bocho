@@ -4050,3 +4050,225 @@ body {
     height: 22px;
   }
 }
+
+/* Home v2 layout and forced light rendering */
+:root {
+  color-scheme: only light;
+}
+
+html,
+body,
+input,
+button,
+select,
+textarea {
+  color-scheme: only light;
+}
+
+@media (prefers-color-scheme: dark) {
+  html,
+  body {
+    background: #dfe5e8 !important;
+    color: var(--text) !important;
+  }
+
+  .phone,
+  .screen,
+  .onboarding-flow,
+  .calendar-panel,
+  .progress-map-card,
+  .drive-detail-panel,
+  .record-card,
+  .tabbar {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+  }
+}
+
+.screen[data-screen="curriculum"] {
+  padding: calc(env(safe-area-inset-top) + 12px) 0 112px;
+  background: var(--bg);
+}
+
+.calendar-panel {
+  display: grid;
+  gap: 12px;
+  margin: 0 14px 12px;
+  padding: 16px 16px 14px;
+  border: 1px solid rgba(225, 233, 236, 0.95);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.calendar-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.calendar-panel__header span {
+  display: block;
+  margin-bottom: 5px;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.calendar-panel__header h1 {
+  margin: 0;
+  color: var(--text);
+  font-size: 24px;
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+
+.calendar-toggle {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 0;
+  border-radius: 14px;
+  background: #eef7f6;
+  color: var(--primary-dark);
+}
+
+.calendar-toggle svg {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.18s ease;
+}
+
+.calendar-toggle.is-expanded svg {
+  transform: rotate(180deg);
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.calendar-weekdays span {
+  color: #8a949e;
+  font-size: 11px;
+  font-weight: 850;
+  text-align: center;
+}
+
+.calendar-day {
+  display: grid;
+  aspect-ratio: 1;
+  min-width: 0;
+  place-items: center;
+  border-radius: 16px;
+  background: #f4f6f8;
+  color: #606b75;
+  font-size: 14px;
+  font-weight: 900;
+  text-decoration: none;
+}
+
+.calendar-day.is-muted {
+  opacity: 0.42;
+}
+
+.calendar-day.is-today {
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(77, 182, 172, 0.2);
+}
+
+.calendar-grid:not(.is-month) .calendar-day {
+  border-radius: 18px;
+}
+
+.calendar-grid.is-month {
+  gap: 7px 6px;
+}
+
+.curriculum-panel {
+  display: block;
+  min-height: 0;
+  padding: 0 14px;
+}
+
+.records-list {
+  gap: 12px;
+  padding: 0;
+}
+
+.road-course {
+  gap: 0;
+}
+
+.progress-map-card {
+  display: grid;
+  overflow: hidden;
+  min-height: 236px;
+  place-items: center;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.78), transparent 38%),
+    linear-gradient(180deg, #ffffff 0%, #f4f7f8 100%);
+}
+
+.progress-map-stage {
+  width: 100%;
+  height: 236px;
+  min-height: 236px;
+  padding: 0;
+}
+
+.progress-map-road {
+  inset: -6px 0 0;
+  height: calc(100% + 6px);
+}
+
+.drive-detail-panel {
+  margin-top: 12px;
+  border-radius: 22px;
+}
+
+.drive-detail-panel .course-detail {
+  max-height: none;
+  overflow: visible;
+}
+
+.status-panel {
+  margin-top: 12px;
+}
+
+@media (max-width: 374px) {
+  .calendar-panel {
+    margin-inline: 12px;
+    padding: 14px;
+  }
+
+  .calendar-panel__header h1 {
+    font-size: 22px;
+  }
+
+  .calendar-day {
+    border-radius: 14px;
+    font-size: 13px;
+  }
+
+  .curriculum-panel {
+    padding-inline: 12px;
+  }
+
+  .progress-map-card {
+    min-height: 222px;
+  }
+
+  .progress-map-stage {
+    height: 222px;
+    min-height: 222px;
+  }
+}
