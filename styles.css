@@ -4125,6 +4125,13 @@ textarea {
   line-height: 1.1;
 }
 
+.calendar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.calendar-month-button,
 .calendar-toggle {
   display: grid;
   width: 38px;
@@ -4137,6 +4144,16 @@ textarea {
   color: var(--primary-dark);
 }
 
+.calendar-month-button {
+  background: #f4f6f8;
+  color: #5f6b75;
+}
+
+.calendar-month-button[hidden] {
+  display: none;
+}
+
+.calendar-month-button svg,
 .calendar-toggle svg {
   width: 20px;
   height: 20px;

@@ -104,11 +104,23 @@
                 <span id="calendar-kicker">이번 주</span>
                 <h1 id="calendar-title">오늘의 연수</h1>
               </div>
-              <button class="calendar-toggle" id="calendar-toggle" type="button" aria-expanded="false" aria-label="달력 펼치기">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="m6 9 6 6 6-6"></path>
-                </svg>
-              </button>
+              <div class="calendar-actions">
+                <button class="calendar-month-button" id="calendar-prev-month" type="button" aria-label="이전 달" hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m15 18-6-6 6-6"></path>
+                  </svg>
+                </button>
+                <button class="calendar-month-button" id="calendar-next-month" type="button" aria-label="다음 달" hidden>
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m9 18 6-6-6-6"></path>
+                  </svg>
+                </button>
+                <button class="calendar-toggle" id="calendar-toggle" type="button" aria-expanded="false" aria-label="달력 펼치기">
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="m6 9 6 6 6-6"></path>
+                  </svg>
+                </button>
+              </div>
             </div>
             <div class="calendar-weekdays" aria-hidden="true">
               <span>월</span>
