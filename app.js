@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.56";
+const APP_VERSION = "1.00.57";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -178,40 +178,40 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 360, height: 240 };
-const ROAD_DAY_PROGRESS_POINTS = [0, 20, 48, 65, 82];
+const ROAD_VIEWBOX = { width: 430, height: 220 };
+const ROAD_DAY_PROGRESS_POINTS = [0, 20, 42, 62, 82];
 const ROAD_PATH_D =
-  "M48 72 C76 44 112 46 140 72 C124 102 98 118 82 152 C118 196 176 198 212 164 C232 118 268 86 306 104 C334 136 334 174 318 196";
+  "M48 70 C92 30 150 34 172 78 C190 118 112 118 106 158 C130 206 218 202 236 154 C250 106 330 92 356 124 C386 138 382 154 402 156";
 const ROAD_PATH_SEGMENTS = [
   {
-    start: { x: 48, y: 72 },
-    control1: { x: 76, y: 44 },
-    control2: { x: 112, y: 46 },
-    end: { x: 140, y: 72 },
+    start: { x: 48, y: 70 },
+    control1: { x: 92, y: 30 },
+    control2: { x: 150, y: 34 },
+    end: { x: 172, y: 78 },
   },
   {
-    start: { x: 140, y: 72 },
-    control1: { x: 124, y: 102 },
-    control2: { x: 98, y: 118 },
-    end: { x: 82, y: 152 },
+    start: { x: 172, y: 78 },
+    control1: { x: 190, y: 118 },
+    control2: { x: 112, y: 118 },
+    end: { x: 106, y: 158 },
   },
   {
-    start: { x: 82, y: 152 },
-    control1: { x: 118, y: 196 },
-    control2: { x: 176, y: 198 },
-    end: { x: 212, y: 164 },
+    start: { x: 106, y: 158 },
+    control1: { x: 130, y: 206 },
+    control2: { x: 218, y: 202 },
+    end: { x: 236, y: 154 },
   },
   {
-    start: { x: 212, y: 164 },
-    control1: { x: 232, y: 118 },
-    control2: { x: 268, y: 86 },
-    end: { x: 306, y: 104 },
+    start: { x: 236, y: 154 },
+    control1: { x: 250, y: 106 },
+    control2: { x: 330, y: 92 },
+    end: { x: 356, y: 124 },
   },
   {
-    start: { x: 306, y: 104 },
-    control1: { x: 334, y: 136 },
-    control2: { x: 334, y: 174 },
-    end: { x: 318, y: 196 },
+    start: { x: 356, y: 124 },
+    control1: { x: 386, y: 138 },
+    control2: { x: 382, y: 154 },
+    end: { x: 402, y: 156 },
   },
 ];
 const roleCopy = {
