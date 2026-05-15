@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.59";
+const APP_VERSION = "1.00.61";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -178,40 +178,40 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 410, height: 220 };
+const ROAD_VIEWBOX = { width: 390, height: 220 };
 const ROAD_DAY_PROGRESS_POINTS = [0, 20, 42, 62, 82];
 const ROAD_PATH_D =
-  "M44 100 C72 47 128 31 164 65 C194 96 121 123 129 162 C168 199 249 165 250 114 C247 64 317 24 352 45 C384 62 382 94 382 112";
+  "M52 100 C70 47 112 36 146 70 C182 101 114 124 129 162 C168 199 238 165 242 114 C240 64 300 30 334 50 C366 66 364 96 364 112";
 const ROAD_PATH_SEGMENTS = [
   {
-    start: { x: 44, y: 100 },
-    control1: { x: 72, y: 47 },
-    control2: { x: 128, y: 31 },
-    end: { x: 164, y: 65 },
+    start: { x: 52, y: 100 },
+    control1: { x: 70, y: 47 },
+    control2: { x: 112, y: 36 },
+    end: { x: 146, y: 70 },
   },
   {
-    start: { x: 164, y: 65 },
-    control1: { x: 194, y: 96 },
-    control2: { x: 121, y: 123 },
+    start: { x: 146, y: 70 },
+    control1: { x: 182, y: 101 },
+    control2: { x: 114, y: 124 },
     end: { x: 129, y: 162 },
   },
   {
     start: { x: 129, y: 162 },
     control1: { x: 168, y: 199 },
-    control2: { x: 249, y: 165 },
-    end: { x: 250, y: 114 },
+    control2: { x: 238, y: 165 },
+    end: { x: 242, y: 114 },
   },
   {
-    start: { x: 250, y: 114 },
-    control1: { x: 247, y: 64 },
-    control2: { x: 317, y: 24 },
-    end: { x: 352, y: 45 },
+    start: { x: 242, y: 114 },
+    control1: { x: 240, y: 64 },
+    control2: { x: 300, y: 30 },
+    end: { x: 334, y: 50 },
   },
   {
-    start: { x: 352, y: 45 },
-    control1: { x: 384, y: 62 },
-    control2: { x: 382, y: 94 },
-    end: { x: 382, y: 112 },
+    start: { x: 334, y: 50 },
+    control1: { x: 366, y: 66 },
+    control2: { x: 364, y: 96 },
+    end: { x: 364, y: 112 },
   },
 ];
 const roleCopy = {
@@ -427,7 +427,7 @@ function renderCurriculum() {
   elements.dayFilter?.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
-  elements.completeNextButton.addEventListener("click", completeNextTask);
+  elements.completeNextButton.addEventListener("click", shareProgress);
   elements.resetProgressButton.addEventListener("click", resetProgress);
   elements.logoutButton.addEventListener("click", logout);
   elements.dismissUpdateBannerButton.addEventListener("click", dismissMainUpdateBanner);
@@ -1186,24 +1186,32 @@ function handleTabClick(event) {
   syncUpdateUi();
 }
 
-function completeNextTask() {
-  const nextTask = curriculum.flatMap((day) => day.items).find((task) => !isComplete(task.id));
+async function shareProgress() {
+  const completedItems = curriculum.reduce(
+    (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
+    0,
+  );
+  const percent = Math.round((completedItems / totalItems) * 100);
+  const shareData = {
+    title: "전운보초",
+    text: `전운보초 연습 진도 ${percent}% 완료`,
+    url: window.location.href,
+  };
 
-  if (!nextTask) {
-    return;
+  if (navigator.share) {
+    try {
+      await navigator.share(shareData);
+      return;
+    } catch (error) {
+      if (error?.name === "AbortError") {
+        return;
+      }
+    }
   }
 
-  progressState[nextTask.id] = true;
-  syncTaskPassDate(nextTask.id, true);
-  celebratedTaskId = nextTask.id;
-  savePassDates();
-  saveProgress();
-  updateProgress();
-
-  window.setTimeout(() => {
-    celebratedTaskId = null;
-    updateProgress();
-  }, 680);
+  if (navigator.clipboard?.writeText) {
+    await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+  }
 }
 
 function resetProgress() {

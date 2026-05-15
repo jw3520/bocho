@@ -4900,7 +4900,7 @@ textarea {
 }
 
 .progress-map-stage {
-  width: max(100%, 410px);
+  width: max(100%, 390px);
   height: 220px;
   min-height: 220px;
 }
@@ -5107,7 +5107,7 @@ textarea {
   }
 
   .progress-map-stage {
-    width: 410px;
+    width: 390px;
     height: 208px;
     min-height: 208px;
   }
@@ -5327,4 +5327,114 @@ textarea {
   .calendar-day {
     font-size: 14px;
   }
+}
+
+/* Final mobile chrome pass: fixed light mode and compact bottom controls */
+:root {
+  color-scheme: only light;
+}
+
+html,
+body,
+input,
+button,
+select,
+textarea,
+dialog {
+  color-scheme: only light;
+}
+
+body {
+  background: #dfe5e8;
+  color: var(--text);
+}
+
+.phone,
+.screen,
+.onboarding-flow {
+  background: var(--bg);
+  color: var(--text);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: only light;
+  }
+
+  html,
+  body {
+    background: #dfe5e8 !important;
+    color: var(--text) !important;
+  }
+
+  .phone,
+  .screen,
+  .calendar-panel,
+  .progress-map-card,
+  .drive-detail-panel,
+  .record-card,
+  .settings-panel,
+  .tabbar,
+  dialog {
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+  }
+}
+
+.screen[data-screen="curriculum"] {
+  padding-bottom: calc(86px + env(safe-area-inset-bottom));
+}
+
+.fab {
+  right: max(18px, calc((100vw - 430px) / 2 + 18px));
+  bottom: calc(68px + env(safe-area-inset-bottom));
+  z-index: 10;
+  width: 50px;
+  height: 50px;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #4db6ac 0%, #2f958b 100%);
+  color: #fff;
+  box-shadow: 0 12px 22px rgba(47, 149, 139, 0.24);
+}
+
+.fab svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.25;
+}
+
+.fab:active {
+  transform: translateY(1px);
+}
+
+.tabbar {
+  width: min(430px, 100%);
+  padding: 6px 76px calc(6px + env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(221, 226, 230, 0.9);
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 -8px 18px rgba(15, 23, 42, 0.06);
+  backdrop-filter: blur(16px);
+}
+
+.tabbar-button {
+  min-width: 46px;
+  height: 44px;
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: #aeb7bf;
+  box-shadow: none;
+}
+
+.tabbar-button svg {
+  width: 23px;
+  height: 23px;
+}
+
+.tabbar-button.is-active {
+  border: 0;
+  background: rgba(77, 182, 172, 0.12);
+  color: var(--primary-dark);
+  box-shadow: none;
 }
