@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.36";
+const APP_VERSION = "1.00.40";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -89,6 +89,12 @@ const elements = {
   calendarKicker: document.querySelector("#calendar-kicker"),
   calendarTitle: document.querySelector("#calendar-title"),
   calendarToggle: document.querySelector("#calendar-toggle"),
+  calendarMonthPicker: document.querySelector("#calendar-month-picker"),
+  calendarPickerPreview: document.querySelector("#calendar-picker-preview"),
+  calendarYearWheel: document.querySelector("#calendar-year-wheel"),
+  calendarMonthGrid: document.querySelector("#calendar-month-grid"),
+  calendarPickerApply: document.querySelector("#calendar-picker-apply"),
+  calendarPickerClose: document.querySelector("#calendar-picker-close"),
   calendarPrevPeriod: document.querySelector("#calendar-prev-period"),
   calendarNextPeriod: document.querySelector("#calendar-next-period"),
   calendarTodayButton: document.querySelector("#calendar-today-button"),
@@ -172,37 +178,39 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 360, height: 250 };
+const ROAD_VIEWBOX = { width: 360, height: 300 };
+const ROAD_PATH_D =
+  "M58 78 C122 34 240 34 298 80 C254 132 142 124 78 158 C126 224 244 190 294 220 C258 266 190 268 134 246 C194 286 270 282 320 258";
 const ROAD_PATH_SEGMENTS = [
   {
-    start: { x: 64, y: 62 },
-    control1: { x: 126, y: 36 },
-    control2: { x: 220, y: 42 },
-    end: { x: 268, y: 68 },
+    start: { x: 58, y: 78 },
+    control1: { x: 122, y: 34 },
+    control2: { x: 240, y: 34 },
+    end: { x: 298, y: 80 },
   },
   {
-    start: { x: 268, y: 68 },
-    control1: { x: 226, y: 98 },
-    control2: { x: 142, y: 100 },
-    end: { x: 94, y: 122 },
+    start: { x: 298, y: 80 },
+    control1: { x: 254, y: 132 },
+    control2: { x: 142, y: 124 },
+    end: { x: 78, y: 158 },
   },
   {
-    start: { x: 94, y: 122 },
-    control1: { x: 132, y: 148 },
-    control2: { x: 224, y: 142 },
-    end: { x: 274, y: 155 },
+    start: { x: 78, y: 158 },
+    control1: { x: 126, y: 224 },
+    control2: { x: 244, y: 190 },
+    end: { x: 294, y: 220 },
   },
   {
-    start: { x: 274, y: 155 },
-    control1: { x: 244, y: 184 },
-    control2: { x: 204, y: 200 },
-    end: { x: 172, y: 205 },
+    start: { x: 294, y: 220 },
+    control1: { x: 258, y: 266 },
+    control2: { x: 190, y: 268 },
+    end: { x: 134, y: 246 },
   },
   {
-    start: { x: 172, y: 205 },
-    control1: { x: 218, y: 222 },
-    control2: { x: 262, y: 224 },
-    end: { x: 310, y: 218 },
+    start: { x: 134, y: 246 },
+    control1: { x: 194, y: 286 },
+    control2: { x: 270, y: 282 },
+    end: { x: 320, y: 258 },
   },
 ];
 const roleCopy = {
@@ -407,6 +415,11 @@ function renderCurriculum() {
   elements.nicknameInput.addEventListener("input", handleNicknameInput);
   elements.list.addEventListener("change", handleChecklistChange);
   elements.calendarToggle?.addEventListener("click", toggleCalendar);
+  elements.calendarKicker?.addEventListener("click", toggleMonthPicker);
+  elements.calendarMonthPicker?.addEventListener("click", handleMonthPickerClick);
+  elements.calendarPickerApply?.addEventListener("click", applyMonthPicker);
+  elements.calendarPickerClose?.addEventListener("click", closeMonthPicker);
+  document.addEventListener("click", closeMonthPickerOnOutsideClick);
   elements.calendarPrevPeriod?.addEventListener("click", () => moveCalendarPeriod(-1));
   elements.calendarNextPeriod?.addEventListener("click", () => moveCalendarPeriod(1));
   elements.calendarTodayButton?.addEventListener("click", resetCalendarToToday);
@@ -654,24 +667,7 @@ function renderDayFilter() {
 
 function toggleCalendar() {
   isCalendarExpanded = !isCalendarExpanded;
-  renderCalendar();
-}
-
-function moveCalendarPeriod(direction) {
-  const nextDate = new Date(calendarDisplayDate);
-
-  if (isCalendarExpanded) {
-    nextDate.setMonth(nextDate.getMonth() + direction, 1);
-  } else {
-    nextDate.setDate(nextDate.getDate() + direction * 7);
-  }
-
-  calendarDisplayDate = nextDate;
-  renderCalendar();
-}
-
-function resetCalendarToToday() {
-  calendarDisplayDate = new Date();
+  closeMonthPicker();
   renderCalendar();
 }
 
@@ -683,37 +679,151 @@ function renderCalendar() {
   const today = new Date();
   const baseMonth = calendarDisplayDate;
   const visibleDates = isCalendarExpanded ? getMonthDates(baseMonth) : getWeekDates(calendarDisplayDate);
-  const title = `${baseMonth.getFullYear()}년 ${baseMonth.getMonth() + 1}월`;
 
-  elements.calendarTitle.textContent = title;
-  elements.calendarTitle.hidden = !isCalendarExpanded;
-  elements.calendarKicker.textContent = getCalendarKicker(baseMonth, today);
+  elements.calendarTitle.hidden = true;
+  elements.calendarKicker.textContent = isCalendarExpanded ? getMonthLabel(baseMonth) : getWeekLabel(calendarDisplayDate);
+  elements.calendarKicker.setAttribute("aria-expanded", String(!elements.calendarMonthPicker?.hidden));
+  elements.calendarKicker.classList.toggle("is-month-mode", isCalendarExpanded);
   elements.calendarToggle?.setAttribute("aria-expanded", String(isCalendarExpanded));
   elements.calendarToggle?.setAttribute("aria-label", isCalendarExpanded ? "달력 접기" : "달력 펼치기");
   elements.calendarToggle?.classList.toggle("is-expanded", isCalendarExpanded);
-
-  if (elements.calendarPrevPeriod) {
-    elements.calendarPrevPeriod.setAttribute("aria-label", isCalendarExpanded ? "이전 달" : "이전 주");
-  }
-
-  if (elements.calendarNextPeriod) {
-    elements.calendarNextPeriod.setAttribute("aria-label", isCalendarExpanded ? "다음 달" : "다음 주");
-  }
+  renderMonthPickerOptions(baseMonth);
 
   elements.calendarGrid.classList.toggle("is-month", isCalendarExpanded);
   elements.calendarGrid.innerHTML = visibleDates.map((date) => renderCalendarDay(date, baseMonth, today)).join("");
 }
 
-function getCalendarKicker(baseDate, today) {
-  if (isCalendarExpanded) {
-    return baseDate.getFullYear() === today.getFullYear() && baseDate.getMonth() === today.getMonth()
-      ? "이번 달"
-      : "월간";
+function renderMonthPickerOptions(baseDate) {
+  if (!elements.calendarYearWheel || !elements.calendarMonthGrid || !elements.calendarMonthPicker) {
+    return;
   }
 
-  const currentWeekStart = getWeekDates(today)[0];
-  const visibleWeekStart = getWeekDates(baseDate)[0];
-  return isSameDate(currentWeekStart, visibleWeekStart) ? "이번 주" : "주간";
+  const currentYear = new Date().getFullYear();
+  const startYear = currentYear - 3;
+  const endYear = currentYear + 3;
+  const years = [];
+  const draftYear = Number(elements.calendarMonthPicker.dataset.year || baseDate.getFullYear());
+  const draftMonth = Number(elements.calendarMonthPicker.dataset.month || baseDate.getMonth());
+
+  for (let year = startYear; year <= endYear; year += 1) {
+    years.push(`
+      <button class="calendar-year-option${year === draftYear ? " is-selected" : ""}" type="button" data-picker-year="${year}" aria-pressed="${year === draftYear}">
+        ${year}
+      </button>
+    `);
+  }
+
+  elements.calendarYearWheel.innerHTML = years.join("");
+  elements.calendarMonthGrid.innerHTML = Array.from({ length: 12 }, (_, index) => {
+    const month = index + 1;
+    return `
+      <button class="calendar-month-option${index === draftMonth ? " is-selected" : ""}" type="button" data-picker-month="${index}" aria-pressed="${index === draftMonth}">
+        ${month}월
+      </button>
+    `;
+  }).join("");
+  updateMonthPickerPreview();
+
+  window.requestAnimationFrame(() => {
+    elements.calendarYearWheel
+      ?.querySelector(".calendar-year-option.is-selected")
+      ?.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+  });
+}
+
+function toggleMonthPicker(event) {
+  event.stopPropagation();
+
+  if (!isCalendarExpanded || !elements.calendarMonthPicker) {
+    return;
+  }
+
+  if (elements.calendarMonthPicker.hidden) {
+    elements.calendarMonthPicker.dataset.year = String(calendarDisplayDate.getFullYear());
+    elements.calendarMonthPicker.dataset.month = String(calendarDisplayDate.getMonth());
+    renderMonthPickerOptions(calendarDisplayDate);
+  }
+
+  elements.calendarMonthPicker.hidden = !elements.calendarMonthPicker.hidden;
+  elements.calendarKicker?.setAttribute("aria-expanded", String(!elements.calendarMonthPicker.hidden));
+}
+
+function closeMonthPicker() {
+  if (!elements.calendarMonthPicker) {
+    return;
+  }
+
+  elements.calendarMonthPicker.hidden = true;
+  elements.calendarKicker?.setAttribute("aria-expanded", "false");
+}
+
+function closeMonthPickerOnOutsideClick(event) {
+  if (
+    elements.calendarMonthPicker?.hidden ||
+    event.target.closest("#calendar-month-picker") ||
+    event.target.closest("#calendar-kicker")
+  ) {
+    return;
+  }
+
+  closeMonthPicker();
+}
+
+function handleMonthPickerClick(event) {
+  const yearButton = event.target.closest("[data-picker-year]");
+  const monthButton = event.target.closest("[data-picker-month]");
+
+  if (!elements.calendarMonthPicker || (!yearButton && !monthButton)) {
+    return;
+  }
+
+  event.stopPropagation();
+
+  if (yearButton) {
+    elements.calendarMonthPicker.dataset.year = yearButton.dataset.pickerYear;
+  }
+
+  if (monthButton) {
+    elements.calendarMonthPicker.dataset.month = monthButton.dataset.pickerMonth;
+  }
+
+  renderMonthPickerOptions(calendarDisplayDate);
+}
+
+function updateMonthPickerPreview() {
+  if (!elements.calendarPickerPreview || !elements.calendarMonthPicker) {
+    return;
+  }
+
+  const year = Number(elements.calendarMonthPicker.dataset.year || calendarDisplayDate.getFullYear());
+  const month = Number(elements.calendarMonthPicker.dataset.month || calendarDisplayDate.getMonth()) + 1;
+  elements.calendarPickerPreview.textContent = `${year}년 ${month}월`;
+}
+
+function applyMonthPicker(event) {
+  event.stopPropagation();
+
+  const year = Number(elements.calendarMonthPicker?.dataset.year || calendarDisplayDate.getFullYear());
+  const month = Number(elements.calendarMonthPicker?.dataset.month || calendarDisplayDate.getMonth());
+  calendarDisplayDate = new Date(year, month, 1);
+  closeMonthPicker();
+  renderCalendar();
+}
+
+function getWeekLabel(baseDate) {
+  const weekStart = getWeekDates(baseDate)[0];
+  const monthStart = new Date(weekStart.getFullYear(), weekStart.getMonth(), 1);
+  const monthStartDay = monthStart.getDay() || 7;
+  const firstWeekStart = new Date(monthStart);
+  firstWeekStart.setDate(monthStart.getDate() - monthStartDay + 1);
+  const diffDays = Math.round((weekStart - firstWeekStart) / 86400000);
+  const weekNumber = Math.floor(diffDays / 7) + 1;
+
+  return `${weekStart.getMonth() + 1}월 ${weekNumber}주차`;
+}
+
+function getMonthLabel(baseDate) {
+  return `${baseDate.getFullYear()}년 ${baseDate.getMonth() + 1}월`;
 }
 
 function renderCalendarDay(date, baseMonth, today) {
@@ -797,15 +907,15 @@ function renderRoadExperience() {
   ensureSelectedDay();
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
   const mapPoints = [
-    { x: 18, y: 25 },
-    { x: 74, y: 27 },
-    { x: 26, y: 50 },
-    { x: 76, y: 62 },
-    { x: 48, y: 82 },
+    { x: (58 / ROAD_VIEWBOX.width) * 100, y: (78 / ROAD_VIEWBOX.height) * 100 },
+    { x: (298 / ROAD_VIEWBOX.width) * 100, y: (80 / ROAD_VIEWBOX.height) * 100 },
+    { x: (78 / ROAD_VIEWBOX.width) * 100, y: (158 / ROAD_VIEWBOX.height) * 100 },
+    { x: (294 / ROAD_VIEWBOX.width) * 100, y: (220 / ROAD_VIEWBOX.height) * 100 },
+    { x: (134 / ROAD_VIEWBOX.width) * 100, y: (246 / ROAD_VIEWBOX.height) * 100 },
   ];
   const finishPoint = {
-    x: (310 / ROAD_VIEWBOX.width) * 100,
-    y: (218 / ROAD_VIEWBOX.height) * 100,
+    x: (320 / ROAD_VIEWBOX.width) * 100,
+    y: (258 / ROAD_VIEWBOX.height) * 100,
   };
   const completedItems = curriculum.reduce(
     (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
@@ -819,11 +929,11 @@ function renderRoadExperience() {
     <section class="road-course" aria-label="Day별 주행 코스">
       <div class="progress-map-card">
         <div class="progress-map-stage" style="--car-x:${carPosition.x}%; --car-y:${carPosition.y}%; --car-angle:${carPosition.angle}deg; --flag-x:${finishPoint.x}%; --flag-y:${finishPoint.y}%;">
-          <svg class="progress-map-road" viewBox="0 0 360 250" aria-hidden="true">
-            <path class="progress-map-road__shadow" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
-            <path class="progress-map-road__base" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
-            <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${roadProgress} 100" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
-            <path class="progress-map-road__dash" d="M64 62 C126 36 220 42 268 68 C226 98 142 100 94 122 C132 148 224 142 274 155 C244 184 204 200 172 205 C218 222 262 224 310 218"></path>
+          <svg class="progress-map-road" viewBox="0 0 360 300" aria-hidden="true">
+            <path class="progress-map-road__shadow" d="${ROAD_PATH_D}"></path>
+            <path class="progress-map-road__base" d="${ROAD_PATH_D}"></path>
+            <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${roadProgress} 100" d="${ROAD_PATH_D}"></path>
+            <path class="progress-map-road__dash" d="${ROAD_PATH_D}"></path>
           </svg>
           <div class="progress-map-finish" aria-hidden="true">⚑</div>
           <div class="progress-map-car" aria-hidden="true">
@@ -1045,7 +1155,7 @@ function handleDayCardClick(event) {
 
   expandedDayId = button.dataset.dayOpen;
   elements.dayFilter
-    .querySelectorAll("[data-day-filter]")
+    ?.querySelectorAll("[data-day-filter]")
     .forEach((filterButton) =>
       filterButton.classList.toggle("is-active", filterButton.dataset.dayFilter === expandedDayId),
     );
@@ -1055,6 +1165,12 @@ function handleDayCardClick(event) {
 
 function scrollRoadDayIntoView(dayId) {
   window.requestAnimationFrame(() => {
+    const scrollContainer = document.querySelector(".road-scroll");
+
+    if (!scrollContainer) {
+      return;
+    }
+
     const day = document.querySelector(`[data-map-day-id="${dayId}"]`);
 
     if (!day) {
