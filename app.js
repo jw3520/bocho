@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.16.06";
+const APP_VERSION = "26.05.16.07";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -488,10 +488,8 @@ function showOnboardingStep(step) {
 function updateWelcomeActions() {
   const hasProfile = hasSavedProfile();
 
-  elements.startButton.textContent = hasProfile ? "새로 시작하기" : "시작하기";
-  elements.mockLoginButton.textContent = hasProfile
-    ? "이어서 로그인"
-    : "이미 계정이 있다면? 로그인";
+  elements.startButton.textContent = hasProfile ? "새 루틴 만들기" : "내 루틴 만들기";
+  elements.mockLoginButton.textContent = hasProfile ? "이어하기" : "기존 루틴 불러오기";
 }
 
 function handleRoleSelect(event) {
