@@ -4900,7 +4900,7 @@ textarea {
 }
 
 .progress-map-stage {
-  width: max(100%, 430px);
+  width: max(100%, 410px);
   height: 220px;
   min-height: 220px;
 }
@@ -5107,7 +5107,7 @@ textarea {
   }
 
   .progress-map-stage {
-    width: 430px;
+    width: 410px;
     height: 208px;
     min-height: 208px;
   }

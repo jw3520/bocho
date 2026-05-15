@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.58";
+const APP_VERSION = "1.00.59";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -178,10 +178,10 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 430, height: 220 };
+const ROAD_VIEWBOX = { width: 410, height: 220 };
 const ROAD_DAY_PROGRESS_POINTS = [0, 20, 42, 62, 82];
 const ROAD_PATH_D =
-  "M44 100 C72 47 128 31 164 65 C194 96 121 123 129 162 C168 199 249 165 250 114 C247 64 317 24 352 45 C385 48 387 64 406 59";
+  "M44 100 C72 47 128 31 164 65 C194 96 121 123 129 162 C168 199 249 165 250 114 C247 64 317 24 352 45 C384 62 382 94 382 112";
 const ROAD_PATH_SEGMENTS = [
   {
     start: { x: 44, y: 100 },
@@ -209,9 +209,9 @@ const ROAD_PATH_SEGMENTS = [
   },
   {
     start: { x: 352, y: 45 },
-    control1: { x: 385, y: 48 },
-    control2: { x: 387, y: 64 },
-    end: { x: 406, y: 59 },
+    control1: { x: 384, y: 62 },
+    control2: { x: 382, y: 94 },
+    end: { x: 382, y: 112 },
   },
 ];
 const roleCopy = {
