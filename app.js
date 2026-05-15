@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.42";
+const APP_VERSION = "1.00.43";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -178,39 +178,39 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 360, height: 300 };
+const ROAD_VIEWBOX = { width: 360, height: 320 };
 const ROAD_PATH_D =
-  "M62 58 C150 20 244 32 296 76 C254 124 136 112 72 150 C120 204 238 184 300 218 C266 258 190 252 138 246 C190 286 276 284 322 268";
+  "M48 48 C126 22 238 30 306 78 C260 126 132 112 62 158 C114 218 232 188 308 236 C266 276 154 244 92 276 C162 306 258 306 326 286";
 const ROAD_PATH_SEGMENTS = [
   {
-    start: { x: 62, y: 58 },
-    control1: { x: 150, y: 20 },
-    control2: { x: 244, y: 32 },
-    end: { x: 296, y: 76 },
+    start: { x: 48, y: 48 },
+    control1: { x: 126, y: 22 },
+    control2: { x: 238, y: 30 },
+    end: { x: 306, y: 78 },
   },
   {
-    start: { x: 296, y: 76 },
-    control1: { x: 254, y: 124 },
-    control2: { x: 136, y: 112 },
-    end: { x: 72, y: 150 },
+    start: { x: 306, y: 78 },
+    control1: { x: 260, y: 126 },
+    control2: { x: 132, y: 112 },
+    end: { x: 62, y: 158 },
   },
   {
-    start: { x: 72, y: 150 },
-    control1: { x: 120, y: 204 },
-    control2: { x: 238, y: 184 },
-    end: { x: 300, y: 218 },
+    start: { x: 62, y: 158 },
+    control1: { x: 114, y: 218 },
+    control2: { x: 232, y: 188 },
+    end: { x: 308, y: 236 },
   },
   {
-    start: { x: 300, y: 218 },
-    control1: { x: 266, y: 258 },
-    control2: { x: 190, y: 252 },
-    end: { x: 138, y: 246 },
+    start: { x: 308, y: 236 },
+    control1: { x: 266, y: 276 },
+    control2: { x: 154, y: 244 },
+    end: { x: 92, y: 276 },
   },
   {
-    start: { x: 138, y: 246 },
-    control1: { x: 190, y: 286 },
-    control2: { x: 276, y: 284 },
-    end: { x: 322, y: 268 },
+    start: { x: 92, y: 276 },
+    control1: { x: 162, y: 306 },
+    control2: { x: 258, y: 306 },
+    end: { x: 326, y: 286 },
   },
 ];
 const roleCopy = {
@@ -813,9 +813,9 @@ function applyMonthPicker(event) {
 function getWeekLabel(baseDate) {
   const weekStart = getWeekDates(baseDate)[0];
   const monthStart = new Date(weekStart.getFullYear(), weekStart.getMonth(), 1);
-  const monthStartDay = monthStart.getDay() || 7;
+  const monthStartDay = monthStart.getDay();
   const firstWeekStart = new Date(monthStart);
-  firstWeekStart.setDate(monthStart.getDate() - monthStartDay + 1);
+  firstWeekStart.setDate(monthStart.getDate() - monthStartDay);
   const diffDays = Math.round((weekStart - firstWeekStart) / 86400000);
   const weekNumber = Math.floor(diffDays / 7) + 1;
 
@@ -847,13 +847,12 @@ function hasPassOnDate(dateValue) {
 }
 
 function getWeekDates(baseDate) {
-  const monday = new Date(baseDate);
-  const day = monday.getDay() || 7;
-  monday.setDate(monday.getDate() - day + 1);
+  const sunday = new Date(baseDate);
+  sunday.setDate(sunday.getDate() - sunday.getDay());
 
   return Array.from({ length: 7 }, (_, index) => {
-    const date = new Date(monday);
-    date.setDate(monday.getDate() + index);
+    const date = new Date(sunday);
+    date.setDate(sunday.getDate() + index);
     return date;
   });
 }
@@ -862,12 +861,12 @@ function getMonthDates(baseDate) {
   const firstDay = new Date(baseDate.getFullYear(), baseDate.getMonth(), 1);
   const lastDay = new Date(baseDate.getFullYear(), baseDate.getMonth() + 1, 0);
   const start = new Date(firstDay);
-  const firstWeekday = start.getDay() || 7;
-  start.setDate(start.getDate() - firstWeekday + 1);
+  const firstWeekday = start.getDay();
+  start.setDate(start.getDate() - firstWeekday);
 
   const end = new Date(lastDay);
-  const lastWeekday = end.getDay() || 7;
-  end.setDate(end.getDate() + (7 - lastWeekday));
+  const lastWeekday = end.getDay();
+  end.setDate(end.getDate() + (6 - lastWeekday));
 
   const dates = [];
   const cursor = new Date(start);
@@ -907,15 +906,15 @@ function renderRoadExperience() {
   ensureSelectedDay();
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
   const mapPoints = [
-    { x: (62 / ROAD_VIEWBOX.width) * 100, y: (58 / ROAD_VIEWBOX.height) * 100 },
-    { x: (296 / ROAD_VIEWBOX.width) * 100, y: (76 / ROAD_VIEWBOX.height) * 100 },
-    { x: (72 / ROAD_VIEWBOX.width) * 100, y: (150 / ROAD_VIEWBOX.height) * 100 },
-    { x: (300 / ROAD_VIEWBOX.width) * 100, y: (218 / ROAD_VIEWBOX.height) * 100 },
-    { x: (138 / ROAD_VIEWBOX.width) * 100, y: (246 / ROAD_VIEWBOX.height) * 100 },
+    { x: (48 / ROAD_VIEWBOX.width) * 100, y: (48 / ROAD_VIEWBOX.height) * 100 },
+    { x: (306 / ROAD_VIEWBOX.width) * 100, y: (78 / ROAD_VIEWBOX.height) * 100 },
+    { x: (62 / ROAD_VIEWBOX.width) * 100, y: (158 / ROAD_VIEWBOX.height) * 100 },
+    { x: (308 / ROAD_VIEWBOX.width) * 100, y: (236 / ROAD_VIEWBOX.height) * 100 },
+    { x: (92 / ROAD_VIEWBOX.width) * 100, y: (276 / ROAD_VIEWBOX.height) * 100 },
   ];
   const finishPoint = {
-    x: (322 / ROAD_VIEWBOX.width) * 100,
-    y: (268 / ROAD_VIEWBOX.height) * 100,
+    x: (326 / ROAD_VIEWBOX.width) * 100,
+    y: (286 / ROAD_VIEWBOX.height) * 100,
   };
   const completedItems = curriculum.reduce(
     (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
@@ -929,13 +928,13 @@ function renderRoadExperience() {
     <section class="road-course" aria-label="Day별 주행 코스">
       <div class="progress-map-card">
         <div class="progress-map-stage" style="--car-x:${carPosition.x}%; --car-y:${carPosition.y}%; --car-angle:${carPosition.angle}deg; --flag-x:${finishPoint.x}%; --flag-y:${finishPoint.y}%;">
-          <svg class="progress-map-road" viewBox="0 0 360 300" aria-hidden="true">
+          <svg class="progress-map-road" viewBox="0 0 ${ROAD_VIEWBOX.width} ${ROAD_VIEWBOX.height}" aria-hidden="true">
             <path class="progress-map-road__shadow" d="${ROAD_PATH_D}"></path>
             <path class="progress-map-road__base" d="${ROAD_PATH_D}"></path>
             <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${roadProgress} 100" d="${ROAD_PATH_D}"></path>
             <path class="progress-map-road__dash" d="${ROAD_PATH_D}"></path>
           </svg>
-          <div class="progress-map-finish" aria-hidden="true">⚑</div>
+          <div class="progress-map-finish" aria-hidden="true"><span></span></div>
           <div class="progress-map-car" aria-hidden="true">
             <span class="progress-map-car__cabin"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>

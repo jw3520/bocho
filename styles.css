@@ -4887,3 +4887,438 @@ textarea {
     min-height: 52px;
   }
 }
+
+/* Photo-referenced roadmap: spaced winding road with day guide details below */
+.progress-map-card {
+  min-height: 350px;
+  padding: 18px 0 16px;
+  background:
+    linear-gradient(180deg, #ffffff 0%, #f6f9fa 100%);
+}
+
+.progress-map-stage {
+  height: 316px;
+  min-height: 316px;
+}
+
+.progress-map-road {
+  inset: 0 -8px;
+  width: calc(100% + 16px);
+  height: 100%;
+}
+
+.progress-map-road__shadow {
+  stroke: rgba(31, 35, 40, 0.11);
+  stroke-width: 42;
+  transform: translateY(6px);
+}
+
+.progress-map-road__base {
+  stroke: #dfe5e8;
+  stroke-width: 36;
+}
+
+.progress-map-road__progress {
+  stroke: #9aa5ad;
+  stroke-width: 36;
+}
+
+.progress-map-road__dash {
+  stroke: rgba(255, 255, 255, 0.92);
+  stroke-dasharray: 12 16;
+  stroke-width: 4;
+}
+
+.progress-map-node {
+  width: 64px;
+  gap: 4px;
+  z-index: 5;
+}
+
+.progress-map-node__button {
+  width: 50px;
+  height: 50px;
+  background:
+    radial-gradient(circle at center, #ffffff 0 56%, transparent 57%),
+    conic-gradient(var(--day-ring-color) var(--day-progress), #d9e1e5 0);
+  color: #56636e;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.88), 0 8px 18px rgba(46, 87, 86, 0.13);
+}
+
+.progress-map-node__button::before {
+  inset: 6px;
+}
+
+.progress-map-node__button span.day-progress-circle {
+  color: #56636e;
+  font-size: 11px;
+}
+
+.progress-map-node small {
+  max-width: 62px;
+  min-height: 18px;
+  padding: 3px 7px;
+  font-size: 10px;
+  background: rgba(255, 255, 255, 0.96);
+}
+
+.progress-map-node.is-selected .progress-map-node__button {
+  background:
+    radial-gradient(circle at center, #ffffff 0 56%, transparent 57%),
+    conic-gradient(var(--primary) var(--day-progress), #cfe4e3 0);
+  box-shadow: 0 0 0 5px rgba(77, 182, 172, 0.18), 0 11px 22px rgba(46, 87, 86, 0.17);
+}
+
+.progress-map-car {
+  top: var(--car-y);
+  left: var(--car-x);
+  z-index: 4;
+  display: block;
+  width: 38px;
+  height: 22px;
+  border-radius: 16px 9px 9px 16px;
+  background:
+    linear-gradient(90deg, #c88e20 0 11%, transparent 11%),
+    linear-gradient(180deg, #ffe58a 0%, #f6c54b 62%, #dca12a 100%);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.86), 0 8px 14px rgba(31, 35, 40, 0.22);
+  filter: none;
+  transform: translate(-50%, -50%) rotate(var(--car-angle));
+  transform-origin: center;
+}
+
+.progress-map-car::before,
+.progress-map-car::after {
+  position: absolute;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.82);
+  content: "";
+}
+
+.progress-map-car::before {
+  top: 5px;
+}
+
+.progress-map-car::after {
+  bottom: 5px;
+}
+
+.progress-map-car__cabin {
+  position: absolute;
+  top: 5px;
+  left: 13px;
+  width: 14px;
+  height: 12px;
+  border-radius: 8px 5px 5px 8px;
+  background: rgba(255, 245, 190, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(196, 139, 28, 0.18);
+}
+
+.progress-map-car__wheel {
+  position: absolute;
+  width: 8px;
+  height: 5px;
+  border-radius: 999px;
+  background: #2f363d;
+}
+
+.progress-map-car__wheel--front-left,
+.progress-map-car__wheel--front-right {
+  right: 6px;
+}
+
+.progress-map-car__wheel--rear-left,
+.progress-map-car__wheel--rear-right {
+  left: 6px;
+}
+
+.progress-map-car__wheel--front-left,
+.progress-map-car__wheel--rear-left {
+  top: -3px;
+}
+
+.progress-map-car__wheel--front-right,
+.progress-map-car__wheel--rear-right {
+  bottom: -3px;
+}
+
+.progress-map-finish {
+  left: var(--flag-x);
+  top: var(--flag-y);
+  width: 28px;
+  height: 44px;
+  color: inherit;
+  font-size: 0;
+  filter: drop-shadow(0 5px 8px rgba(31, 35, 40, 0.18));
+  text-shadow: none;
+  transform: translate(-40%, -94%);
+}
+
+.progress-map-finish::before {
+  position: absolute;
+  left: 6px;
+  top: 7px;
+  width: 3px;
+  height: 36px;
+  border-radius: 999px;
+  background: #4b5563;
+  content: "";
+}
+
+.progress-map-finish span {
+  position: absolute;
+  left: 9px;
+  top: 6px;
+  width: 18px;
+  height: 15px;
+  border-radius: 3px 8px 8px 3px;
+  background: #ef5350;
+  clip-path: polygon(0 0, 100% 16%, 72% 50%, 100% 84%, 0 100%);
+}
+
+.drive-detail-panel {
+  margin-top: 14px;
+}
+
+.drive-detail-panel__header {
+  gap: 10px;
+  padding: 18px 18px 12px;
+}
+
+.drive-detail-panel > .course-card__meta {
+  padding: 0 18px 14px;
+}
+
+.drive-detail-panel .course-detail {
+  gap: 9px;
+  padding: 0 12px 14px;
+}
+
+@media (max-width: 374px) {
+  .progress-map-card {
+    min-height: 320px;
+  }
+
+  .progress-map-stage {
+    height: 288px;
+    min-height: 288px;
+  }
+
+  .progress-map-node {
+    width: 58px;
+  }
+
+  .progress-map-node__button {
+    width: 45px;
+    height: 45px;
+  }
+
+  .progress-map-node__button span.day-progress-circle {
+    font-size: 10px;
+  }
+
+  .progress-map-node small {
+    max-width: 56px;
+    font-size: 9px;
+  }
+}
+
+/* Minimal calendar pass referenced from donnaga */
+.screen[data-screen="curriculum"] {
+  background: var(--bg);
+}
+
+.calendar-panel {
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: calc(env(safe-area-inset-top) + 14px) 22px 8px;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.calendar-period-row {
+  gap: 6px;
+}
+
+.calendar-kicker-button {
+  color: var(--primary-dark);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.1;
+}
+
+.calendar-toggle {
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-radius: 12px;
+  background: #eef7f6;
+  color: var(--primary-dark);
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.calendar-toggle svg {
+  width: 17px;
+  height: 17px;
+  stroke-width: 2.5;
+}
+
+.calendar-weekdays,
+.calendar-grid {
+  gap: 6px;
+}
+
+.calendar-weekdays {
+  margin-top: 2px;
+}
+
+.calendar-weekdays span {
+  color: #8a949e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.calendar-day {
+  border: 0;
+  border-radius: 16px;
+  background: transparent;
+  color: #59636e;
+  font-size: 15px;
+  font-weight: 700;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+
+.calendar-day.has-pass-mark::before,
+.calendar-day.has-pass-mark::after {
+  inset: 8px;
+  border-width: 2px;
+}
+
+.calendar-day.is-today {
+  border: 1px solid rgba(77, 182, 172, 0.36);
+  background: #e7f8f5;
+  color: #1f666b;
+  box-shadow: none;
+}
+
+.calendar-day.is-muted {
+  opacity: 0.36;
+}
+
+.calendar-grid:not(.is-month) .calendar-day {
+  border-radius: 16px;
+}
+
+.calendar-month-picker {
+  width: min(376px, calc(100vw - 24px));
+  max-height: min(430px, calc(100vh - 28px));
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid rgba(225, 233, 236, 0.96);
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 18px 44px rgba(31, 35, 40, 0.16);
+  backdrop-filter: none;
+  animation: calendarSheetIn 0.2s ease-out both;
+}
+
+.calendar-month-picker::before {
+  width: 36px;
+  height: 4px;
+  background: #d8dee3;
+}
+
+.calendar-picker-head strong {
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 900;
+}
+
+.calendar-picker-head span {
+  min-height: 32px;
+  padding: 0 11px;
+  border: 0;
+  background: #eef7f6;
+  color: var(--primary-dark);
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.calendar-year-wheel {
+  gap: 8px;
+  margin: 0 -16px;
+  padding: 0 16px 2px;
+}
+
+.calendar-year-option,
+.calendar-month-option {
+  border: 0;
+  background: #f5f6f8;
+  color: #3f4952;
+  font-size: 14px;
+  font-weight: 800;
+  box-shadow: none;
+}
+
+.calendar-year-option {
+  min-width: 76px;
+  min-height: 40px;
+}
+
+.calendar-month-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.calendar-month-option {
+  min-height: 48px;
+  border-radius: 14px;
+}
+
+.calendar-year-option.is-selected,
+.calendar-month-option.is-selected {
+  border: 0;
+  background: rgba(77, 182, 172, 0.14);
+  color: var(--primary-dark);
+  box-shadow: none;
+}
+
+.calendar-picker-close,
+.calendar-picker-apply {
+  min-height: 46px;
+  border-radius: 14px;
+  font-size: 14px;
+  font-weight: 900;
+  box-shadow: none;
+}
+
+.calendar-picker-close {
+  background: #f4f5f7;
+  color: #65717c;
+}
+
+.calendar-picker-apply {
+  min-height: 46px;
+  background: var(--primary);
+  color: #fff;
+  box-shadow: 0 8px 16px rgba(77, 182, 172, 0.18);
+}
+
+@media (max-width: 374px) {
+  .calendar-panel {
+    padding-inline: 18px;
+  }
+
+  .calendar-kicker-button {
+    font-size: 17px;
+  }
+
+  .calendar-day {
+    font-size: 14px;
+  }
+}
