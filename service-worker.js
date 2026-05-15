@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bocho-pwa-v49";
+const CACHE_VERSION = "bocho-pwa-v50";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",

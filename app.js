@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.49";
+const APP_VERSION = "1.00.50";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -178,39 +178,45 @@ const pwaUpdateState = {
 };
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
-const ROAD_VIEWBOX = { width: 360, height: 420 };
+const ROAD_VIEWBOX = { width: 360, height: 240 };
 const ROAD_PATH_D =
-  "M58 70 C104 44 176 44 236 62 C204 112 118 132 70 184 C126 214 236 168 304 188 C264 250 160 264 92 330 C152 356 250 360 318 342";
+  "M42 78 C82 36 128 36 150 82 C176 126 95 128 84 166 C128 210 198 196 206 156 C220 104 264 94 308 118 C338 152 304 196 260 188 C288 218 326 214 336 188";
 const ROAD_PATH_SEGMENTS = [
   {
-    start: { x: 58, y: 70 },
-    control1: { x: 104, y: 44 },
-    control2: { x: 176, y: 44 },
-    end: { x: 236, y: 62 },
+    start: { x: 42, y: 78 },
+    control1: { x: 82, y: 36 },
+    control2: { x: 128, y: 36 },
+    end: { x: 150, y: 82 },
   },
   {
-    start: { x: 236, y: 62 },
-    control1: { x: 204, y: 112 },
-    control2: { x: 118, y: 132 },
-    end: { x: 70, y: 184 },
+    start: { x: 150, y: 82 },
+    control1: { x: 176, y: 126 },
+    control2: { x: 95, y: 128 },
+    end: { x: 84, y: 166 },
   },
   {
-    start: { x: 70, y: 184 },
-    control1: { x: 126, y: 214 },
-    control2: { x: 236, y: 168 },
-    end: { x: 304, y: 188 },
+    start: { x: 84, y: 166 },
+    control1: { x: 128, y: 210 },
+    control2: { x: 198, y: 196 },
+    end: { x: 206, y: 156 },
   },
   {
-    start: { x: 304, y: 188 },
-    control1: { x: 264, y: 250 },
-    control2: { x: 160, y: 264 },
-    end: { x: 92, y: 330 },
+    start: { x: 206, y: 156 },
+    control1: { x: 220, y: 104 },
+    control2: { x: 264, y: 94 },
+    end: { x: 308, y: 118 },
   },
   {
-    start: { x: 92, y: 330 },
-    control1: { x: 152, y: 356 },
-    control2: { x: 250, y: 360 },
-    end: { x: 318, y: 342 },
+    start: { x: 308, y: 118 },
+    control1: { x: 338, y: 152 },
+    control2: { x: 304, y: 196 },
+    end: { x: 260, y: 188 },
+  },
+  {
+    start: { x: 260, y: 188 },
+    control1: { x: 288, y: 218 },
+    control2: { x: 326, y: 214 },
+    end: { x: 336, y: 184 },
   },
 ];
 const roleCopy = {
@@ -906,15 +912,15 @@ function renderRoadExperience() {
   ensureSelectedDay();
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
   const mapPoints = [
-    { x: (58 / ROAD_VIEWBOX.width) * 100, y: (70 / ROAD_VIEWBOX.height) * 100 },
-    { x: (236 / ROAD_VIEWBOX.width) * 100, y: (62 / ROAD_VIEWBOX.height) * 100 },
-    { x: (70 / ROAD_VIEWBOX.width) * 100, y: (184 / ROAD_VIEWBOX.height) * 100 },
-    { x: (304 / ROAD_VIEWBOX.width) * 100, y: (188 / ROAD_VIEWBOX.height) * 100 },
-    { x: (92 / ROAD_VIEWBOX.width) * 100, y: (330 / ROAD_VIEWBOX.height) * 100 },
+    { x: (42 / ROAD_VIEWBOX.width) * 100, y: (78 / ROAD_VIEWBOX.height) * 100 },
+    { x: (150 / ROAD_VIEWBOX.width) * 100, y: (82 / ROAD_VIEWBOX.height) * 100 },
+    { x: (84 / ROAD_VIEWBOX.width) * 100, y: (166 / ROAD_VIEWBOX.height) * 100 },
+    { x: (206 / ROAD_VIEWBOX.width) * 100, y: (156 / ROAD_VIEWBOX.height) * 100 },
+    { x: (308 / ROAD_VIEWBOX.width) * 100, y: (118 / ROAD_VIEWBOX.height) * 100 },
   ];
   const finishPoint = {
-    x: (318 / ROAD_VIEWBOX.width) * 100,
-    y: (342 / ROAD_VIEWBOX.height) * 100,
+    x: (336 / ROAD_VIEWBOX.width) * 100,
+    y: (184 / ROAD_VIEWBOX.height) * 100,
   };
   const completedItems = curriculum.reduce(
     (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
