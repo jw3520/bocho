@@ -4890,8 +4890,8 @@ textarea {
 
 /* Photo-referenced roadmap: spaced winding road with day guide details below */
 .progress-map-card {
-  min-height: 250px;
-  padding: 12px 0 12px;
+  min-height: 228px;
+  padding: 4px 0;
   background:
     linear-gradient(180deg, #ffffff 0%, #f6f9fa 100%);
 }
@@ -5098,7 +5098,7 @@ textarea {
 
 @media (max-width: 374px) {
   .progress-map-card {
-    min-height: 236px;
+    min-height: 216px;
   }
 
   .progress-map-stage {
