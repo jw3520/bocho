@@ -5421,7 +5421,7 @@ svg {
 .fab {
   right: max(18px, calc((100vw - 430px) / 2 + 18px));
   bottom: calc(68px + env(safe-area-inset-bottom));
-  z-index: 10;
+  z-index: 300;
   width: 50px;
   height: 50px;
   border: 0;
@@ -5429,6 +5429,10 @@ svg {
   background: linear-gradient(180deg, #4db6ac 0%, #2f958b 100%);
   color: #fff;
   box-shadow: 0 12px 22px rgba(47, 149, 139, 0.24);
+}
+
+.screen[data-screen="settings"].screen--active ~ .fab {
+  display: grid;
 }
 
 .fab svg {
@@ -5501,6 +5505,96 @@ svg {
 .secondary-button--success {
   background: rgba(77, 182, 172, 0.14);
   color: var(--primary-dark);
+}
+
+.screen[data-screen="settings"] {
+  background: var(--bg);
+}
+
+.screen[data-screen="settings"] .subscreen-header {
+  padding: calc(env(safe-area-inset-top) + 18px) 18px 12px;
+}
+
+.screen[data-screen="settings"] .subscreen-header__title p {
+  display: none;
+}
+
+.panel--settings {
+  min-height: calc(100dvh - 150px);
+  padding: 12px 14px 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.settings-list {
+  display: grid;
+  gap: 10px;
+}
+
+.settings-row,
+.settings-row--update,
+.settings-row--progress,
+.settings-row--danger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 16px;
+  border: 0;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(46, 87, 86, 0.05);
+}
+
+.settings-row strong {
+  color: #1f2328;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.settings-row p {
+  margin: 3px 0 0;
+  color: #8b95a1;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.settings-row .primary-button,
+.settings-row .secondary-button {
+  min-width: 84px;
+  min-height: 38px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 14px;
+  box-shadow: none;
+  white-space: nowrap;
+}
+
+.settings-row .primary-button {
+  background: var(--primary);
+  color: #fff;
+}
+
+.settings-row .secondary-button {
+  background: #eef7f6;
+  color: var(--primary-dark);
+}
+
+.settings-row .secondary-button--danger {
+  background: #f4f5f7;
+  color: #5d6874;
+}
+
+.settings-row .secondary-button--success,
+#clear-web-cache-button.is-done {
+  background: #e7f8f5;
+  color: var(--primary-dark);
+}
+
+.asset-progress {
+  flex: 0 0 92px;
 }
 
 /* Let the car remain visible as it passes under day nodes */
