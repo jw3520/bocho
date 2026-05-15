@@ -5058,7 +5058,7 @@ textarea {
   font-size: 0;
   filter: drop-shadow(0 5px 8px rgba(31, 35, 40, 0.18));
   text-shadow: none;
-  transform: translate(-25%, -97%);
+  transform: translate(-25%, 10%);
 }
 
 .progress-map-finish::before {
@@ -5343,6 +5343,7 @@ textarea,
 dialog {
   color-scheme: only light;
   forced-color-adjust: none;
+  -webkit-text-fill-color: currentColor;
 }
 
 body {
@@ -5352,6 +5353,15 @@ body {
 
 html {
   background: #dfe5e8;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  filter: none !important;
+  mix-blend-mode: normal !important;
 }
 
 *,
@@ -5384,11 +5394,23 @@ html {
   .progress-map-card,
   .drive-detail-panel,
   .record-card,
+  .settings-row,
+  .panel,
   .settings-panel,
   .tabbar,
   dialog {
-    background-color: var(--bg) !important;
     color: var(--text) !important;
+    filter: none !important;
+    mix-blend-mode: normal !important;
+  }
+
+  .calendar-panel,
+  .progress-map-card,
+  .drive-detail-panel,
+  .record-card,
+  .settings-row,
+  dialog {
+    background-color: #fff !important;
   }
 }
 
@@ -5491,4 +5513,59 @@ html {
 
 .progress-map-node.is-selected .progress-map-node__button {
   box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.12), 0 9px 18px rgba(31, 35, 40, 0.12);
+}
+
+.day-progress-circle {
+  display: grid;
+  gap: 1px;
+  place-items: center;
+  line-height: 1;
+}
+
+.day-pass-badge {
+  display: inline-grid;
+  min-width: 28px;
+  min-height: 15px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(77, 182, 172, 0.18);
+  color: var(--primary-dark);
+  font-size: 9px;
+  font-weight: 1000;
+  letter-spacing: 0.03em;
+}
+
+.day-pass-date {
+  color: #697783;
+  font-size: 8px;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.button-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: updateButtonSpin 0.72s linear infinite;
+}
+
+#clear-web-cache-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  min-width: 124px;
+}
+
+#clear-web-cache-button.is-done {
+  background: rgba(77, 182, 172, 0.14);
+  color: var(--primary-dark);
+}
+
+@keyframes updateButtonSpin {
+  to {
+    transform: rotate(360deg);
+  }
 }

@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.63";
+const APP_VERSION = "26.05.16.01";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -378,6 +378,18 @@ function getDayCompletion(day) {
     total: day.items.length,
     isDone: completed === day.items.length,
   };
+}
+
+function getDayCompletionDate(day) {
+  if (!getDayCompletion(day).isDone) {
+    return "";
+  }
+
+  return day.items
+    .map((task) => passDateState[task.id])
+    .filter(Boolean)
+    .sort()
+    .at(-1) || toDateInputValue(new Date());
 }
 
 function getFirstIncompleteIndex() {
@@ -897,6 +909,15 @@ function toDateInputValue(date) {
   return `${year}-${month}-${day}`;
 }
 
+function formatShortDate(dateValue) {
+  if (!dateValue) {
+    return "";
+  }
+
+  const [year, month, day] = dateValue.split("-");
+  return `${year.slice(-2)}.${month}.${day}`;
+}
+
 function ensureSelectedDay() {
   if (expandedDayId && curriculum.some((day) => day.id === expandedDayId)) {
     return;
@@ -1009,6 +1030,7 @@ function renderRoadDayNode(day, index, point) {
   const state = getDayState(day);
   const ratio = Math.round((status.completed / status.total) * 100);
   const ringColor = getDayRingColor(ratio);
+  const completionDate = getDayCompletionDate(day);
   const doneClass = status.isDone ? " is-complete" : "";
   const isExpanded = day.id === expandedDayId;
   const selectedClass = isExpanded ? " is-selected" : "";
@@ -1017,7 +1039,11 @@ function renderRoadDayNode(day, index, point) {
   return `
     <article class="progress-map-node${stateClass}${doneClass}${selectedClass}" data-map-day-id="${day.id}" style="--node-x:${point.x}%; --node-y:${point.y}%; --day-progress:${ratio * 3.6}deg; --day-ring-color:${ringColor};">
       <button class="progress-map-node__button" type="button" data-day-open="${day.id}" aria-pressed="${isExpanded}" aria-label="${day.day} ${day.title}">
-        <span class="day-progress-circle">${ratio}%</span>
+        <span class="day-progress-circle">${
+          ratio === 100
+            ? `<span class="day-pass-badge">PASS</span><span class="day-pass-date">${formatShortDate(completionDate)}</span>`
+            : `${ratio}%`
+        }</span>
       </button>
       <small>${day.day}</small>
     </article>
@@ -1484,7 +1510,11 @@ function updateRoadMapUi() {
     }
 
     if (percentLabel) {
-      percentLabel.textContent = `${ratio}%`;
+      const completionDate = getDayCompletionDate(day);
+      percentLabel.innerHTML =
+        ratio === 100
+          ? `<span class="day-pass-badge">PASS</span><span class="day-pass-date">${formatShortDate(completionDate)}</span>`
+          : `${ratio}%`;
     }
   });
 }
@@ -1698,7 +1728,7 @@ function dismissMainUpdateBanner() {
 function openSettingsForUpdate() {
   const settingsButton = elements.tabButtons.find((button) => button.dataset.screenTarget === "settings");
   settingsButton?.click();
-  window.setTimeout(() => elements.clearWebCacheButton?.focus(), 120);
+  window.setTimeout(() => elements.clearWebCacheButton?.click(), 180);
 }
 
 async function detectCachedAssetUpdate() {
@@ -1808,15 +1838,34 @@ async function registerServiceWorker() {
   }
 }
 
-async function clearWebCacheAndReload() {
-  const originalText = elements.clearWebCacheButton.textContent;
-  elements.clearWebCacheButton.textContent = "확인 중...";
-  elements.clearWebCacheButton.disabled = true;
+function setUpdateButtonState(state) {
+  if (!elements.clearWebCacheButton) {
+    return;
+  }
 
+  const labels = {
+    idle: "업데이트",
+    checking: "확인 중...",
+    done: "완료!",
+    retry: "다시 시도",
+  };
+
+  elements.clearWebCacheButton.classList.toggle("is-checking", state === "checking");
+  elements.clearWebCacheButton.classList.toggle("is-done", state === "done");
+  elements.clearWebCacheButton.disabled = state === "checking";
+  elements.clearWebCacheButton.innerHTML =
+    state === "checking"
+      ? `<span class="button-spinner" aria-hidden="true"></span><span>${labels.checking}</span>`
+      : `<span>${labels[state] || labels.idle}</span>`;
+}
+
+async function clearWebCacheAndReload() {
+  setUpdateButtonState("checking");
   try {
     const shouldActivateWaitingWorker = pwaUpdateState.updateAvailable && Boolean(swRegistrationRef?.waiting);
 
     if (shouldActivateWaitingWorker) {
+      setUpdateButtonState("done");
       hideUpdateAvailableUI();
       markUpdateChecked();
       swRegistrationRef.waiting.postMessage({ type: "SKIP_WAITING" });
@@ -1834,6 +1883,7 @@ async function clearWebCacheAndReload() {
 
       if (swRegistrationRef.waiting) {
         showUpdateAvailableUI();
+        setUpdateButtonState("done");
         swRegistrationRef.waiting.postMessage({ type: "SKIP_WAITING" });
         window.setTimeout(() => {
           if (!reloadingForServiceWorker) {
@@ -1846,23 +1896,22 @@ async function clearWebCacheAndReload() {
 
     const hasAssetUpdate = await detectCachedAssetUpdate();
     if (hasAssetUpdate || pwaUpdateState.updateAvailable) {
+      setUpdateButtonState("done");
       hideUpdateAvailableUI();
       await clearAppCaches();
       window.location.reload();
       return;
     }
 
-    elements.clearWebCacheButton.textContent = "최신 상태";
+    setUpdateButtonState("done");
     hideUpdateAvailableUI();
     window.setTimeout(() => {
-      elements.clearWebCacheButton.textContent = originalText;
-      elements.clearWebCacheButton.disabled = false;
+      setUpdateButtonState("idle");
       syncUpdateUi();
     }, 900);
   } catch (error) {
     console.error("[PWA] failed to apply update:", error);
-    elements.clearWebCacheButton.textContent = "다시 시도";
-    elements.clearWebCacheButton.disabled = false;
+    setUpdateButtonState("retry");
     syncUpdateUi();
   }
 }
