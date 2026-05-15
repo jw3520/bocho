@@ -1,7 +1,7 @@
 {
-  "name": "Bocho App",
-  "short_name": "Bocho",
-  "description": "Installable offline-ready Bocho PWA shell.",
+  "name": "전운보초",
+  "short_name": "전운보초",
+  "description": "전운보초 5일 운전 연습 커리큘럼",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
