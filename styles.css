@@ -5567,30 +5567,43 @@ svg {
   min-height: 38px;
   border: 0;
   border-radius: 999px;
-  padding: 0 14px;
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 700;
   box-shadow: none;
   white-space: nowrap;
 }
 
 .settings-row .primary-button {
-  background: var(--primary);
+  background: linear-gradient(180deg, var(--primary) 0%, #38afa4 100%);
   color: #fff;
 }
 
 .settings-row .secondary-button {
-  background: #eef7f6;
-  color: var(--primary-dark);
+  background: #eef1f4;
+  color: #616974;
 }
 
 .settings-row .secondary-button--danger {
-  background: #f4f5f7;
-  color: #5d6874;
+  background: #fff5f6;
+  color: #f3818b;
 }
 
-.settings-row .secondary-button--success,
-#clear-web-cache-button.is-done {
-  background: #e7f8f5;
-  color: var(--primary-dark);
+.settings-row .secondary-button--success {
+  background: #eef1f4;
+  color: #616974;
+}
+
+.settings-row .primary-button.is-pulsing,
+.settings-row #clear-web-cache-button.primary-button {
+  background: linear-gradient(180deg, var(--primary) 0%, #38afa4 100%);
+  color: #fff;
+}
+
+.settings-row #clear-web-cache-button.is-checking,
+.settings-row #clear-web-cache-button.is-done {
+  background: #eef1f4;
+  color: #616974;
 }
 
 .asset-progress {
@@ -5636,8 +5649,8 @@ svg {
 }
 
 #clear-web-cache-button.is-done {
-  background: rgba(77, 182, 172, 0.14);
-  color: var(--primary-dark);
+  background: #eef1f4;
+  color: #616974;
 }
 
 @keyframes updateButtonSpin {
