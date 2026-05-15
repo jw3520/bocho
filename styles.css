@@ -4890,15 +4890,15 @@ textarea {
 
 /* Photo-referenced roadmap: spaced winding road with day guide details below */
 .progress-map-card {
-  min-height: 350px;
-  padding: 18px 0 16px;
+  min-height: 462px;
+  padding: 18px 0 18px;
   background:
     linear-gradient(180deg, #ffffff 0%, #f6f9fa 100%);
 }
 
 .progress-map-stage {
-  height: 316px;
-  min-height: 316px;
+  height: 428px;
+  min-height: 428px;
 }
 
 .progress-map-road {
@@ -5047,13 +5047,13 @@ textarea {
 .progress-map-finish {
   left: var(--flag-x);
   top: var(--flag-y);
-  width: 28px;
-  height: 44px;
+  width: 24px;
+  height: 38px;
   color: inherit;
   font-size: 0;
   filter: drop-shadow(0 5px 8px rgba(31, 35, 40, 0.18));
   text-shadow: none;
-  transform: translate(-40%, -94%);
+  transform: translate(-40%, -10%);
 }
 
 .progress-map-finish::before {
@@ -5061,7 +5061,7 @@ textarea {
   left: 6px;
   top: 7px;
   width: 3px;
-  height: 36px;
+  height: 30px;
   border-radius: 999px;
   background: #4b5563;
   content: "";
@@ -5071,8 +5071,8 @@ textarea {
   position: absolute;
   left: 9px;
   top: 6px;
-  width: 18px;
-  height: 15px;
+  width: 16px;
+  height: 13px;
   border-radius: 3px 8px 8px 3px;
   background: #ef5350;
   clip-path: polygon(0 0, 100% 16%, 72% 50%, 100% 84%, 0 100%);
@@ -5098,12 +5098,12 @@ textarea {
 
 @media (max-width: 374px) {
   .progress-map-card {
-    min-height: 320px;
+    min-height: 420px;
   }
 
   .progress-map-stage {
-    height: 288px;
-    min-height: 288px;
+    height: 390px;
+    min-height: 390px;
   }
 
   .progress-map-node {
