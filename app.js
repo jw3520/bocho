@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.62";
+const APP_VERSION = "1.00.63";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -114,6 +114,7 @@ const elements = {
   screens: [...document.querySelectorAll("[data-screen]")],
   completeNextButton: document.querySelector("#complete-next-button"),
   resetProgressButton: document.querySelector("#reset-progress-button"),
+  completeAllButton: document.querySelector("#complete-all-button"),
   logoutButton: document.querySelector("#logout-button"),
   mainUpdateBanner: document.querySelector("#main-update-banner"),
   applyUpdateBannerButton: document.querySelector("#apply-update-banner-button"),
@@ -429,6 +430,7 @@ function renderCurriculum() {
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
   elements.completeNextButton.addEventListener("click", shareProgress);
   elements.resetProgressButton.addEventListener("click", resetProgress);
+  elements.completeAllButton.addEventListener("click", completeAllTasks);
   elements.logoutButton.addEventListener("click", logout);
   elements.dismissUpdateBannerButton.addEventListener("click", dismissMainUpdateBanner);
   elements.applyUpdateBannerButton.addEventListener("click", openSettingsForUpdate);
@@ -1219,6 +1221,21 @@ function resetProgress() {
   passDateState = {};
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(PASS_DATE_STORAGE_KEY);
+  updateProgress();
+}
+
+function completeAllTasks() {
+  const today = toDateInputValue(new Date());
+
+  curriculum.forEach((day) => {
+    day.items.forEach((task) => {
+      progressState[task.id] = true;
+      passDateState[task.id] = passDateState[task.id] || today;
+    });
+  });
+
+  savePassDates();
+  saveProgress();
   updateProgress();
 }
 

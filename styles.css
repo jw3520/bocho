@@ -5342,11 +5342,22 @@ select,
 textarea,
 dialog {
   color-scheme: only light;
+  forced-color-adjust: none;
 }
 
 body {
   background: #dfe5e8;
   color: var(--text);
+}
+
+html {
+  background: #dfe5e8;
+}
+
+*,
+*::before,
+*::after {
+  forced-color-adjust: none;
 }
 
 .phone,
@@ -5439,6 +5450,28 @@ body {
   box-shadow: none;
 }
 
+.settings-actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: 8px;
+  align-items: center;
+}
+
+.settings-row .secondary-button,
+.settings-row .primary-button {
+  min-width: 76px;
+  white-space: nowrap;
+}
+
+.settings-row #logout-button {
+  min-width: 92px;
+}
+
+.secondary-button--success {
+  background: rgba(77, 182, 172, 0.14);
+  color: var(--primary-dark);
+}
+
 /* Let the car remain visible as it passes under day nodes */
 .progress-map-node__button,
 .progress-map-node--completed .progress-map-node__button,
@@ -5446,14 +5479,14 @@ body {
 .progress-map-node--active .progress-map-node__button,
 .progress-map-node.is-selected .progress-map-node__button {
   background:
-    radial-gradient(circle at center, rgba(255, 255, 255, 0.82) 0 57%, transparent 58%),
-    conic-gradient(var(--day-ring-color) var(--day-progress), rgba(227, 232, 235, 0.72) 0);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.58), 0 7px 16px rgba(31, 35, 40, 0.1);
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.58) 0 57%, transparent 58%),
+    conic-gradient(var(--day-ring-color) var(--day-progress), rgba(227, 232, 235, 0.58) 0);
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.4), 0 7px 16px rgba(31, 35, 40, 0.09);
 }
 
 .progress-map-node__button::before {
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: inset 0 0 0 1px rgba(217, 224, 228, 0.62);
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: inset 0 0 0 1px rgba(217, 224, 228, 0.46);
 }
 
 .progress-map-node.is-selected .progress-map-node__button {
