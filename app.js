@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "1.00.53";
+const APP_VERSION = "1.00.55";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -179,6 +179,7 @@ const pwaUpdateState = {
 
 const dayNumbers = ["1", "2", "3", "4", "5"];
 const ROAD_VIEWBOX = { width: 360, height: 240 };
+const ROAD_DAY_PROGRESS_POINTS = [0, 20, 48, 65, 82];
 const ROAD_PATH_D =
   "M48 72 C76 44 112 46 140 72 C124 102 98 118 82 152 C118 196 176 198 212 164 C232 118 268 86 306 104 C334 136 334 174 318 196";
 const ROAD_PATH_SEGMENTS = [
@@ -905,17 +906,8 @@ function ensureSelectedDay() {
 function renderRoadExperience() {
   ensureSelectedDay();
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
-  const mapPoints = [
-    { x: (48 / ROAD_VIEWBOX.width) * 100, y: (72 / ROAD_VIEWBOX.height) * 100 },
-    { x: (140 / ROAD_VIEWBOX.width) * 100, y: (72 / ROAD_VIEWBOX.height) * 100 },
-    { x: (82 / ROAD_VIEWBOX.width) * 100, y: (152 / ROAD_VIEWBOX.height) * 100 },
-    { x: (212 / ROAD_VIEWBOX.width) * 100, y: (164 / ROAD_VIEWBOX.height) * 100 },
-    { x: (306 / ROAD_VIEWBOX.width) * 100, y: (104 / ROAD_VIEWBOX.height) * 100 },
-  ];
-  const finishPoint = {
-    x: (318 / ROAD_VIEWBOX.width) * 100,
-    y: (196 / ROAD_VIEWBOX.height) * 100,
-  };
+  const mapPoints = ROAD_DAY_PROGRESS_POINTS.map((progress) => getRoadPathPosition(progress));
+  const finishPoint = getRoadPathPosition(100);
   const completedItems = curriculum.reduce(
     (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
     0,
