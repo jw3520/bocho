@@ -4053,7 +4053,7 @@ body {
 
 /* Home v2 layout and forced light rendering */
 :root {
-  color-scheme: only light;
+  color-scheme: light;
 }
 
 html,
@@ -4062,7 +4062,7 @@ input,
 button,
 select,
 textarea {
-  color-scheme: only light;
+  color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -5331,7 +5331,7 @@ textarea {
 
 /* Final mobile chrome pass: fixed light mode and compact bottom controls */
 :root {
-  color-scheme: only light;
+  color-scheme: light;
 }
 
 html,
@@ -5341,7 +5341,7 @@ button,
 select,
 textarea,
 dialog {
-  color-scheme: only light;
+  color-scheme: light;
   forced-color-adjust: none;
   -webkit-text-fill-color: currentColor;
 }
@@ -5379,7 +5379,7 @@ svg {
 
 @media (prefers-color-scheme: dark) {
   :root {
-    color-scheme: only light;
+    color-scheme: light;
   }
 
   html,

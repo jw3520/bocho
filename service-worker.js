@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bocho-pwa-26.05.16.02";
+const CACHE_VERSION = "bocho-pwa-26.05.16.03";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",
@@ -41,20 +41,18 @@ self.addEventListener("fetch", (event) => {
   }
 
   event.respondWith(
-    caches.match(request).then((cachedResponse) => {
-      const networkResponse = fetch(request)
-        .then((response) => {
-          if (response && response.ok && request.url.startsWith(self.location.origin)) {
-            const responseClone = response.clone();
-            caches.open(CACHE_VERSION).then((cache) => cache.put(request, responseClone));
-          }
+    fetch(request)
+      .then((response) => {
+        if (response && response.ok && request.url.startsWith(self.location.origin)) {
+          const responseClone = response.clone();
+          caches.open(CACHE_VERSION).then((cache) => cache.put(request, responseClone));
+        }
 
-          return response;
-        })
-        .catch(() => cachedResponse || caches.match("/index.html"));
-
-      return cachedResponse || networkResponse;
-    }),
+        return response;
+      })
+      .catch(() =>
+        caches.match(request).then((cachedResponse) => cachedResponse || caches.match("/index.html")),
+      ),
   );
 });
 
