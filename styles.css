@@ -4193,20 +4193,20 @@ body {
 }
 
 .role-mini-icon--coach::before {
-  top: -6px;
-  left: 4px;
+  top: -4px;
+  left: 7px;
   z-index: 1;
   display: block;
-  width: 20px;
-  height: 11px;
+  width: 14px;
+  height: 8px;
   background:
-    radial-gradient(ellipse at 18% 72%, #ff7b7b 0 5px, transparent 5.5px),
-    radial-gradient(ellipse at 50% 38%, #ff7b7b 0 6px, transparent 6.5px),
-    radial-gradient(ellipse at 82% 72%, #ff7b7b 0 5px, transparent 5.5px);
+    radial-gradient(circle at 22% 72%, #ff7b7b 0 3.2px, transparent 3.8px),
+    radial-gradient(circle at 50% 40%, #ff7b7b 0 3.8px, transparent 4.4px),
+    radial-gradient(circle at 78% 72%, #ff7b7b 0 3.2px, transparent 3.8px);
   filter:
-    drop-shadow(0 1px 0 rgba(31, 35, 40, 0.36))
-    drop-shadow(1px 0 0 rgba(31, 35, 40, 0.22))
-    drop-shadow(-1px 0 0 rgba(31, 35, 40, 0.22));
+    drop-shadow(0 1px 0 rgba(31, 35, 40, 0.24))
+    drop-shadow(1px 0 0 rgba(31, 35, 40, 0.14))
+    drop-shadow(-1px 0 0 rgba(31, 35, 40, 0.14));
 }
 
 .role-mini-icon--coach::after {
