@@ -3766,6 +3766,11 @@ body {
   gap: 10px;
 }
 
+.is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions {
+  visibility: hidden;
+  pointer-events: none;
+}
+
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-primary {
   min-height: 56px;
   border: 0;
@@ -3834,6 +3839,21 @@ body {
   background:
     radial-gradient(circle at 82% 8%, rgba(77, 182, 172, 0.14), transparent 26%),
     linear-gradient(180deg, #f7faf9 0%, #f2f4f6 100%);
+}
+
+.onboarding-screen[data-onboarding-step="nickname"] {
+  grid-template-rows: auto auto auto;
+  align-content: center;
+  gap: 14px;
+}
+
+.onboarding-screen[data-onboarding-step="nickname"] .onboarding-actions {
+  align-self: start;
+}
+
+.onboarding-screen[data-onboarding-step="nickname"] .onboarding-primary {
+  min-height: 54px;
+  border-radius: 18px;
 }
 
 .onboarding-screen[data-onboarding-step="role"] .onboarding-step-header,
@@ -4047,7 +4067,22 @@ body {
 }
 
 .gender-card__icon .wheel {
+  fill: rgba(255, 255, 255, 0.18);
   stroke-width: 5;
+}
+
+.gender-card__icon .wheel-rim {
+  stroke: rgba(20, 23, 26, 0.72);
+  stroke-width: 4;
+}
+
+.gender-card__icon .wheel-hub {
+  fill: #f8fbfb;
+  stroke-width: 4;
+}
+
+.gender-card__icon .wheel-spoke {
+  stroke-width: 2.5;
 }
 
 .gender-card strong {
@@ -4057,7 +4092,9 @@ body {
 }
 
 .nickname-panel {
-  gap: 14px;
+  gap: 12px;
+  align-self: end;
+  padding: 18px;
   border: 0;
   border-radius: 24px;
   background: rgba(255, 255, 255, 0.96);
