@@ -5722,6 +5722,16 @@ textarea {
   font-weight: 800;
 }
 
+.calendar-weekdays span:first-child,
+.calendar-day.is-sunday span {
+  color: #ff4e85;
+}
+
+.calendar-weekdays span:last-child,
+.calendar-day.is-saturday span {
+  color: #4f86ff;
+}
+
 .calendar-day {
   border: 0;
   border-radius: 16px;

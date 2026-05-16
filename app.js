@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.00";
+const APP_VERSION = "26.05.17.01";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -925,12 +925,14 @@ function getMonthLabel(baseDate) {
 function renderCalendarDay(date, baseMonth, today) {
   const isCurrentMonth = date.getMonth() === baseMonth.getMonth();
   const isToday = isSameDate(date, today);
+  const dayOfWeek = date.getDay();
   const dateValue = toDateInputValue(date);
   const hasPassMark = hasPassOnDate(dateValue);
   const dateLabel = `${date.getMonth() + 1}월 ${date.getDate()}일`;
+  const weekendClass = dayOfWeek === 0 ? " is-sunday" : dayOfWeek === 6 ? " is-saturday" : "";
 
   return `
-    <time class="calendar-day${isToday ? " is-today" : ""}${isCurrentMonth ? "" : " is-muted"}${hasPassMark ? " has-pass-mark" : ""}" datetime="${dateValue}" aria-label="${dateLabel}${hasPassMark ? " PASS 기록 있음" : ""}">
+    <time class="calendar-day${weekendClass}${isToday ? " is-today" : ""}${isCurrentMonth ? "" : " is-muted"}${hasPassMark ? " has-pass-mark" : ""}" datetime="${dateValue}" aria-label="${dateLabel}${hasPassMark ? " PASS 기록 있음" : ""}">
       <span>${date.getDate()}</span>
     </time>
   `;
