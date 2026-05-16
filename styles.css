@@ -3991,7 +3991,7 @@ body {
 }
 
 .gender-card[data-gender-option="female"] {
-  background: rgba(255, 248, 251, 0.98);
+  background: rgba(255, 255, 255, 0.96);
 }
 
 .gender-card[data-gender-option="female"].is-selected {
@@ -3999,7 +3999,7 @@ body {
 }
 
 .gender-card__icon--female {
-  background: #fff0f5;
+  background: #f5a6b8;
 }
 
 .gender-card__icon svg {
@@ -4143,21 +4143,22 @@ body {
 
 .role-mini-icon--closet {
   background:
-    linear-gradient(145deg, transparent 0 38%, #fffdf3 39% 47%, transparent 48%),
-    linear-gradient(215deg, transparent 0 38%, #fffdf3 39% 47%, transparent 48%),
-    radial-gradient(circle at 50% -5%, #fffdf3 0 46%, transparent 47%),
+    linear-gradient(135deg, transparent 0 42%, #fffdf3 43% 54%, transparent 55%) 8px 9px / 7px 7px no-repeat,
+    linear-gradient(225deg, transparent 0 42%, #fffdf3 43% 54%, transparent 55%) 13px 9px / 7px 7px no-repeat,
+    linear-gradient(135deg, transparent 0 42%, #fffdf3 43% 54%, transparent 55%) 18px 9px / 7px 7px no-repeat,
+    radial-gradient(circle at 50% 3px, #fffdf3 0 12px, transparent 13px),
     #ffe36e;
 }
 
 .role-mini-icon--beginner {
-  background: #ffc45f;
+  background: #ffe36e;
 }
 
 .role-mini-icon--coach {
   background:
-    radial-gradient(circle at 42% -8%, #ff8a8a 0 18%, transparent 19%),
-    radial-gradient(circle at 56% -10%, #ff8a8a 0 20%, transparent 21%),
-    radial-gradient(circle at 70% -4%, #ff8a8a 0 17%, transparent 18%),
+    radial-gradient(circle at 40% -3px, #ff7b7b 0 8px, transparent 9px),
+    radial-gradient(circle at 55% -5px, #ff7b7b 0 9px, transparent 10px),
+    radial-gradient(circle at 71% -2px, #ff7b7b 0 7px, transparent 8px),
     #ffe36e;
   border-radius: 45% 52% 48% 50%;
 }
@@ -6190,8 +6191,8 @@ svg {
 }
 
 .gender-card .gender-card__icon--female {
-  background: #fff0f5;
-  color: #f3818b;
+  background: #f5a6b8;
+  color: #fff;
   border: 0;
   box-shadow: none;
 }
