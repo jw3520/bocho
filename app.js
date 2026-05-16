@@ -6,9 +6,8 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.06";
+const APP_VERSION = "26.05.17.07";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
-const BOOT_INTRO_DELAY_MS = 1000;
 
 const curriculum = [
   {
@@ -463,24 +462,21 @@ function initOnboarding() {
   elements.appShell.hidden = true;
   elements.onboardingFlow.hidden = false;
   showOnboardingStep("welcome");
+  document.body.classList.remove("is-boot-loading");
 
-  window.setTimeout(() => {
-    document.body.classList.remove("is-boot-loading");
+  if (shouldRestoreSession) {
+    onboardingDraft = loadOnboarding();
+    showAppShell();
+    return;
+  }
 
-    if (shouldRestoreSession) {
-      onboardingDraft = loadOnboarding();
-      showAppShell();
-      return;
-    }
-
-    setActiveSession(false);
-    elements.appShell.hidden = true;
-    elements.onboardingFlow.hidden = false;
-    onboardingDraft = loadOnboarding() || onboardingDraft;
-    updateWelcomeActions();
-    reflectOnboardingDraft();
-    showOnboardingStep("welcome");
-  }, BOOT_INTRO_DELAY_MS);
+  setActiveSession(false);
+  elements.appShell.hidden = true;
+  elements.onboardingFlow.hidden = false;
+  onboardingDraft = loadOnboarding() || onboardingDraft;
+  updateWelcomeActions();
+  reflectOnboardingDraft();
+  showOnboardingStep("welcome");
 }
 
 function reflectOnboardingDraft() {
