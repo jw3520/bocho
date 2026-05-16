@@ -3990,6 +3990,18 @@ body {
   background: #f4f6f8;
 }
 
+.gender-card[data-gender-option="female"] {
+  background: rgba(255, 248, 251, 0.98);
+}
+
+.gender-card[data-gender-option="female"].is-selected {
+  box-shadow: 0 0 0 2px rgba(243, 129, 139, 0.28), 0 8px 18px rgba(46, 87, 86, 0.08);
+}
+
+.gender-card__icon--female {
+  background: #fff0f5;
+}
+
 .gender-card__icon svg {
   width: 104px;
   height: 104px;
@@ -6175,6 +6187,13 @@ svg {
   to {
     transform: rotate(360deg);
   }
+}
+
+.gender-card .gender-card__icon--female {
+  background: #fff0f5;
+  color: #f3818b;
+  border: 0;
+  box-shadow: none;
 }
 
 .calendar-period-row {
