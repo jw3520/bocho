@@ -4225,15 +4225,15 @@ body {
 }
 
 .role-mini-icon--coach::before {
-  top: -7px;
-  left: 11px;
+  top: -5px;
+  left: 12px;
   z-index: 1;
   display: block;
-  width: 7px;
-  height: 13px;
+  width: 5px;
+  height: 10px;
   border-radius: 999px 999px 70% 70%;
   background: #ff7b7b;
-  box-shadow: 0 0 0 0.8px #1f2328;
+  box-shadow: 0 0 0 0.7px #1f2328;
   filter: none;
 }
 
