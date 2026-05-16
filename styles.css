@@ -3694,7 +3694,7 @@ body {
 /* Welcome screen copy and primary action refinement */
 .onboarding-screen[data-onboarding-step="welcome"] {
   position: relative;
-  grid-template-rows: minmax(330px, 1fr) auto auto;
+  grid-template-rows: minmax(356px, 1fr) auto auto;
   gap: 24px;
   padding: calc(env(safe-area-inset-top) + 22px) 22px calc(22px + env(safe-area-inset-bottom));
   background:
@@ -3703,7 +3703,7 @@ body {
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual {
-  min-height: 330px;
+  min-height: 356px;
   margin: -22px -22px 0;
   overflow: hidden;
   background:
@@ -3715,13 +3715,13 @@ body {
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual img {
-  top: 94px;
-  width: 176px;
-  height: 176px;
+  top: -18px;
+  width: min(520px, 122vw);
+  height: auto;
   border: 0;
-  border-radius: 42px;
-  box-shadow: 0 22px 46px rgba(46, 87, 86, 0.18);
-  transform: translateX(-50%) rotate(-2deg);
+  border-radius: 0;
+  box-shadow: none;
+  transform: translateX(-50%);
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy {
@@ -3792,12 +3792,12 @@ body {
 
 @media (max-width: 374px) {
   .onboarding-screen[data-onboarding-step="welcome"] {
-    grid-template-rows: minmax(304px, 1fr) auto auto;
+    grid-template-rows: minmax(320px, 1fr) auto auto;
     gap: 18px;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual {
-    min-height: 304px;
+    min-height: 320px;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual::before {
@@ -3807,9 +3807,9 @@ body {
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual img {
-    top: 88px;
-    width: 160px;
-    height: 160px;
+    top: -8px;
+    width: 122vw;
+    height: auto;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy h1 {
@@ -3933,6 +3933,10 @@ body {
 .choice-card__icon .egg-bottom,
 .choice-card__icon .shell-hat {
   fill: #fffdf3;
+}
+
+.choice-card__icon .shell-hat {
+  stroke-width: 3.6;
 }
 
 .choice-card__icon .comb {
@@ -4069,26 +4073,29 @@ body {
 }
 
 .role-status-button {
-  display: inline-flex;
+  display: grid;
   align-items: center;
-  gap: 7px;
+  justify-content: center;
+  width: 34px;
+  min-width: 34px;
+  height: 34px;
   min-height: 34px;
   margin-left: auto;
   border: 0;
-  border-radius: 999px;
-  padding: 0 11px 0 8px;
-  background: rgba(255, 255, 255, 0.78);
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
   color: #5d6874;
   font-size: 12px;
   font-weight: 800;
-  box-shadow: 0 3px 10px rgba(46, 87, 86, 0.05);
+  box-shadow: none;
 }
 
 .role-mini-icon {
   position: relative;
   display: inline-grid;
-  width: 22px;
-  height: 22px;
+  width: 28px;
+  height: 28px;
   place-items: center;
   border-radius: 50%;
   background: #fff1a8;
@@ -4102,18 +4109,18 @@ body {
 }
 
 .role-mini-icon::before {
-  top: 7px;
-  left: 6px;
+  top: 9px;
+  left: 8px;
   width: 3px;
   height: 3px;
   border-radius: 50%;
   background: #1f2328;
-  box-shadow: 8px 0 0 #1f2328;
+  box-shadow: 10px 0 0 #1f2328;
 }
 
 .role-mini-icon::after {
-  top: 12px;
-  left: 9px;
+  top: 15px;
+  left: 11px;
   border-top: 4px solid #f6a600;
   border-right: 4px solid transparent;
   border-left: 4px solid transparent;
@@ -4133,14 +4140,14 @@ body {
 }
 
 .role-mini-icon--coach::before {
-  top: 7px;
+  top: 9px;
 }
 
 .role-mini-icon--coach::after {
-  top: -5px;
-  left: 7px;
-  width: 9px;
-  height: 8px;
+  top: -6px;
+  left: 9px;
+  width: 11px;
+  height: 10px;
   border: 0;
   border-radius: 8px 8px 3px 3px;
   background: #ff8a8a;
@@ -4213,6 +4220,33 @@ body {
 .role-dialog-option.is-selected {
   background: #eef7f6;
   color: var(--primary-dark);
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+}
+
+.calendar-period-row {
+  display: flex;
+  width: 100%;
+}
+
+.calendar-heading {
+  width: 100%;
+}
+
+.role-status-button .role-mini-icon {
+  width: 28px !important;
+  min-width: 28px;
+  max-width: 28px;
+  height: 28px !important;
+  min-height: 28px;
+  max-height: 28px;
 }
 
 /* Road map progress: gray road, percent nodes, yellow practice car */
@@ -6128,4 +6162,20 @@ svg {
   to {
     transform: rotate(360deg);
   }
+}
+
+.calendar-period-row {
+  display: flex;
+  width: 100%;
+}
+
+#role-status-label.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  min-width: 1px !important;
+  max-width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
 }
