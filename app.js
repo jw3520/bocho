@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.07";
+const APP_VERSION = "26.05.17.08";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -117,6 +117,7 @@ const elements = {
   connectionStatus: document.querySelector("#connection-status"),
   connectionDot: document.querySelector("#connection-dot"),
   tabButtons: [...document.querySelectorAll("[data-screen-target]")],
+  openChatButton: document.querySelector("#open-chat-button"),
   screens: [...document.querySelectorAll("[data-screen]")],
   completeNextButton: document.querySelector("#complete-next-button"),
   resetProgressButton: document.querySelector("#reset-progress-button"),
@@ -434,6 +435,7 @@ function renderCurriculum() {
   elements.dayFilter?.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
+  elements.openChatButton?.addEventListener("click", confirmOpenChat);
   elements.completeNextButton.addEventListener("click", shareProgress);
   elements.resetProgressButton.addEventListener("click", resetProgress);
   elements.completeAllButton.addEventListener("click", completeAllTasks);
@@ -1312,6 +1314,18 @@ function handleTabClick(event) {
     screen.classList.toggle("screen--active", screen.dataset.screen === target),
   );
   syncUpdateUi();
+}
+
+function confirmOpenChat(event) {
+  const link = event.currentTarget.href;
+
+  event.preventDefault();
+
+  if (!window.confirm("오픈채팅으로 이동할까요?")) {
+    return;
+  }
+
+  window.open(link, "_blank", "noopener,noreferrer");
 }
 
 async function shareProgress() {
