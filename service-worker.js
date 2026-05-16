@@ -1,10 +1,11 @@
-const CACHE_VERSION = "bocho-pwa-26.05.16.11";
+const CACHE_VERSION = "bocho-pwa-26.05.16.12";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
   "/app.js",
   "/public/manifest.json",
+  "/public/intro-car-outpaint.png",
   "/public/icons/icon-192.png",
   "/public/icons/icon-512.png",
   "/public/icons/apple-touch-icon.png",

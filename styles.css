@@ -3715,13 +3715,16 @@ body {
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual img {
-  top: -18px;
-  width: min(520px, 122vw);
-  height: auto;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   border: 0;
   border-radius: 0;
   box-shadow: none;
-  transform: translateX(-50%);
+  object-fit: cover;
+  object-position: center 40%;
+  transform: none;
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy {
@@ -3807,9 +3810,9 @@ body {
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual img {
-    top: -8px;
-    width: 122vw;
-    height: auto;
+    top: 0;
+    width: 100%;
+    height: 100%;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-copy h1 {
@@ -3952,7 +3955,7 @@ body {
 }
 
 .choice-card__icon--beginner {
-  background: #fff4c7;
+  background: #ffe0aa;
 }
 
 .choice-card__icon--coach {
@@ -4098,7 +4101,7 @@ body {
   height: 28px;
   place-items: center;
   border-radius: 50%;
-  background: #fff1a8;
+  background: #ffe36e;
   box-shadow: inset 0 0 0 2px rgba(31, 35, 40, 0.8);
 }
 
@@ -4128,14 +4131,22 @@ body {
 
 .role-mini-icon--closet {
   background:
-    linear-gradient(180deg, #fff1a8 0 54%, #fffdf3 55% 100%);
+    linear-gradient(145deg, transparent 0 38%, #fffdf3 39% 47%, transparent 48%),
+    linear-gradient(215deg, transparent 0 38%, #fffdf3 39% 47%, transparent 48%),
+    radial-gradient(circle at 50% -5%, #fffdf3 0 46%, transparent 47%),
+    #ffe36e;
+}
+
+.role-mini-icon--beginner {
+  background: #ffc45f;
 }
 
 .role-mini-icon--coach {
-  background: #ffe36e;
-}
-
-.role-mini-icon--coach {
+  background:
+    radial-gradient(circle at 42% -8%, #ff8a8a 0 18%, transparent 19%),
+    radial-gradient(circle at 56% -10%, #ff8a8a 0 20%, transparent 21%),
+    radial-gradient(circle at 70% -4%, #ff8a8a 0 17%, transparent 18%),
+    #ffe36e;
   border-radius: 45% 52% 48% 50%;
 }
 
@@ -4144,13 +4155,15 @@ body {
 }
 
 .role-mini-icon--coach::after {
-  top: -6px;
-  left: 9px;
-  width: 11px;
-  height: 10px;
-  border: 0;
-  border-radius: 8px 8px 3px 3px;
-  background: #ff8a8a;
+  top: 15px;
+  left: 11px;
+  width: 0;
+  height: 0;
+  border-top: 4px solid #f6a600;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+  border-radius: 0;
+  background: transparent;
 }
 
 .role-dialog {

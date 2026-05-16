@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.16.11";
+const APP_VERSION = "26.05.16.12";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -187,6 +187,7 @@ const pwaUpdateState = {
 const dayNumbers = ["1", "2", "3", "4", "5"];
 const ROAD_VIEWBOX = { width: 390, height: 220 };
 const ROAD_DAY_PROGRESS_POINTS = [0, 20, 42, 62, 82];
+const ROAD_COURSE_PROGRESS_POINTS = [...ROAD_DAY_PROGRESS_POINTS, 100];
 const ROAD_PATH_D =
   "M52 100 C70 47 112 36 146 70 C182 101 114 124 129 162 C168 199 238 165 242 114 C240 64 300 30 334 50 C366 66 364 96 364 112";
 const ROAD_PATH_SEGMENTS = [
@@ -1002,13 +1003,8 @@ function renderRoadExperience() {
   const selectedDay = curriculum.find((day) => day.id === expandedDayId) || curriculum[0];
   const mapPoints = ROAD_DAY_PROGRESS_POINTS.map((progress) => getRoadPathPosition(progress));
   const finishPoint = getRoadPathPosition(100);
-  const completedItems = curriculum.reduce(
-    (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
-    0,
-  );
-  const totalProgress = Math.round((completedItems / totalItems) * 100);
-  const roadProgress = totalProgress;
-  const carPosition = getRoadCarPosition(totalProgress);
+  const courseProgress = getRoadCourseProgress();
+  const carPosition = getRoadCarPosition(courseProgress);
 
   return `
     <section class="road-course" aria-label="Day별 주행 코스">
@@ -1017,7 +1013,7 @@ function renderRoadExperience() {
           <svg class="progress-map-road" viewBox="0 0 ${ROAD_VIEWBOX.width} ${ROAD_VIEWBOX.height}" aria-hidden="true">
             <path class="progress-map-road__shadow" d="${ROAD_PATH_D}"></path>
             <path class="progress-map-road__base" d="${ROAD_PATH_D}"></path>
-            <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${roadProgress} 100" d="${ROAD_PATH_D}"></path>
+            <path class="progress-map-road__progress" pathLength="100" style="stroke-dasharray:${courseProgress} 100" d="${ROAD_PATH_D}"></path>
             <path class="progress-map-road__dash" d="${ROAD_PATH_D}"></path>
           </svg>
           <div class="progress-map-finish" aria-hidden="true"><span></span></div>
@@ -1071,6 +1067,18 @@ function getRoadCarPosition(progress) {
     y: Math.min(94, position.y + 17),
     angle: startDirection.angle,
   };
+}
+
+function getRoadCourseProgress() {
+  return curriculum.reduce((sum, day, index) => {
+    const segmentStart = ROAD_COURSE_PROGRESS_POINTS[index] ?? 0;
+    const segmentEnd = ROAD_COURSE_PROGRESS_POINTS[index + 1] ?? 100;
+    const segmentLength = segmentEnd - segmentStart;
+    const completed = day.items.filter((task) => isComplete(task.id)).length;
+    const ratio = day.items.length ? completed / day.items.length : 0;
+
+    return sum + segmentLength * ratio;
+  }, 0);
 }
 
 function sampleRoadPath() {
@@ -1547,13 +1555,8 @@ function updateProgressWithoutRerender(taskId) {
 }
 
 function updateRoadMapUi() {
-  const completedItems = curriculum.reduce(
-    (sum, day) => sum + day.items.filter((task) => isComplete(task.id)).length,
-    0,
-  );
-  const totalProgress = Math.round((completedItems / totalItems) * 100);
-  const roadProgress = totalProgress;
-  const carPosition = getRoadCarPosition(totalProgress);
+  const courseProgress = getRoadCourseProgress();
+  const carPosition = getRoadCarPosition(courseProgress);
   const stage = elements.list.querySelector(".progress-map-stage");
   const roadProgressPath = elements.list.querySelector(".progress-map-road__progress");
 
@@ -1564,7 +1567,7 @@ function updateRoadMapUi() {
   }
 
   if (roadProgressPath) {
-    roadProgressPath.style.strokeDasharray = `${roadProgress} 100`;
+    roadProgressPath.style.strokeDasharray = `${courseProgress} 100`;
   }
 
   curriculum.forEach((day) => {
