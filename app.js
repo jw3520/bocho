@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.16.09";
+const APP_VERSION = "26.05.16.10";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -95,6 +95,12 @@ const elements = {
   calendarMonthGrid: document.querySelector("#calendar-month-grid"),
   calendarPickerApply: document.querySelector("#calendar-picker-apply"),
   calendarPickerClose: document.querySelector("#calendar-picker-close"),
+  roleStatusButton: document.querySelector("#role-status-button"),
+  roleStatusIcon: document.querySelector("#role-status-icon"),
+  roleStatusLabel: document.querySelector("#role-status-label"),
+  roleDialog: document.querySelector("#role-dialog"),
+  roleDialogClose: document.querySelector("#role-dialog-close"),
+  roleDialogOptions: [...document.querySelectorAll("[data-profile-role-option]")],
   calendarPrevPeriod: document.querySelector("#calendar-prev-period"),
   calendarNextPeriod: document.querySelector("#calendar-next-period"),
   calendarTodayButton: document.querySelector("#calendar-today-button"),
@@ -237,7 +243,9 @@ const roleCopy = {
     subtitle: "오늘도 하나씩 눌러가며 실전 감각을 올려봐요.",
   },
 };
-const nicknameSuggestions = ["도로연습러", "안전주행러"];
+const nicknameColors = ["담청색", "호박색", "연두색", "은회색", "살구색", "하늘색", "라벤더색", "민트색"];
+const nicknameAnimals = ["기린", "임팔라", "알파카", "수달", "고래", "여우", "토끼", "코알라"];
+const nicknameParts = ["뿔", "엉덩이", "꼬리", "앞발", "콧등", "귀", "발끝", "등"];
 const GUIDE_CONTENTS = {
   "day1-item1": [
     "guide/guide/Day1/Item1_운전자세/Content1.png",
@@ -414,6 +422,10 @@ function renderCurriculum() {
   elements.calendarMonthPicker?.addEventListener("click", handleMonthPickerClick);
   elements.calendarPickerApply?.addEventListener("click", applyMonthPicker);
   elements.calendarPickerClose?.addEventListener("click", closeMonthPicker);
+  elements.roleStatusButton?.addEventListener("click", openRoleDialog);
+  elements.roleDialogClose?.addEventListener("click", closeRoleDialog);
+  elements.roleDialogOptions.forEach((button) => button.addEventListener("click", handleProfileRoleSelect));
+  elements.roleDialog?.addEventListener("click", handleRoleDialogBackdropClick);
   document.addEventListener("click", closeMonthPickerOnOutsideClick);
   elements.calendarPrevPeriod?.addEventListener("click", () => moveCalendarPeriod(-1));
   elements.calendarNextPeriod?.addEventListener("click", () => moveCalendarPeriod(1));
@@ -467,6 +479,7 @@ function reflectOnboardingDraft() {
     button.classList.toggle("is-selected", button.dataset.genderOption === onboardingDraft.gender),
   );
   elements.nicknameInput.value = onboardingDraft.nickname || "";
+  refreshNicknameSuggestions();
   handleNicknameInput();
 }
 
@@ -475,6 +488,9 @@ function showOnboardingStep(step) {
   elements.onboardingScreens.forEach((screen) => {
     screen.classList.toggle("is-active", screen.dataset.onboardingStep === step);
   });
+  if (step === "nickname") {
+    refreshNicknameSuggestions();
+  }
   saveOnboarding();
 }
 
@@ -500,6 +516,32 @@ function handleGenderSelect(event) {
   );
   showOnboardingStep("nickname");
   elements.nicknameInput.focus();
+}
+
+function getRandomEntry(items) {
+  return items[Math.floor(Math.random() * items.length)];
+}
+
+function createRandomNickname(existing = new Set()) {
+  let nickname = "";
+  let attempts = 0;
+
+  do {
+    nickname = `${getRandomEntry(nicknameColors)}${getRandomEntry(nicknameAnimals)}의${getRandomEntry(nicknameParts)}`;
+    attempts += 1;
+  } while (existing.has(nickname) && attempts < 12);
+
+  return nickname;
+}
+
+function refreshNicknameSuggestions() {
+  const used = new Set();
+  elements.nicknameSuggestButtons.forEach((button) => {
+    const nickname = createRandomNickname(used);
+    used.add(nickname);
+    button.dataset.nicknameSuggestion = nickname;
+    button.textContent = nickname;
+  });
 }
 
 function handleNicknameInput() {
@@ -603,6 +645,7 @@ function skipOnboarding() {
 function showAppShell() {
   elements.onboardingFlow.hidden = true;
   elements.appShell.hidden = false;
+  updateRoleStatusUi();
   updateHomeProfile();
   updateProgress();
 }
@@ -644,6 +687,61 @@ function updateHomeProfile() {
   if (elements.homeSubtitle) {
     elements.homeSubtitle.textContent = copy.subtitle;
   }
+  updateRoleStatusUi();
+}
+
+function getRoleShortLabel(role) {
+  const labels = {
+    closet: "장롱면허",
+    beginner: "초보운전",
+    coach: "서포터",
+  };
+
+  return labels[role] || "상태";
+}
+
+function updateRoleStatusUi() {
+  const role = (loadOnboarding() || onboardingDraft)?.role || "closet";
+
+  if (elements.roleStatusLabel) {
+    elements.roleStatusLabel.textContent = getRoleShortLabel(role);
+  }
+
+  if (elements.roleStatusIcon) {
+    elements.roleStatusIcon.className = `role-mini-icon role-mini-icon--${role}`;
+  }
+
+  elements.roleDialogOptions.forEach((button) => {
+    button.classList.toggle("is-selected", button.dataset.profileRoleOption === role);
+  });
+}
+
+function openRoleDialog() {
+  updateRoleStatusUi();
+  elements.roleDialog?.showModal();
+}
+
+function closeRoleDialog() {
+  elements.roleDialog?.close();
+}
+
+function handleRoleDialogBackdropClick(event) {
+  if (event.target === elements.roleDialog) {
+    closeRoleDialog();
+  }
+}
+
+function handleProfileRoleSelect(event) {
+  const role = event.currentTarget.dataset.profileRoleOption;
+  const profile = loadOnboarding() || onboardingDraft;
+
+  onboardingDraft = {
+    ...profile,
+    role,
+  };
+  saveOnboarding();
+  updateHomeProfile();
+  closeRoleDialog();
 }
 
 function renderDayFilter() {
