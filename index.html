@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" href="/public/icons/apple-touch-icon.png">
     <link rel="icon" href="/public/icons/favicon.ico" sizes="any">
     <link rel="icon" href="/public/icons/favicon-32.png" type="image/png">
-    <link rel="stylesheet" href="/styles.css?v=26.05.16.08">
+    <link rel="stylesheet" href="/styles.css?v=26.05.16.09">
     <title>전운보초</title>
   </head>
   <body>
@@ -23,8 +23,8 @@
           <img src="/public/icons/jeonwoon-bocho-bumper.png" alt="" aria-hidden="true">
         </div>
         <div class="onboarding-copy">
-          <h1>운전, 혼자 고민하지 마세요.</h1>
-          <p>450명의 드라이버들과 함께 실력을 높여보세요.</p>
+          <h1>운전이 다시 쉬워지는 곳</h1>
+          <p>450명의 드라이버들과 함께 운전 경험을 쌓아보세요.</p>
         </div>
         <div class="onboarding-actions">
           <button class="onboarding-primary" type="button" data-onboarding-next="role">새로 만들기</button>
@@ -35,24 +35,57 @@
       <section class="onboarding-screen" data-onboarding-step="role">
         <div class="onboarding-step-header">
           <span>1/3</span>
-          <h2>어떤 목적으로 시작하시나요?</h2>
+          <h2>어떤 상태인가요?</h2>
           <p>언제든지 설정을 바꿀 수 있으니 편하게 선택해 주세요.</p>
         </div>
         <div class="choice-list">
           <button class="choice-card" type="button" data-role-option="closet">
-            <span class="choice-card__badge">장롱면허 · 완전 기초형</span>
+            <span class="choice-card__icon choice-card__icon--closet" aria-hidden="true">
+              <svg viewBox="0 0 96 96">
+                <path class="egg-shell" d="M25 58c0-21 10-36 23-36s23 15 23 36c0 15-9 25-23 25S25 73 25 58Z"></path>
+                <path class="crack" d="M28 54l7-5 6 6 7-7 8 8 7-6 6 5"></path>
+                <path class="chick-body" d="M34 46c0-13 8-23 20-23s20 10 20 23c0 11-8 19-20 19S34 57 34 46Z"></path>
+                <path class="shell-hat" d="M37 27l7-9 7 8 7-10 8 12"></path>
+                <circle cx="48" cy="42" r="2.4"></circle>
+                <circle cx="61" cy="42" r="2.4"></circle>
+                <path class="beak" d="M53 48l5 3-5 3"></path>
+              </svg>
+            </span>
+            <span class="choice-card__badge">장롱면허</span>
             <strong>면허는 있지만 아직은 겁나요</strong>
             <p>기초 조작법부터 차근차근 다시 배우고 싶어요.</p>
           </button>
           <button class="choice-card" type="button" data-role-option="beginner">
-            <span class="choice-card__badge">초보운전 · 실전 주행형</span>
+            <span class="choice-card__icon choice-card__icon--beginner" aria-hidden="true">
+              <svg viewBox="0 0 96 96">
+                <path class="chick-body" d="M25 50c0-17 13-31 31-31s31 14 31 31-13 31-31 31-31-14-31-31Z"></path>
+                <path class="wing" d="M29 55c-10 4-16 1-19-6 7-5 14-4 20 2"></path>
+                <path class="tuft" d="M47 21l4-9 5 9 8-6"></path>
+                <circle cx="49" cy="45" r="2.5"></circle>
+                <circle cx="64" cy="45" r="2.5"></circle>
+                <path class="beak" d="M55 51l6 4-6 4"></path>
+                <path class="feet" d="M45 80l-5 6M66 80l5 6"></path>
+              </svg>
+            </span>
+            <span class="choice-card__badge">초보운전</span>
             <strong>혼자서도 당당하게 운전하고 싶어요</strong>
             <p>주행 경험은 있지만, 실전 노하우와 자신감이 필요해요.</p>
           </button>
           <button class="choice-card" type="button" data-role-option="coach">
-            <span class="choice-card__badge">지도자 · 서포터형</span>
+            <span class="choice-card__icon choice-card__icon--coach" aria-hidden="true">
+              <svg viewBox="0 0 96 96">
+                <path class="comb" d="M49 19c-5-8 4-14 9-7 2-10 14-8 13 2 8-3 14 6 7 12"></path>
+                <path class="chick-body" d="M21 54c0-19 15-34 35-34s35 15 35 34S76 86 56 86 21 73 21 54Z"></path>
+                <path class="wing" d="M33 59c8-4 16-2 21 5-8 5-16 4-21-5Z"></path>
+                <circle cx="55" cy="45" r="2.4"></circle>
+                <circle cx="71" cy="45" r="2.4"></circle>
+                <path class="beak" d="M62 52l7 4-7 4"></path>
+                <path class="feet" d="M47 85l-5 7M68 85l5 7"></path>
+              </svg>
+            </span>
+            <span class="choice-card__badge">서포터</span>
             <strong>안전한 운전 습관을 길러주고 싶어요</strong>
-            <p>지인이나 가족에게 나만의 운전 노하우를 공유하고 싶어요.</p>
+            <p>나만의 운전 노하우를 공유하고 싶어요.</p>
           </button>
         </div>
       </section>
@@ -61,15 +94,38 @@
         <div class="onboarding-step-header">
           <span>2/3</span>
           <h2>성별이 어떻게 되시나요?</h2>
-          <p>프로필에 맞는 말투와 추천 문구를 구성할게요.</p>
         </div>
         <div class="gender-grid">
           <button class="gender-card" type="button" data-gender-option="male">
-            <span>♂</span>
+            <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <path class="driver-hair" d="M39 37c5-15 35-17 43 0 0 0-8-5-20-5s-23 5-23 5Z"></path>
+                <path class="driver-face" d="M34 56c0-19 12-32 28-32s28 13 28 32-12 33-28 33-28-14-28-33Z"></path>
+                <path class="driver-ear" d="M33 58c-8-1-9 14-1 16M91 58c8-1 9 14 1 16"></path>
+                <circle cx="53" cy="57" r="2.6"></circle>
+                <circle cx="73" cy="57" r="2.6"></circle>
+                <path class="driver-nose" d="M62 60l-3 11h8"></path>
+                <path class="driver-mouth" d="M54 77c6 4 13 4 19 0"></path>
+                <path class="wheel" d="M28 105c4-15 18-25 34-25s30 10 34 25"></path>
+                <path class="wheel" d="M41 102c5-7 12-10 21-10s16 3 21 10"></path>
+              </svg>
+            </span>
             <strong>남성</strong>
           </button>
           <button class="gender-card" type="button" data-gender-option="female">
-            <span>♀</span>
+            <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
+              <svg viewBox="0 0 120 120">
+                <path class="driver-hair" d="M34 66c-9-28 4-45 28-45s37 17 28 45c-8-20-48-20-56 0Z"></path>
+                <path class="driver-face" d="M34 57c0-18 12-31 28-31s28 13 28 31-12 32-28 32-28-14-28-32Z"></path>
+                <path class="driver-braid" d="M32 58c-14 12-10 30 7 35M92 58c14 12 10 30-7 35"></path>
+                <circle cx="53" cy="58" r="2.6"></circle>
+                <circle cx="73" cy="58" r="2.6"></circle>
+                <path class="driver-nose" d="M62 61l-3 10h8"></path>
+                <path class="driver-mouth" d="M54 77c6 4 13 4 19 0"></path>
+                <path class="wheel" d="M28 105c4-15 18-25 34-25s30 10 34 25"></path>
+                <path class="wheel" d="M41 102c5-7 12-10 21-10s16 3 21 10"></path>
+              </svg>
+            </span>
             <strong>여성</strong>
           </button>
         </div>
@@ -79,15 +135,17 @@
         <div class="onboarding-step-header">
           <span>3/3</span>
           <h2>닉네임을 입력해주세요.</h2>
-          <p>홈 화면에서 부를 이름이에요.</p>
         </div>
         <div class="nickname-panel">
           <label for="nickname-input">닉네임</label>
-          <input id="nickname-input" type="text" maxlength="14" placeholder="예: 도로연습러" autocomplete="nickname">
-          <button class="suggestion-chip" id="nickname-suggest-button" type="button">추천 "도로연습러"</button>
+          <input id="nickname-input" type="text" maxlength="14" placeholder="닉네임을 입력하거나 추천 닉네임을 클릭하세요." autocomplete="nickname">
+          <div class="nickname-suggestions" aria-label="추천 닉네임">
+            <button class="suggestion-chip" type="button" data-nickname-suggestion="도로연습러">도로연습러</button>
+            <button class="suggestion-chip" type="button" data-nickname-suggestion="안전주행러">안전주행러</button>
+          </div>
         </div>
         <div class="onboarding-actions">
-          <button class="onboarding-primary" id="finish-onboarding-button" type="button" disabled>완료 / 시작하기</button>
+          <button class="onboarding-primary" id="finish-onboarding-button" type="button" disabled>시작하기</button>
         </div>
       </section>
     </div>
@@ -227,6 +285,14 @@
               <path d="M9 20v-6h6v6"></path>
             </svg>
           </button>
+          <a class="tabbar-button tabbar-button--chat" href="https://open.kakao.com/o/gGrrLzhf" target="_blank" rel="noopener noreferrer" aria-label="운전톡방">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path class="chat-bubble" d="M12 4C6.9 4 3 7.2 3 11.2c0 2.6 1.7 4.9 4.2 6.1l-.7 2.7 3.2-1.8c.7.1 1.5.2 2.3.2 5.1 0 9-3.2 9-7.2S17.1 4 12 4Z"></path>
+              <path d="M8 11.2h.01"></path>
+              <path d="M12 11.2h.01"></path>
+              <path d="M16 11.2h.01"></path>
+            </svg>
+          </a>
           <button class="tabbar-button" type="button" data-screen-target="settings" aria-label="설정">
             <span class="tabbar-button__badge update-badge" id="settings-update-badge" hidden></span>
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -292,6 +358,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.16.08" defer></script>
+    <script src="/app.js?v=26.05.16.09" defer></script>
   </body>
 </html>

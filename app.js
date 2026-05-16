@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.16.08";
+const APP_VERSION = "26.05.16.09";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -146,7 +146,7 @@ const elements = {
   roleButtons: [...document.querySelectorAll("[data-role-option]")],
   genderButtons: [...document.querySelectorAll("[data-gender-option]")],
   nicknameInput: document.querySelector("#nickname-input"),
-  nicknameSuggestButton: document.querySelector("#nickname-suggest-button"),
+  nicknameSuggestButtons: [...document.querySelectorAll("[data-nickname-suggestion]")],
   finishOnboardingButton: document.querySelector("#finish-onboarding-button"),
   homeRoleLabel: document.querySelector("#home-role-label"),
   homeGreeting: document.querySelector("#home-greeting"),
@@ -237,14 +237,7 @@ const roleCopy = {
     subtitle: "오늘도 하나씩 눌러가며 실전 감각을 올려봐요.",
   },
 };
-const nicknameSuggestions = [
-  "도로연습러",
-  "차선연습러",
-  "주차연습러",
-  "안전주행러",
-  "실전연습러",
-  "도로적응중",
-];
+const nicknameSuggestions = ["도로연습러", "안전주행러"];
 const GUIDE_CONTENTS = {
   "day1-item1": [
     "guide/guide/Day1/Item1_운전자세/Content1.png",
@@ -412,7 +405,7 @@ function renderCurriculum() {
   elements.mockLoginButton.addEventListener("click", loginWithSavedProfile);
   elements.roleButtons.forEach((button) => button.addEventListener("click", handleRoleSelect));
   elements.genderButtons.forEach((button) => button.addEventListener("click", handleGenderSelect));
-  elements.nicknameSuggestButton.addEventListener("click", suggestNickname);
+  elements.nicknameSuggestButtons.forEach((button) => button.addEventListener("click", suggestNickname));
   elements.finishOnboardingButton.addEventListener("click", finishOnboarding);
   elements.nicknameInput.addEventListener("input", handleNicknameInput);
   elements.list.addEventListener("change", handleChecklistChange);
@@ -488,8 +481,8 @@ function showOnboardingStep(step) {
 function updateWelcomeActions() {
   const hasProfile = hasSavedProfile();
 
-  elements.startButton.textContent = hasProfile ? "새로 만들기" : "새로 만들기";
-  elements.mockLoginButton.textContent = hasProfile ? "기존 정보 불러오기" : "기존 정보 불러오기";
+  elements.startButton.textContent = "새로 만들기";
+  elements.mockLoginButton.textContent = "기존 정보 불러오기";
 }
 
 function handleRoleSelect(event) {
@@ -566,10 +559,13 @@ function loginWithSavedProfile() {
   showAppShell();
 }
 
-function suggestNickname() {
+function suggestNickname(event) {
   const roleIndex = ["closet", "beginner", "coach"].indexOf(onboardingDraft.role);
   const genderOffset = onboardingDraft.gender === "female" ? 1 : 0;
-  const suggestion = nicknameSuggestions[Math.max(roleIndex, 0) + genderOffset] || nicknameSuggestions[0];
+  const suggestion =
+    event?.currentTarget?.dataset.nicknameSuggestion ||
+    nicknameSuggestions[Math.max(roleIndex, 0) + genderOffset] ||
+    nicknameSuggestions[0];
 
   elements.nicknameInput.value = suggestion;
   elements.nicknameInput.dispatchEvent(new Event("input"));
@@ -913,8 +909,8 @@ function renderRoadExperience() {
     0,
   );
   const totalProgress = Math.round((completedItems / totalItems) * 100);
-  const roadProgress = Math.max(4, totalProgress);
-  const carPosition = getRoadPathPosition(totalProgress);
+  const roadProgress = totalProgress;
+  const carPosition = getRoadCarPosition(totalProgress);
 
   return `
     <section class="road-course" aria-label="Day별 주행 코스">
@@ -960,6 +956,22 @@ function getRoadPathPosition(progress) {
     x: (target.x / ROAD_VIEWBOX.width) * 100,
     y: (target.y / ROAD_VIEWBOX.height) * 100,
     angle,
+  };
+}
+
+function getRoadCarPosition(progress) {
+  const position = getRoadPathPosition(progress);
+
+  if (progress > 0) {
+    return position;
+  }
+
+  const startDirection = getRoadPathPosition(1);
+
+  return {
+    x: position.x,
+    y: Math.min(94, position.y + 17),
+    angle: startDirection.angle,
   };
 }
 
@@ -1442,8 +1454,8 @@ function updateRoadMapUi() {
     0,
   );
   const totalProgress = Math.round((completedItems / totalItems) * 100);
-  const roadProgress = Math.max(4, totalProgress);
-  const carPosition = getRoadPathPosition(totalProgress);
+  const roadProgress = totalProgress;
+  const carPosition = getRoadCarPosition(totalProgress);
   const stage = elements.list.querySelector(".progress-map-stage");
   const roadProgressPath = elements.list.querySelector(".progress-map-road__progress");
 

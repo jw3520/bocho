@@ -3836,6 +3836,239 @@ body {
   }
 }
 
+/* Onboarding selection refresh */
+.onboarding-screen[data-onboarding-step="role"],
+.onboarding-screen[data-onboarding-step="gender"],
+.onboarding-screen[data-onboarding-step="nickname"] {
+  gap: 18px;
+  background:
+    radial-gradient(circle at 82% 8%, rgba(77, 182, 172, 0.14), transparent 26%),
+    linear-gradient(180deg, #f7faf9 0%, #f2f4f6 100%);
+}
+
+.onboarding-screen[data-onboarding-step="role"] .onboarding-step-header,
+.onboarding-screen[data-onboarding-step="gender"] .onboarding-step-header,
+.onboarding-screen[data-onboarding-step="nickname"] .onboarding-step-header {
+  gap: 8px;
+}
+
+.onboarding-screen[data-onboarding-step="role"] .onboarding-step-header h2,
+.onboarding-screen[data-onboarding-step="gender"] .onboarding-step-header h2,
+.onboarding-screen[data-onboarding-step="nickname"] .onboarding-step-header h2 {
+  color: #1f2328;
+  font-size: 30px;
+  font-weight: 850;
+  line-height: 1.18;
+  letter-spacing: 0;
+}
+
+.choice-list {
+  display: grid;
+  gap: 12px;
+}
+
+.choice-card {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) 82px;
+  min-height: 136px;
+  gap: 7px 12px;
+  align-items: center;
+  padding: 16px 16px 16px 18px;
+  border: 0;
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 12px rgba(46, 87, 86, 0.05);
+}
+
+.choice-card.is-selected {
+  box-shadow: 0 0 0 2px rgba(77, 182, 172, 0.28), 0 8px 18px rgba(46, 87, 86, 0.08);
+}
+
+.choice-card__badge,
+.choice-card strong,
+.choice-card p {
+  grid-column: 1;
+}
+
+.choice-card__badge {
+  width: max-content;
+  padding: 6px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: #eef7f6;
+  color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 800;
+  box-shadow: none;
+}
+
+.choice-card strong {
+  color: #1f2328;
+  font-size: 17px;
+  font-weight: 800;
+  line-height: 1.28;
+}
+
+.choice-card p {
+  color: #7f8993;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.42;
+  word-break: keep-all;
+}
+
+.choice-card__icon {
+  grid-row: 1 / span 3;
+  grid-column: 2;
+  display: grid;
+  width: 82px;
+  height: 82px;
+  place-items: center;
+  border-radius: 26px;
+  background: #fff9df;
+}
+
+.choice-card__icon svg {
+  width: 76px;
+  height: 76px;
+  overflow: visible;
+  fill: none;
+  stroke: #1f2328;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4;
+}
+
+.choice-card__icon .chick-body,
+.choice-card__icon .egg-shell,
+.choice-card__icon .shell-hat {
+  fill: #fff1a8;
+}
+
+.choice-card__icon .egg-shell,
+.choice-card__icon .shell-hat {
+  fill: #fffdf3;
+}
+
+.choice-card__icon .comb {
+  fill: #ff8a8a;
+}
+
+.choice-card__icon .beak {
+  fill: #f6c84f;
+}
+
+.choice-card__icon--beginner {
+  background: #fff4c7;
+}
+
+.choice-card__icon--coach {
+  background: #ffe9e8;
+}
+
+.gender-grid {
+  gap: 14px;
+  align-content: center;
+}
+
+.gender-card {
+  min-height: 220px;
+  gap: 14px;
+  padding: 22px 12px;
+  border: 0;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 12px rgba(46, 87, 86, 0.05);
+}
+
+.gender-card.is-selected {
+  box-shadow: 0 0 0 2px rgba(77, 182, 172, 0.28), 0 8px 18px rgba(46, 87, 86, 0.08);
+}
+
+.gender-card__icon {
+  display: grid;
+  width: 110px;
+  height: 110px;
+  place-items: center;
+  border-radius: 36px;
+  background: #f4f6f8;
+}
+
+.gender-card__icon svg {
+  width: 104px;
+  height: 104px;
+  overflow: visible;
+  fill: none;
+  stroke: #14171a;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 5;
+}
+
+.gender-card__icon .driver-face {
+  fill: #fff;
+}
+
+.gender-card__icon .driver-hair,
+.gender-card__icon .driver-braid {
+  stroke-width: 7;
+}
+
+.gender-card__icon .wheel {
+  stroke-width: 5;
+}
+
+.gender-card strong {
+  color: #1f2328;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+.nickname-panel {
+  gap: 14px;
+  border: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.96);
+  box-shadow: 0 4px 12px rgba(46, 87, 86, 0.05);
+}
+
+.nickname-panel label {
+  color: #1f2328;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.nickname-panel input {
+  min-height: 56px;
+  border-radius: 18px;
+  background: #f4f6f8;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.nickname-panel input::placeholder {
+  color: #9aa3ad;
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.nickname-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.nickname-suggestions .suggestion-chip {
+  min-height: 36px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 13px;
+  background: #eef1f4;
+  color: #616974;
+  font-size: 13px;
+  font-weight: 700;
+}
+
 /* Road map progress: gray road, percent nodes, yellow practice car */
 .progress-map-card {
   background:
@@ -5536,7 +5769,7 @@ svg {
 
 .tabbar {
   width: min(430px, 100%);
-  padding: 6px 76px calc(6px + env(safe-area-inset-bottom));
+  padding: 6px 70px calc(6px + env(safe-area-inset-bottom));
   border-top: 1px solid rgba(221, 226, 230, 0.9);
   background: rgba(255, 255, 255, 0.96);
   box-shadow: 0 -8px 18px rgba(15, 23, 42, 0.06);
@@ -5544,6 +5777,8 @@ svg {
 }
 
 .tabbar-button {
+  display: grid;
+  place-items: center;
   min-width: 46px;
   height: 44px;
   border: 0;
@@ -5551,6 +5786,7 @@ svg {
   background: transparent;
   color: #aeb7bf;
   box-shadow: none;
+  text-decoration: none;
 }
 
 .tabbar-button svg {
@@ -5563,6 +5799,15 @@ svg {
   background: rgba(77, 182, 172, 0.12);
   color: var(--primary-dark);
   box-shadow: none;
+}
+
+.tabbar-button--chat {
+  color: #3c3c3c;
+}
+
+.tabbar-button--chat .chat-bubble {
+  fill: #fee500;
+  stroke: #3c1e1e;
 }
 
 .settings-actions {
