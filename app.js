@@ -7,17 +7,22 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.17.17";
+const APP_VERSION = "26.05.17.18";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
+  { id: "black", label: "블랙", body: "#3f4750", bodyDark: "#1f2328", cabin: "#d9e1e5" },
+  { id: "white", label: "화이트", body: "#f8fafc", bodyDark: "#c9d2da", cabin: "#d9f0ff" },
+  { id: "gray", label: "그레이", body: "#9aa5ad", bodyDark: "#64717c", cabin: "#e9eef2" },
+  { id: "green", label: "그린", body: "#73c66b", bodyDark: "#3d9146", cabin: "#e4f8df" },
   { id: "mint", label: "민트", body: "#54c7b8", bodyDark: "#2f8d88", cabin: "#d9fff8" },
   { id: "blue", label: "블루", body: "#5d9cec", bodyDark: "#3267b7", cabin: "#d8e9ff" },
+  { id: "red", label: "레드", body: "#ef5350", bodyDark: "#b93634", cabin: "#ffe1df" },
   { id: "pink", label: "핑크", body: "#f3818b", bodyDark: "#c94f5f", cabin: "#ffe1e5" },
-  { id: "black", label: "블랙", body: "#56636e", bodyDark: "#2f363d", cabin: "#dfe5e8" },
+  { id: "purple", label: "퍼플", body: "#9b7ee7", bodyDark: "#6f52b8", cabin: "#ebe3ff" },
 ];
 const VEHICLE_TYPES = [
-  { id: "basic", label: "기본 차량" },
+  { id: "basic", label: "기본" },
   { id: "sedan", label: "승용차" },
   { id: "suv", label: "SUV" },
 ];
@@ -827,7 +832,6 @@ function renderVehicleOptions() {
       (color) => `
         <button class="car-color-option${vehicleDraft.color === color.id ? " is-selected" : ""}" type="button" data-vehicle-color="${color.id}" aria-pressed="${vehicleDraft.color === color.id}" aria-label="${color.label}">
           <span style="background:${color.body}"></span>
-          <strong>${color.label}</strong>
         </button>
       `,
     ).join("");
@@ -1174,14 +1178,7 @@ function renderRoadExperience() {
             <path class="progress-map-road__dash" d="${ROAD_PATH_D}"></path>
           </svg>
           <div class="progress-map-finish" aria-hidden="true"><span></span></div>
-          <button class="car-customize-button" type="button" data-car-customize-open aria-label="차량 변경">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 15h16"></path>
-              <path d="M6 15l2-5h8l2 5"></path>
-              <circle cx="8" cy="17" r="1.5"></circle>
-              <circle cx="16" cy="17" r="1.5"></circle>
-            </svg>
-          </button>
+          <button class="car-customize-button" type="button" data-car-customize-open>차량 변경</button>
           <div class="progress-map-car progress-map-car--${vehicleState.type}" style="${getVehicleStyle()}" aria-hidden="true">
             <span class="progress-map-car__cabin"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>

@@ -4004,8 +4004,8 @@ body {
 
 .gender-card .gender-card__icon {
   display: grid;
-  width: 116px;
-  height: 116px;
+  width: 132px;
+  height: 110px;
   place-items: center;
   border-radius: 0;
   background: transparent;
@@ -4025,9 +4025,9 @@ body {
 }
 
 .gender-card__icon svg {
-  width: 112px;
-  height: 112px;
-  transform: translateX(-1px);
+  width: 132px;
+  height: 106px;
+  transform: none;
   overflow: visible;
   fill: none;
   stroke: #1f2933;
@@ -4041,67 +4041,71 @@ body {
   stroke: none;
 }
 
-.gender-symbol .symbol-face {
-  fill: #fff3c4;
-  stroke-width: 3.5;
+.gender-symbol .driver-car-body {
+  fill: #dff4f2;
+  stroke-width: 3.4;
 }
 
-.gender-symbol .symbol-hoodie {
-  fill: #f5faf9;
-  stroke-width: 3.5;
-}
-
-.gender-symbol--male .symbol-face {
-  fill: #ffe89a;
-}
-
-.gender-symbol--male .symbol-hoodie {
-  fill: #e4f7f5;
-}
-
-.gender-symbol--female .symbol-face {
-  fill: #ffe5b9;
-}
-
-.gender-symbol--female .symbol-hoodie {
+.gender-symbol--female .driver-car-body {
   fill: #fff0f2;
 }
 
-.gender-symbol .symbol-eye {
+.gender-symbol .driver-car-window {
+  fill: #f8fbfc;
+  stroke-width: 3.2;
+}
+
+.gender-symbol .driver-wheel {
+  fill: #2f363d;
+  stroke-width: 3;
+}
+
+.gender-symbol .driver-seat,
+.gender-symbol .driver-wheel-ring {
+  fill: none;
+  stroke: #7b5539;
+  stroke-width: 5;
+}
+
+.gender-symbol .chick-head {
+  fill: #ffe36e;
+  stroke-width: 3.4;
+}
+
+.gender-symbol .chick-tuft {
+  fill: none;
+  stroke-width: 3.2;
+}
+
+.gender-symbol .chick-eye {
   fill: #1f2933;
   stroke: none;
 }
 
-.gender-symbol .symbol-smile,
-.gender-symbol .symbol-hairline {
-  fill: none;
-  stroke-width: 3.2;
-}
-
-.gender-symbol .symbol-cheek {
-  fill: rgba(243, 129, 139, 0.28);
-  stroke: none;
-}
-
-.gender-symbol .symbol-wheel {
-  fill: none;
-  stroke: #7b5539;
-  stroke-width: 5.5;
-}
-
-.gender-symbol .symbol-cap {
-  fill: #8fd8d0;
-  stroke-width: 3.2;
-}
-
-.gender-symbol .symbol-cap-bill {
-  fill: #62bdb5;
+.gender-symbol .chick-beak {
+  fill: #ffb63d;
   stroke-width: 3;
 }
 
-.gender-symbol .symbol-ribbon,
-.gender-symbol .symbol-knot {
+.gender-symbol .chick-wing {
+  fill: none;
+  stroke: #d99a2b;
+  stroke-width: 5;
+}
+
+.gender-symbol .flower-wreath circle {
   fill: #f3818b;
+  stroke-width: 2.4;
+}
+
+.gender-symbol .flower-wreath circle:nth-child(2),
+.gender-symbol .flower-wreath circle:nth-child(4) {
+  fill: #ffd66b;
+}
+
+.gender-symbol .flower-wreath path {
+  fill: none;
+  stroke: #73c66b;
   stroke-width: 3;
 }
 
@@ -5636,6 +5640,12 @@ textarea {
   transform-origin: center;
 }
 
+.progress-map-car--basic {
+  width: 38px;
+  height: 22px;
+  border-radius: 16px 9px 9px 16px;
+}
+
 .progress-map-car::before,
 .progress-map-car::after {
   position: absolute;
@@ -5667,23 +5677,39 @@ textarea {
 }
 
 .progress-map-car--sedan {
-  width: 42px;
-  height: 20px;
-  border-radius: 15px 8px 8px 15px;
+  width: 46px;
+  height: 19px;
+  border-radius: 18px 8px 8px 18px;
+}
+
+.progress-map-car--sedan .progress-map-car__cabin {
+  top: 3px;
+  left: 17px;
+  width: 16px;
+  height: 11px;
+  border-radius: 9px 4px 4px 7px;
 }
 
 .progress-map-car--suv {
-  width: 42px;
-  height: 25px;
-  border-radius: 12px 8px 8px 12px;
+  width: 45px;
+  height: 27px;
+  border-radius: 9px 7px 7px 9px;
+  background:
+    linear-gradient(90deg, var(--car-body-dark) 0 9%, transparent 9%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 76%, #ffffff) 0 35%, var(--car-body) 36% 70%, var(--car-body-dark) 100%);
 }
 
 .progress-map-car--suv .progress-map-car__cabin {
-  top: 5px;
-  left: 12px;
-  width: 17px;
-  height: 14px;
-  border-radius: 6px;
+  top: 4px;
+  left: 14px;
+  width: 19px;
+  height: 13px;
+  border-radius: 4px;
+}
+
+.progress-map-car--suv .progress-map-car__wheel {
+  width: 9px;
+  height: 6px;
 }
 
 .car-customize-button {
@@ -5691,25 +5717,20 @@ textarea {
   right: 13px;
   bottom: 13px;
   z-index: 20;
-  display: inline-grid;
-  width: 38px;
-  height: 38px;
-  place-items: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 74px;
+  height: 34px;
+  padding: 0 13px;
   border: 0;
-  border-radius: 50%;
+  border-radius: 999px;
   background: rgba(255, 255, 255, 0.96);
   color: var(--primary-dark);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0;
   box-shadow: 0 8px 18px rgba(46, 87, 86, 0.16);
-}
-
-.car-customize-button svg {
-  width: 22px;
-  height: 22px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 2.2;
 }
 
 .car-dialog {
@@ -5759,22 +5780,17 @@ textarea {
 }
 
 .car-color-options {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding-bottom: 2px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px 10px;
 }
 
 .car-color-option {
   display: grid;
-  gap: 6px;
   justify-items: center;
-  min-width: 54px;
+  min-width: 0;
   border: 0;
   background: transparent;
-  color: #56636e;
-  font-size: 11px;
-  font-weight: 800;
 }
 
 .car-color-option span {
@@ -5787,10 +5803,6 @@ textarea {
 
 .car-color-option.is-selected span {
   box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.18), inset 0 0 0 2px #ffffff;
-}
-
-.car-color-option.is-selected strong {
-  color: var(--primary-dark);
 }
 
 .car-type-options {
