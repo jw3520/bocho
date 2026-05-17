@@ -3694,16 +3694,20 @@ body {
 /* Welcome screen copy and primary action refinement */
 .onboarding-screen[data-onboarding-step="welcome"] {
   position: relative;
-  grid-template-rows: minmax(356px, 1fr) auto auto;
+  grid-template-rows: minmax(0, 54dvh) auto auto;
   gap: 24px;
+  min-height: 100dvh;
+  max-height: 100dvh;
   padding: calc(env(safe-area-inset-top) + 22px) 22px calc(22px + env(safe-area-inset-bottom));
+  overflow: hidden;
   background:
     radial-gradient(circle at 78% 8%, rgba(77, 182, 172, 0.18), transparent 30%),
     linear-gradient(180deg, #f5faf9 0%, #f2f4f6 100%);
 }
 
 .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual {
-  min-height: 356px;
+  height: 100%;
+  min-height: 0;
   margin: -22px -22px 0;
   overflow: hidden;
   background:
@@ -3800,12 +3804,12 @@ body {
 
 @media (max-width: 374px) {
   .onboarding-screen[data-onboarding-step="welcome"] {
-    grid-template-rows: minmax(320px, 1fr) auto auto;
+    grid-template-rows: minmax(0, 50dvh) auto auto;
     gap: 18px;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual {
-    min-height: 320px;
+    min-height: 0;
   }
 
   .onboarding-screen[data-onboarding-step="welcome"] .onboarding-visual::before {
@@ -4022,56 +4026,62 @@ body {
   height: 104px;
   overflow: visible;
   fill: none;
-  stroke: #14171a;
+  stroke: #1f2933;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 3.6;
+  stroke-width: 3.4;
 }
 
-.gender-avatar .chick-body {
-  fill: #ffe36e;
-  stroke-width: 3.6;
-}
-
-.gender-avatar .chick-shadow {
+.gender-symbol .symbol-shadow {
   fill: rgba(31, 35, 40, 0.08);
   stroke: none;
 }
 
-.gender-avatar .chick-wing {
-  fill: rgba(255, 196, 77, 0.34);
-  stroke-width: 3.2;
+.gender-symbol .symbol-key-body {
+  stroke-width: 3.5;
 }
 
-.gender-avatar .chick-eye {
-  fill: #202631;
+.gender-symbol--male .symbol-key-body {
+  fill: #8fd8d0;
+}
+
+.gender-symbol--female .symbol-key-body {
+  fill: #ffc7cf;
+}
+
+.gender-symbol .symbol-visor {
+  fill: rgba(255, 255, 255, 0.86);
+  stroke-width: 3;
+}
+
+.gender-symbol .symbol-face-line,
+.gender-symbol .symbol-helmet-band,
+.gender-symbol .symbol-key-stem,
+.gender-symbol .symbol-key-bit {
+  fill: none;
+  stroke-width: 3.8;
+}
+
+.gender-symbol--male .symbol-helmet-band,
+.gender-symbol--male .symbol-key-stem,
+.gender-symbol--male .symbol-key-bit {
+  stroke: #2f8d88;
+}
+
+.gender-symbol--female .symbol-key-stem,
+.gender-symbol--female .symbol-key-bit {
+  stroke: #d65f74;
+}
+
+.gender-symbol .symbol-dot {
+  fill: #1f2933;
   stroke: none;
 }
 
-.gender-avatar .chick-beak {
-  fill: #ffb63d;
-  stroke-width: 3;
-}
-
-.gender-avatar .chick-wheel {
-  stroke: #7b5539;
-  stroke-width: 6;
-}
-
-.gender-avatar .chick-cap {
-  fill: #4db6ac;
-  stroke-width: 3.2;
-}
-
-.gender-avatar .chick-cap-bill {
-  fill: #3f9f97;
-  stroke-width: 3;
-}
-
-.gender-avatar .chick-bow,
-.gender-avatar .chick-bow-knot {
+.gender-symbol .symbol-ribbon,
+.gender-symbol .symbol-knot {
   fill: #f3818b;
-  stroke-width: 3.2;
+  stroke-width: 3;
 }
 
 .gender-card strong {
@@ -5709,6 +5719,26 @@ textarea {
   padding: 16px 18px 12px;
 }
 
+.drive-detail-panel__header h3 {
+  margin: 0;
+  color: #202631;
+  font-size: 19px;
+  font-weight: 900;
+  line-height: 1.28;
+}
+
+.day-item-summary {
+  max-width: 100%;
+  margin: 6px 0 0;
+  overflow: hidden;
+  color: #7a838c;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .drive-detail-panel .day-progress-text {
   position: static;
   align-self: start;
@@ -5754,11 +5784,34 @@ textarea {
   font-weight: 850;
 }
 
-.drive-detail-panel .record-card__arrow {
-  color: #a1abb5;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1;
+.drive-detail-panel .record-card__pictogram {
+  position: relative;
+  display: inline-grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 9px;
+  background: #e9f7f5;
+}
+
+.drive-detail-panel .record-card__pictogram::before {
+  width: 6px;
+  height: 6px;
+  border-top: 2px solid var(--primary-dark);
+  border-right: 2px solid var(--primary-dark);
+  content: "";
+  transform: translateX(-1px) rotate(45deg);
+}
+
+.drive-detail-panel .record-card__pictogram::after {
+  position: absolute;
+  left: 4px;
+  bottom: 4px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(40, 141, 132, 0.22);
+  content: "";
 }
 
 .drive-detail-panel .guide-thumb,

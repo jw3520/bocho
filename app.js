@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.11";
+const APP_VERSION = "26.05.17.14";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -169,6 +169,8 @@ let calendarDisplayDate = new Date();
 let deferredInstallPrompt = null;
 let celebratedTaskId = null;
 let activeGuideTaskId = null;
+let detailSwipeStart = null;
+let suppressNextDetailClick = false;
 let swRegistrationRef = null;
 let reloadingForServiceWorker = false;
 let onboardingDraft = loadOnboarding() || {
@@ -434,6 +436,8 @@ function renderCurriculum() {
   elements.calendarTodayButton?.addEventListener("click", resetCalendarToToday);
   elements.dayFilter?.addEventListener("click", handleDayFilterClick);
   elements.list.addEventListener("click", handleDayCardClick);
+  elements.list.addEventListener("touchstart", handleDetailSwipeStart, { passive: true });
+  elements.list.addEventListener("touchend", handleDetailSwipeEnd, { passive: true });
   elements.tabButtons.forEach((button) => button.addEventListener("click", handleTabClick));
   elements.openChatButton?.addEventListener("click", confirmOpenChat);
   elements.completeNextButton.addEventListener("click", shareProgress);
@@ -1163,15 +1167,16 @@ function getDayRingColor(ratio) {
 function renderSelectedDayPanel(day) {
   const status = getDayCompletion(day);
   const ratio = Math.round((status.completed / status.total) * 100);
+  const itemSummary = day.items.map((task) => task.title).join(", ");
 
   return `
     <section class="drive-detail-panel" data-selected-day="${day.id}">
       <div class="drive-detail-panel__header">
         <div>
-          <h3>${day.day}: ${day.title}</h3>
-          <p>${day.goal}</p>
+          <h3>${day.day}. ${day.title}</h3>
+          <p class="day-item-summary" title="${itemSummary}">${itemSummary}</p>
         </div>
-        <span class="day-progress-text" data-day-status="${day.id}" aria-label="${status.completed}/${status.total} PASS, ${ratio}% 완료">${status.completed}/${status.total} PASS · ${ratio}% 완료</span>
+        <span class="day-progress-text" data-day-status="${day.id}" aria-label="${status.completed}/${status.total} PASS, ${ratio}% 완료">${status.completed}/${status.total} PASS</span>
       </div>
       <div class="course-detail">${day.items.map((task) => renderTask(task)).join("")}</div>
     </section>
@@ -1191,7 +1196,7 @@ function renderTask(task) {
         <div class="record-card__content">
           <p class="record-card__note">${task.title}</p>
         </div>
-        <span class="record-card__arrow" aria-hidden="true">&gt;</span>
+        <span class="record-card__pictogram" aria-hidden="true"></span>
     </article>
   `;
 }
@@ -1226,15 +1231,15 @@ function handleDayFilterClick(event) {
     return;
   }
 
-  elements.dayFilter
-    .querySelectorAll("[data-day-filter]")
-    .forEach((filterButton) => filterButton.classList.toggle("is-active", filterButton === button));
-  expandedDayId = button.dataset.dayFilter;
-  updateProgress();
-  scrollRoadDayIntoView(button.dataset.dayFilter);
+  selectRoadDay(button.dataset.dayFilter);
 }
 
 function handleDayCardClick(event) {
+  if (suppressNextDetailClick) {
+    suppressNextDetailClick = false;
+    return;
+  }
+
   if (event.target.closest(".pass-button")) {
     return;
   }
@@ -1252,14 +1257,73 @@ function handleDayCardClick(event) {
     return;
   }
 
-  expandedDayId = button.dataset.dayOpen;
+  selectRoadDay(button.dataset.dayOpen);
+}
+
+function selectRoadDay(dayId) {
+  expandedDayId = dayId;
   elements.dayFilter
     ?.querySelectorAll("[data-day-filter]")
     .forEach((filterButton) =>
       filterButton.classList.toggle("is-active", filterButton.dataset.dayFilter === expandedDayId),
     );
   updateProgress();
-  scrollRoadDayIntoView(button.dataset.dayOpen);
+  scrollRoadDayIntoView(dayId);
+}
+
+function handleDetailSwipeStart(event) {
+  const panel = event.target.closest(".drive-detail-panel");
+
+  if (!panel || event.target.closest(".pass-button")) {
+    detailSwipeStart = null;
+    return;
+  }
+
+  const touch = event.changedTouches?.[0];
+
+  if (!touch) {
+    return;
+  }
+
+  detailSwipeStart = {
+    x: touch.clientX,
+    y: touch.clientY,
+    dayId: panel.dataset.selectedDay,
+  };
+}
+
+function handleDetailSwipeEnd(event) {
+  if (!detailSwipeStart) {
+    return;
+  }
+
+  const touch = event.changedTouches?.[0];
+  const start = detailSwipeStart;
+  detailSwipeStart = null;
+
+  if (!touch) {
+    return;
+  }
+
+  const deltaX = touch.clientX - start.x;
+  const deltaY = touch.clientY - start.y;
+
+  if (Math.abs(deltaX) < 44 || Math.abs(deltaX) < Math.abs(deltaY) * 1.25) {
+    return;
+  }
+
+  const currentIndex = curriculum.findIndex((day) => day.id === start.dayId);
+  const nextIndex = Math.max(0, Math.min(curriculum.length - 1, currentIndex + (deltaX < 0 ? 1 : -1)));
+
+  if (nextIndex === currentIndex || !curriculum[nextIndex]) {
+    return;
+  }
+
+  suppressNextDetailClick = true;
+  selectRoadDay(curriculum[nextIndex].id);
+  window.setTimeout(() => {
+    suppressNextDetailClick = false;
+  }, 360);
 }
 
 function scrollRoadDayIntoView(dayId) {
@@ -1614,7 +1678,7 @@ function updateSelectedDayPanelUi() {
   const progressText = elements.list.querySelector(".day-progress-text");
 
   if (progressText) {
-    progressText.textContent = `${status.completed}/${status.total} PASS · ${ratio}% 완료`;
+    progressText.textContent = `${status.completed}/${status.total} PASS`;
     progressText.setAttribute("aria-label", `${status.completed}/${status.total} PASS, ${ratio}% 완료`);
   }
 }
