@@ -4001,8 +4001,10 @@ body {
   width: 110px;
   height: 110px;
   place-items: center;
-  border-radius: 36px;
-  background: #f4f6f8;
+  border-radius: 34px;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.86), transparent 26%),
+    linear-gradient(145deg, #e8f6f4 0%, #d6ece9 100%);
 }
 
 .gender-card[data-gender-option="female"] {
@@ -4014,7 +4016,9 @@ body {
 }
 
 .gender-card__icon--female {
-  background: #f5a6b8;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.82), transparent 26%),
+    linear-gradient(145deg, #ffe6ee 0%, #f7b8c7 100%);
 }
 
 .gender-card__icon svg {
@@ -4025,77 +4029,63 @@ body {
   stroke: #14171a;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 5;
+  stroke-width: 3.6;
 }
 
-.gender-card__icon .driver-head {
-  fill: #fff8ec;
-}
-
-.gender-card__icon .driver-shadow {
-  fill: rgba(20, 23, 26, 0.08);
+.gender-avatar .avatar-halo {
+  fill: rgba(255, 255, 255, 0.42);
   stroke: none;
 }
 
-.gender-card__icon .driver-neck {
-  fill: #f2c9a6;
+.gender-avatar .avatar-face {
+  fill: #ffe1bf;
+  stroke-width: 3.6;
+}
+
+.gender-avatar .avatar-neck {
+  fill: #f3c69f;
   stroke-width: 3;
 }
 
-.gender-card__icon .driver-shirt {
+.gender-avatar .avatar-shoulders {
   fill: #4db6ac;
-  stroke-width: 4;
+  stroke-width: 3.6;
 }
 
-.gender-card__icon--female .driver-shirt {
+.gender-card__icon--female .avatar-shoulders {
   fill: #f3818b;
 }
 
-.gender-card__icon .driver-seat {
-  fill: rgba(255, 255, 255, 0.38);
-  stroke-width: 4;
+.gender-avatar .avatar-hair,
+.gender-avatar .avatar-hair-back,
+.gender-avatar .avatar-bangs {
+  fill: #202631;
+  stroke-width: 3.6;
 }
 
-.gender-card__icon .driver-hair,
-.gender-card__icon .driver-bangs,
-.gender-card__icon .driver-hair-back {
-  fill: #263238;
+.gender-card__icon--female .avatar-hair-back,
+.gender-card__icon--female .avatar-bangs {
+  fill: #5b3f39;
 }
 
-.gender-card__icon--female .driver-hair,
-.gender-card__icon--female .driver-bangs,
-.gender-card__icon--female .driver-hair-back {
-  fill: #5a3f38;
+.gender-avatar .avatar-side-hair {
+  stroke: #5b3f39;
+  stroke-width: 4.2;
 }
 
-.gender-card__icon .driver-hair,
-.gender-card__icon .driver-braid {
-  stroke-width: 4.5;
-}
-
-.gender-card__icon .driver-cheek {
-  stroke: #f2a6a6;
-  stroke-width: 4;
-}
-
-.gender-card__icon .driver-eye {
-  fill: #14171a;
+.gender-avatar .avatar-eye {
+  fill: #202631;
   stroke: none;
 }
 
-.gender-card__icon .driver-side-hair {
-  stroke: #5a3f38;
-  stroke-width: 5;
+.gender-avatar .avatar-smile {
+  stroke: #202631;
+  stroke-width: 3;
 }
 
-.gender-card__icon .wheel {
+.gender-avatar .avatar-wheel {
   stroke: #7b5539;
-  stroke-width: 7;
-}
-
-.gender-card__icon .wheel-center {
-  stroke: #9a6a45;
-  stroke-width: 5;
+  stroke-width: 6;
 }
 
 .gender-card strong {
@@ -6319,8 +6309,19 @@ svg {
   }
 }
 
+.gender-card .gender-card__icon--male {
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.86), transparent 26%),
+    linear-gradient(145deg, #e8f6f4 0%, #d6ece9 100%);
+  color: #fff;
+  border: 0;
+  box-shadow: none;
+}
+
 .gender-card .gender-card__icon--female {
-  background: #f5a6b8;
+  background:
+    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.82), transparent 26%),
+    linear-gradient(145deg, #ffe6ee 0%, #f7b8c7 100%);
   color: #fff;
   border: 0;
   box-shadow: none;

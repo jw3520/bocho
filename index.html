@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.17.09">
+    <link rel="stylesheet" href="/styles.css?v=26.05.17.10">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -114,36 +114,34 @@
         <div class="gender-grid">
           <button class="gender-card" type="button" data-gender-option="male">
             <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
-              <svg viewBox="0 0 120 120">
-                <path class="driver-shadow" d="M30 101c7-18 18-28 32-28s25 10 32 28"></path>
-                <path class="driver-neck" d="M53 73h18v14H53Z"></path>
-                <path class="driver-shirt" d="M34 103c5-18 16-27 28-27s23 9 28 27Z"></path>
-                <path class="driver-head" d="M35 52c0-18 11-30 27-30s27 12 27 30-11 31-27 31-27-13-27-31Z"></path>
-                <path class="driver-hair" d="M37 45c2-16 13-25 28-25 12 0 22 7 25 21-8-5-18-7-28-7-11 0-19 3-25 11Z"></path>
-                <circle class="driver-eye" cx="53" cy="56" r="2.4"></circle>
-                <circle class="driver-eye" cx="72" cy="56" r="2.4"></circle>
-                <path class="driver-mouth" d="M55 68c4 4 10 4 14 0"></path>
-                <path class="wheel" d="M33 105c6-13 17-20 29-20s23 7 29 20"></path>
-                <path class="wheel-center" d="M49 103c4-5 8-7 13-7s9 2 13 7"></path>
+              <svg class="gender-avatar" viewBox="0 0 120 120">
+                <circle class="avatar-halo" cx="60" cy="60" r="48"></circle>
+                <path class="avatar-shoulders" d="M28 103c7-20 19-31 32-31s25 11 32 31Z"></path>
+                <path class="avatar-neck" d="M52 69h16v16H52Z"></path>
+                <path class="avatar-face" d="M34 52c0-18 11-31 26-31s26 13 26 31-11 31-26 31-26-13-26-31Z"></path>
+                <path class="avatar-hair" d="M35 44c4-17 16-26 31-24 11 1 19 8 22 20-13-4-22-4-31-2-8 1-15 3-22 6Z"></path>
+                <circle class="avatar-eye" cx="51" cy="55" r="2.2"></circle>
+                <circle class="avatar-eye" cx="69" cy="55" r="2.2"></circle>
+                <path class="avatar-smile" d="M53 66c4 3 10 3 14 0"></path>
+                <path class="avatar-wheel" d="M36 105c6-13 15-19 24-19s18 6 24 19"></path>
               </svg>
             </span>
             <strong>남성</strong>
           </button>
           <button class="gender-card" type="button" data-gender-option="female">
             <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
-              <svg viewBox="0 0 120 120">
-                <path class="driver-shadow" d="M30 101c7-18 18-28 32-28s25 10 32 28"></path>
-                <path class="driver-hair-back" d="M32 59c-3-23 9-38 30-38s33 15 30 38c-2 16-10 27-30 27S34 75 32 59Z"></path>
-                <path class="driver-neck" d="M53 73h18v14H53Z"></path>
-                <path class="driver-shirt" d="M34 103c5-18 16-27 28-27s23 9 28 27Z"></path>
-                <path class="driver-head" d="M36 54c0-17 11-29 26-29s26 12 26 29-11 30-26 30-26-13-26-30Z"></path>
-                <path class="driver-bangs" d="M39 43c6-13 18-19 31-15 8 2 14 8 18 17-12-5-20-5-27-2-7-4-14-4-22 0Z"></path>
-                <path class="driver-side-hair" d="M39 50c-6 8-8 21-3 32M85 50c6 8 8 21 3 32"></path>
-                <circle class="driver-eye" cx="53" cy="57" r="2.4"></circle>
-                <circle class="driver-eye" cx="72" cy="57" r="2.4"></circle>
-                <path class="driver-mouth" d="M55 69c4 4 10 4 14 0"></path>
-                <path class="wheel" d="M33 105c6-13 17-20 29-20s23 7 29 20"></path>
-                <path class="wheel-center" d="M49 103c4-5 8-7 13-7s9 2 13 7"></path>
+              <svg class="gender-avatar" viewBox="0 0 120 120">
+                <circle class="avatar-halo" cx="60" cy="60" r="48"></circle>
+                <path class="avatar-hair-back" d="M30 57c0-23 12-38 30-38s30 15 30 38c0 22-9 32-30 32S30 79 30 57Z"></path>
+                <path class="avatar-shoulders" d="M28 103c7-20 19-31 32-31s25 11 32 31Z"></path>
+                <path class="avatar-neck" d="M52 69h16v16H52Z"></path>
+                <path class="avatar-face" d="M35 54c0-17 11-30 25-30s25 13 25 30-11 30-25 30-25-13-25-30Z"></path>
+                <path class="avatar-bangs" d="M38 43c7-14 21-20 34-13 7 4 11 10 13 17-11-6-20-7-29-4-6 1-12 1-18 0Z"></path>
+                <path class="avatar-side-hair" d="M37 52c-5 8-6 18-2 28M83 52c5 8 6 18 2 28"></path>
+                <circle class="avatar-eye" cx="51" cy="57" r="2.2"></circle>
+                <circle class="avatar-eye" cx="69" cy="57" r="2.2"></circle>
+                <path class="avatar-smile" d="M53 68c4 3 10 3 14 0"></path>
+                <path class="avatar-wheel" d="M36 105c6-13 15-19 24-19s18 6 24 19"></path>
               </svg>
             </span>
             <strong>여성</strong>
@@ -412,6 +410,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.17.09" defer></script>
+    <script src="/app.js?v=26.05.17.10" defer></script>
   </body>
 </html>
