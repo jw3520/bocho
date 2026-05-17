@@ -5771,8 +5771,8 @@ textarea {
 
 .drive-detail-panel .record-card {
   cursor: pointer;
-  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 30px 14px;
-  gap: 10px;
+  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 14px;
+  gap: 12px;
   align-items: center;
   min-height: 68px;
   padding: 11px 12px 11px 10px;
@@ -5786,24 +5786,18 @@ textarea {
 }
 
 .drive-detail-panel .record-card__content {
+  display: grid;
   gap: 0;
+  place-items: center;
+  min-height: 42px;
 }
 
 .drive-detail-panel .record-card__note {
+  width: 100%;
+  margin: 0;
+  text-align: center;
   font-size: 15px;
   font-weight: 850;
-}
-
-.drive-detail-panel .record-card__pictogram {
-  position: relative;
-  display: inline-grid;
-  width: 30px;
-  height: 30px;
-  place-items: center;
-  border-radius: 12px;
-  background: #e9f7f5;
-  font-size: 15px;
-  line-height: 1;
 }
 
 .drive-detail-panel .record-card__arrow {
