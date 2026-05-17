@@ -3279,7 +3279,7 @@ button:active {
 .progress-map-nodes {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: 8;
 }
 
 .progress-map-node {
@@ -4041,40 +4041,6 @@ body {
   stroke: none;
 }
 
-.gender-symbol .gender-hero-car {
-  fill: #dff3f0;
-  stroke: #20262d;
-  stroke-width: 3.2;
-}
-
-.gender-symbol--female .gender-hero-car {
-  fill: #fff1f4;
-}
-
-.gender-symbol .gender-hero-bumper {
-  fill: none;
-  stroke: rgba(32, 38, 45, 0.22);
-  stroke-width: 3;
-}
-
-.gender-symbol .gender-hero-glass {
-  fill: #f7fbfc;
-  stroke: #20262d;
-  stroke-width: 3.2;
-}
-
-.gender-symbol .gender-hero-wheel {
-  fill: #30363d;
-  stroke: #20262d;
-  stroke-width: 3;
-}
-
-.gender-symbol .gender-hero-light {
-  fill: none;
-  stroke: #ffcf66;
-  stroke-width: 5;
-}
-
 .gender-symbol .gender-hero-face {
   fill: #ffe36e;
   stroke: #20262d;
@@ -4085,6 +4051,18 @@ body {
   fill: none;
   stroke: #20262d;
   stroke-width: 3.2;
+}
+
+.gender-symbol .gender-hero-pin {
+  fill: #f3819a;
+  stroke: #20262d;
+  stroke-width: 2.8;
+}
+
+.gender-symbol .gender-hero-pin-dot {
+  fill: #ffd1dc;
+  stroke: #20262d;
+  stroke-width: 2.2;
 }
 
 .gender-symbol .gender-hero-eye {
@@ -4116,21 +4094,10 @@ body {
   stroke-width: 5.4;
 }
 
-.gender-symbol .gender-hero-wreath path {
+.gender-symbol .gender-hero-steer-core {
   fill: none;
-  stroke: #65b86a;
-  stroke-width: 3;
-}
-
-.gender-symbol .gender-hero-wreath circle {
-  fill: #f48fa0;
-  stroke: #20262d;
-  stroke-width: 2.2;
-}
-
-.gender-symbol .gender-hero-wreath circle:nth-child(3),
-.gender-symbol .gender-hero-wreath circle:nth-child(5) {
-  fill: #ffd76b;
+  stroke: #7a4f2c;
+  stroke-width: 3.4;
 }
 
 .gender-card strong {
@@ -5264,7 +5231,7 @@ textarea {
 }
 
 .progress-map-nodes {
-  z-index: 5;
+  z-index: 8;
 }
 
 .progress-map-node {
@@ -5610,7 +5577,7 @@ textarea {
 .progress-map-node {
   width: 64px;
   gap: 4px;
-  z-index: 5;
+  z-index: 8;
 }
 
 .progress-map-node__button {
@@ -5650,10 +5617,10 @@ textarea {
 .progress-map-car {
   top: var(--car-y);
   left: var(--car-x);
-  z-index: 6;
+  z-index: 4;
   display: block;
-  width: 58px;
-  height: 36px;
+  width: 68px;
+  height: 38px;
   background: transparent;
   box-shadow: none;
   filter: none;
@@ -5661,119 +5628,69 @@ textarea {
   transform-origin: center;
 }
 
-.progress-map-car-svg {
+.progress-map-car-image {
   display: block;
   width: 100%;
   height: 100%;
-  overflow: visible;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  transform-origin: center;
 }
 
 .progress-map-car--sedan {
-  width: 62px;
-  height: 38px;
+  width: 58px;
+  height: 50px;
 }
 
 .progress-map-car--compact {
-  width: 54px;
-  height: 39px;
+  width: 74px;
+  height: 34px;
 }
 
 .progress-map-car--suv {
-  width: 66px;
-  height: 41px;
+  width: 62px;
+  height: 42px;
 }
 
-.progress-map-car--suv .progress-map-car__wheel {
-  width: 9px;
-  height: 6px;
+.progress-map-car--suv .progress-map-car-image {
+  transform: rotate(90deg) scale(1.12);
 }
 
-.car-svg-shape {
-  display: none;
+.progress-map-car--color-black .progress-map-car-image {
+  filter: grayscale(1) brightness(0.46) contrast(1.35);
 }
 
-.progress-map-car--sedan .car-svg-shape--sedan,
-.progress-map-car--compact .car-svg-shape--compact,
-.progress-map-car--suv .car-svg-shape--suv {
-  display: block;
+.progress-map-car--color-white .progress-map-car-image {
+  filter: grayscale(0.7) brightness(1.35) contrast(0.9);
 }
 
-.car-svg-shadow {
-  fill: rgba(31, 35, 40, 0.2);
-  stroke: none;
+.progress-map-car--color-gray .progress-map-car-image {
+  filter: grayscale(1) brightness(0.9) contrast(1.05);
 }
 
-.car-svg-body {
-  fill: var(--car-body);
-  stroke: color-mix(in srgb, var(--car-body-dark) 72%, #1f2328);
-  stroke-width: 2.9;
-  filter: drop-shadow(0 5px 5px rgba(31, 35, 40, 0.22));
+.progress-map-car--color-green .progress-map-car-image {
+  filter: hue-rotate(88deg) saturate(1.25) brightness(0.98);
 }
 
-.car-svg-nose,
-.car-svg-tail {
-  fill: color-mix(in srgb, var(--car-body) 70%, #ffffff);
-  stroke: color-mix(in srgb, var(--car-body-dark) 58%, transparent);
-  stroke-width: 1.2;
+.progress-map-car--color-mint .progress-map-car-image {
+  filter: hue-rotate(128deg) saturate(1.1) brightness(1.05);
 }
 
-.car-svg-windshield,
-.car-svg-rear-window {
-  fill: color-mix(in srgb, var(--car-cabin) 42%, #3d4c59);
-  stroke: rgba(31, 35, 40, 0.42);
-  stroke-width: 1.5;
+.progress-map-car--color-blue .progress-map-car-image {
+  filter: hue-rotate(185deg) saturate(1.15) brightness(1.02);
 }
 
-.car-svg-roof {
-  fill: color-mix(in srgb, var(--car-cabin) 62%, #6d7a86);
-  stroke: rgba(31, 35, 40, 0.24);
-  stroke-width: 1.2;
+.progress-map-car--color-red .progress-map-car-image {
+  filter: hue-rotate(-35deg) saturate(1.4) brightness(1.02);
 }
 
-.car-svg-tire {
-  fill: #1f252b;
-  stroke: rgba(255, 255, 255, 0.26);
-  stroke-width: 0.9;
+.progress-map-car--color-pink .progress-map-car-image {
+  filter: hue-rotate(-12deg) saturate(1.15) brightness(1.12);
 }
 
-.car-svg-highlight,
-.car-svg-rail,
-.car-svg-contour,
-.car-svg-center-line {
-  fill: none;
-  stroke-linecap: round;
-}
-
-.car-svg-highlight {
-  stroke: rgba(255, 255, 255, 0.64);
-  stroke-width: 2.7;
-}
-
-.car-svg-rail {
-  stroke: rgba(31, 35, 40, 0.28);
-  stroke-linecap: round;
-  stroke-width: 2;
-}
-
-.car-svg-contour,
-.car-svg-center-line {
-  stroke: rgba(31, 35, 40, 0.2);
-  stroke-width: 1.2;
-}
-
-.car-svg-light,
-.car-svg-tail-light {
-  fill: none;
-  stroke-linecap: round;
-  stroke-width: 3.2;
-}
-
-.car-svg-light {
-  stroke: rgba(255, 245, 205, 0.96);
-}
-
-.car-svg-tail-light {
-  stroke: rgba(255, 96, 96, 0.9);
+.progress-map-car--color-purple .progress-map-car-image {
+  filter: hue-rotate(235deg) saturate(1.05) brightness(1.06);
 }
 
 .car-customize-button {

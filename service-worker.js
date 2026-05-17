@@ -1,9 +1,12 @@
-const CACHE_VERSION = "bocho-pwa-26.05.18.03";
+const CACHE_VERSION = "bocho-pwa-26.05.18.04";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",
   "/styles.css",
   "/app.js",
+  "/public/ref/sedan.jpg",
+  "/public/ref/small.webp",
+  "/public/ref/suv.png",
   "/public/manifest.json",
   "/public/intro-car-outpaint.png",
   "/public/icons/icon-192.png",
