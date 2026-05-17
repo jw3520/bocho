@@ -3994,12 +3994,12 @@ body {
   padding: 18px 12px 20px;
   border: 0;
   border-radius: 28px;
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(241, 249, 255, 0.98);
   box-shadow: 0 4px 12px rgba(46, 87, 86, 0.05);
 }
 
 .gender-card.is-selected {
-  box-shadow: 0 0 0 2px rgba(77, 182, 172, 0.28), 0 8px 18px rgba(46, 87, 86, 0.08);
+  box-shadow: 0 0 0 2px rgba(111, 173, 235, 0.32), 0 8px 18px rgba(46, 87, 86, 0.08);
 }
 
 .gender-card .gender-card__icon {
@@ -4013,7 +4013,7 @@ body {
 }
 
 .gender-card[data-gender-option="female"] {
-  background: rgba(255, 255, 255, 0.96);
+  background: rgba(255, 246, 249, 0.98);
 }
 
 .gender-card[data-gender-option="female"].is-selected {
