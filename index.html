@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.17.10">
+    <link rel="stylesheet" href="/styles.css?v=26.05.17.11">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -115,15 +115,16 @@
           <button class="gender-card" type="button" data-gender-option="male">
             <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
               <svg class="gender-avatar" viewBox="0 0 120 120">
-                <circle class="avatar-halo" cx="60" cy="60" r="48"></circle>
-                <path class="avatar-shoulders" d="M28 103c7-20 19-31 32-31s25 11 32 31Z"></path>
-                <path class="avatar-neck" d="M52 69h16v16H52Z"></path>
-                <path class="avatar-face" d="M34 52c0-18 11-31 26-31s26 13 26 31-11 31-26 31-26-13-26-31Z"></path>
-                <path class="avatar-hair" d="M35 44c4-17 16-26 31-24 11 1 19 8 22 20-13-4-22-4-31-2-8 1-15 3-22 6Z"></path>
-                <circle class="avatar-eye" cx="51" cy="55" r="2.2"></circle>
-                <circle class="avatar-eye" cx="69" cy="55" r="2.2"></circle>
-                <path class="avatar-smile" d="M53 66c4 3 10 3 14 0"></path>
-                <path class="avatar-wheel" d="M36 105c6-13 15-19 24-19s18 6 24 19"></path>
+                <path class="chick-shadow" d="M26 100c8-13 21-20 34-20s26 7 34 20"></path>
+                <path class="chick-body" d="M29 61c0-23 14-39 31-39s31 16 31 39-14 38-31 38-31-15-31-38Z"></path>
+                <path class="chick-wing chick-wing--left" d="M34 68c-9 1-15-4-17-13 8-4 15-2 20 5"></path>
+                <path class="chick-wing chick-wing--right" d="M86 68c9 1 15-4 17-13-8-4-15-2-20 5"></path>
+                <path class="chick-cap" d="M39 31c6-12 29-17 42-3l-4 8c-11-6-24-6-35 0Z"></path>
+                <path class="chick-cap-bill" d="M77 30c8 0 13 2 17 6-6 3-13 3-20 0Z"></path>
+                <circle class="chick-eye" cx="51" cy="57" r="2.6"></circle>
+                <circle class="chick-eye" cx="69" cy="57" r="2.6"></circle>
+                <path class="chick-beak" d="M56 65h10l-5 6Z"></path>
+                <path class="chick-wheel" d="M35 105c6-12 15-18 25-18s19 6 25 18"></path>
               </svg>
             </span>
             <strong>남성</strong>
@@ -131,17 +132,16 @@
           <button class="gender-card" type="button" data-gender-option="female">
             <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
               <svg class="gender-avatar" viewBox="0 0 120 120">
-                <circle class="avatar-halo" cx="60" cy="60" r="48"></circle>
-                <path class="avatar-hair-back" d="M30 57c0-23 12-38 30-38s30 15 30 38c0 22-9 32-30 32S30 79 30 57Z"></path>
-                <path class="avatar-shoulders" d="M28 103c7-20 19-31 32-31s25 11 32 31Z"></path>
-                <path class="avatar-neck" d="M52 69h16v16H52Z"></path>
-                <path class="avatar-face" d="M35 54c0-17 11-30 25-30s25 13 25 30-11 30-25 30-25-13-25-30Z"></path>
-                <path class="avatar-bangs" d="M38 43c7-14 21-20 34-13 7 4 11 10 13 17-11-6-20-7-29-4-6 1-12 1-18 0Z"></path>
-                <path class="avatar-side-hair" d="M37 52c-5 8-6 18-2 28M83 52c5 8 6 18 2 28"></path>
-                <circle class="avatar-eye" cx="51" cy="57" r="2.2"></circle>
-                <circle class="avatar-eye" cx="69" cy="57" r="2.2"></circle>
-                <path class="avatar-smile" d="M53 68c4 3 10 3 14 0"></path>
-                <path class="avatar-wheel" d="M36 105c6-13 15-19 24-19s18 6 24 19"></path>
+                <path class="chick-shadow" d="M26 100c8-13 21-20 34-20s26 7 34 20"></path>
+                <path class="chick-body" d="M29 61c0-23 14-39 31-39s31 16 31 39-14 38-31 38-31-15-31-38Z"></path>
+                <path class="chick-wing chick-wing--left" d="M34 68c-9 1-15-4-17-13 8-4 15-2 20 5"></path>
+                <path class="chick-wing chick-wing--right" d="M86 68c9 1 15-4 17-13-8-4-15-2-20 5"></path>
+                <path class="chick-bow" d="M47 30c-8-8-18-2-15 8 7 1 12-1 17-6 4 6 10 8 18 6 2-10-8-16-16-8Z"></path>
+                <circle class="chick-bow-knot" cx="49" cy="34" r="4"></circle>
+                <circle class="chick-eye" cx="51" cy="57" r="2.6"></circle>
+                <circle class="chick-eye" cx="69" cy="57" r="2.6"></circle>
+                <path class="chick-beak" d="M56 65h10l-5 6Z"></path>
+                <path class="chick-wheel" d="M35 105c6-12 15-18 25-18s19 6 25 18"></path>
               </svg>
             </span>
             <strong>여성</strong>
@@ -410,6 +410,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.17.10" defer></script>
+    <script src="/app.js?v=26.05.17.11" defer></script>
   </body>
 </html>

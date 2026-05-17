@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.10";
+const APP_VERSION = "26.05.17.11";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -1162,27 +1162,16 @@ function getDayRingColor(ratio) {
 
 function renderSelectedDayPanel(day) {
   const status = getDayCompletion(day);
-  const state = getDayState(day);
   const ratio = Math.round((status.completed / status.total) * 100);
-  const stateLabel = {
-    completed: "완료됨",
-    active: status.completed > 0 ? "진행중" : "시작 가능",
-    available: "열람 가능",
-  }[state];
 
   return `
     <section class="drive-detail-panel" data-selected-day="${day.id}">
       <div class="drive-detail-panel__header">
         <div>
-          <span class="day-chip">${day.day} · ${stateLabel}</span>
           <h3>${day.day}: ${day.title}</h3>
           <p>${day.goal}</p>
         </div>
-        <span class="day-progress-text" aria-label="${ratio}% 완료">${ratio}% 완료</span>
-      </div>
-      <div class="course-card__meta">
-        <span class="day-status" data-day-status="${day.id}">${status.completed}/${status.total} PASS</span>
-        <span>모든 Day 열람 가능</span>
+        <span class="day-progress-text" data-day-status="${day.id}" aria-label="${status.completed}/${status.total} PASS, ${ratio}% 완료">${status.completed}/${status.total} PASS · ${ratio}% 완료</span>
       </div>
       <div class="course-detail">${day.items.map((task) => renderTask(task)).join("")}</div>
     </section>
@@ -1192,32 +1181,17 @@ function renderSelectedDayPanel(day) {
 function renderTask(task) {
   const checked = isComplete(task.id) ? " checked" : "";
   const passed = isComplete(task.id);
-  const cover = task.cover || task.preview;
-  const coverMarkup = cover
-    ? `<img src="${encodeURI(cover)}" alt="${task.title} 대표 자료" loading="lazy">`
-    : `<span aria-hidden="true">Guide</span>`;
-  const previewLink = task.preview || task.cover;
-  const previewMarkup = previewLink
-    ? `<button class="guide-link" type="button" data-guide-open="${task.id}">자료 보기</button>`
-    : `<span class="guide-link is-disabled">자료 준비중</span>`;
 
   return `
-    <article class="record-card${passed ? " is-passed" : ""}${celebratedTaskId === task.id ? " is-celebrating" : ""}" data-task-id="${task.id}">
-      <div class="record-card__leading">
+    <article class="record-card${passed ? " is-passed" : ""}${celebratedTaskId === task.id ? " is-celebrating" : ""}" data-task-id="${task.id}" data-guide-open="${task.id}" role="button" tabindex="0" aria-label="${task.title} 상세 가이드 열기">
         <label class="pass-button${checked ? " is-passed" : ""}" aria-label="${task.title} PASS">
-        <input type="checkbox" data-task-checkbox="${task.id}"${checked}>
+          <input type="checkbox" data-task-checkbox="${task.id}"${checked}>
           <span>${passed ? "DONE" : "PASS"}</span>
         </label>
         <div class="record-card__content">
-          <span class="record-card__category">${checked ? "PASS 완료" : "가이드 항목"}</span>
           <p class="record-card__note">${task.title}</p>
-          <span class="record-card__meta">${isComplete(task.id) ? "통과 처리됨" : "자료 확인 후 PASS를 누르세요"}</span>
         </div>
-        <div class="guide-thumb">${coverMarkup}</div>
-      </div>
-      <div class="guide-link-row">
-        ${previewMarkup}
-      </div>
+        <span class="record-card__arrow" aria-hidden="true">&gt;</span>
     </article>
   `;
 }
@@ -1261,6 +1235,10 @@ function handleDayFilterClick(event) {
 }
 
 function handleDayCardClick(event) {
+  if (event.target.closest(".pass-button")) {
+    return;
+  }
+
   const guideButton = event.target.closest("[data-guide-open]");
 
   if (guideButton) {
@@ -1632,28 +1610,12 @@ function updateSelectedDayPanelUi() {
   }
 
   const status = getDayCompletion(selectedDay);
-  const state = getDayState(selectedDay);
   const ratio = Math.round((status.completed / status.total) * 100);
-  const stateLabel = {
-    completed: "완료됨",
-    active: status.completed > 0 ? "진행중" : "시작 가능",
-    available: "열람 가능",
-  }[state];
-  const chip = elements.list.querySelector(".drive-detail-panel__header .day-chip");
   const progressText = elements.list.querySelector(".day-progress-text");
-  const dayStatus = elements.list.querySelector(`[data-day-status="${selectedDay.id}"]`);
-
-  if (chip) {
-    chip.textContent = `${selectedDay.day} · ${stateLabel}`;
-  }
 
   if (progressText) {
-    progressText.textContent = `${ratio}% 완료`;
-    progressText.setAttribute("aria-label", `${ratio}% 완료`);
-  }
-
-  if (dayStatus) {
-    dayStatus.textContent = `${status.completed}/${status.total} PASS`;
+    progressText.textContent = `${status.completed}/${status.total} PASS · ${ratio}% 완료`;
+    progressText.setAttribute("aria-label", `${status.completed}/${status.total} PASS, ${ratio}% 완료`);
   }
 }
 
@@ -1668,8 +1630,6 @@ function updateTaskCardUi(taskId) {
   const checkbox = card.querySelector("[data-task-checkbox]");
   const passButton = card.querySelector(".pass-button");
   const passText = passButton?.querySelector("span");
-  const category = card.querySelector(".record-card__category");
-  const meta = card.querySelector(".record-card__meta");
 
   card.classList.toggle("is-passed", passed);
   card.classList.toggle("is-celebrating", celebratedTaskId === taskId);
@@ -1684,14 +1644,6 @@ function updateTaskCardUi(taskId) {
 
   if (passText) {
     passText.textContent = passed ? "DONE" : "PASS";
-  }
-
-  if (category) {
-    category.textContent = passed ? "PASS 완료" : "가이드 항목";
-  }
-
-  if (meta) {
-    meta.textContent = passed ? "통과 처리됨" : "자료 확인 후 PASS를 누르세요";
   }
 }
 

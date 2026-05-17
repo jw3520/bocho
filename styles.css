@@ -4001,10 +4001,8 @@ body {
   width: 110px;
   height: 110px;
   place-items: center;
-  border-radius: 34px;
-  background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.86), transparent 26%),
-    linear-gradient(145deg, #e8f6f4 0%, #d6ece9 100%);
+  border-radius: 0;
+  background: transparent;
 }
 
 .gender-card[data-gender-option="female"] {
@@ -4016,9 +4014,7 @@ body {
 }
 
 .gender-card__icon--female {
-  background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.82), transparent 26%),
-    linear-gradient(145deg, #ffe6ee 0%, #f7b8c7 100%);
+  background: transparent;
 }
 
 .gender-card__icon svg {
@@ -4032,60 +4028,50 @@ body {
   stroke-width: 3.6;
 }
 
-.gender-avatar .avatar-halo {
-  fill: rgba(255, 255, 255, 0.42);
+.gender-avatar .chick-body {
+  fill: #ffe36e;
+  stroke-width: 3.6;
+}
+
+.gender-avatar .chick-shadow {
+  fill: rgba(31, 35, 40, 0.08);
   stroke: none;
 }
 
-.gender-avatar .avatar-face {
-  fill: #ffe1bf;
-  stroke-width: 3.6;
+.gender-avatar .chick-wing {
+  fill: rgba(255, 196, 77, 0.34);
+  stroke-width: 3.2;
 }
 
-.gender-avatar .avatar-neck {
-  fill: #f3c69f;
-  stroke-width: 3;
-}
-
-.gender-avatar .avatar-shoulders {
-  fill: #4db6ac;
-  stroke-width: 3.6;
-}
-
-.gender-card__icon--female .avatar-shoulders {
-  fill: #f3818b;
-}
-
-.gender-avatar .avatar-hair,
-.gender-avatar .avatar-hair-back,
-.gender-avatar .avatar-bangs {
-  fill: #202631;
-  stroke-width: 3.6;
-}
-
-.gender-card__icon--female .avatar-hair-back,
-.gender-card__icon--female .avatar-bangs {
-  fill: #5b3f39;
-}
-
-.gender-avatar .avatar-side-hair {
-  stroke: #5b3f39;
-  stroke-width: 4.2;
-}
-
-.gender-avatar .avatar-eye {
+.gender-avatar .chick-eye {
   fill: #202631;
   stroke: none;
 }
 
-.gender-avatar .avatar-smile {
-  stroke: #202631;
+.gender-avatar .chick-beak {
+  fill: #ffb63d;
   stroke-width: 3;
 }
 
-.gender-avatar .avatar-wheel {
+.gender-avatar .chick-wheel {
   stroke: #7b5539;
   stroke-width: 6;
+}
+
+.gender-avatar .chick-cap {
+  fill: #4db6ac;
+  stroke-width: 3.2;
+}
+
+.gender-avatar .chick-cap-bill {
+  fill: #3f9f97;
+  stroke-width: 3;
+}
+
+.gender-avatar .chick-bow,
+.gender-avatar .chick-bow-knot {
+  fill: #f3818b;
+  stroke-width: 3.2;
 }
 
 .gender-card strong {
@@ -5716,17 +5702,70 @@ textarea {
 }
 
 .drive-detail-panel__header {
-  gap: 10px;
-  padding: 18px 18px 12px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 10px 12px;
+  align-items: start;
+  padding: 16px 18px 12px;
+}
+
+.drive-detail-panel .day-progress-text {
+  position: static;
+  align-self: start;
+  padding-top: 3px;
+  color: var(--primary-dark);
+  font-size: 13px;
+  font-weight: 900;
+  line-height: 1.2;
+  white-space: nowrap;
 }
 
 .drive-detail-panel > .course-card__meta {
-  padding: 0 18px 14px;
+  display: none;
 }
 
 .drive-detail-panel .course-detail {
   gap: 9px;
   padding: 0 12px 14px;
+}
+
+.drive-detail-panel .record-card {
+  cursor: pointer;
+  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 18px;
+  gap: 12px;
+  align-items: center;
+  min-height: 68px;
+  padding: 11px 12px 11px 10px;
+}
+
+.drive-detail-panel .pass-button {
+  min-width: 62px;
+  min-height: 42px;
+  align-self: center;
+  touch-action: manipulation;
+}
+
+.drive-detail-panel .record-card__content {
+  gap: 0;
+}
+
+.drive-detail-panel .record-card__note {
+  font-size: 15px;
+  font-weight: 850;
+}
+
+.drive-detail-panel .record-card__arrow {
+  color: #a1abb5;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.drive-detail-panel .guide-thumb,
+.drive-detail-panel .guide-link-row,
+.drive-detail-panel .record-card__category,
+.drive-detail-panel .record-card__meta {
+  display: none;
 }
 
 @media (max-width: 374px) {
@@ -6310,18 +6349,14 @@ svg {
 }
 
 .gender-card .gender-card__icon--male {
-  background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.86), transparent 26%),
-    linear-gradient(145deg, #e8f6f4 0%, #d6ece9 100%);
+  background: transparent;
   color: #fff;
   border: 0;
   box-shadow: none;
 }
 
 .gender-card .gender-card__icon--female {
-  background:
-    radial-gradient(circle at 28% 20%, rgba(255, 255, 255, 0.82), transparent 26%),
-    linear-gradient(145deg, #ffe6ee 0%, #f7b8c7 100%);
+  background: transparent;
   color: #fff;
   border: 0;
   box-shadow: none;
