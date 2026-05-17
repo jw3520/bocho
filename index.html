@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.17.14">
+    <link rel="stylesheet" href="/styles.css?v=26.05.17.15">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -116,14 +116,15 @@
             <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
               <svg class="gender-symbol gender-symbol--male" viewBox="0 0 120 120">
                 <ellipse class="symbol-shadow" cx="60" cy="104" rx="33" ry="8"></ellipse>
-                <path class="symbol-key-body" d="M35 55c0-21 13-36 31-36s31 15 31 36v9c0 18-13 31-31 31S35 82 35 64Z"></path>
-                <path class="symbol-helmet-band" d="M43 37c9-8 31-8 43 0"></path>
-                <path class="symbol-visor" d="M45 56c5-9 12-14 21-14s16 5 21 14c-5 9-12 14-21 14s-16-5-21-14Z"></path>
-                <path class="symbol-face-line" d="M54 58c4 3 8 4 12 4s8-1 12-4"></path>
-                <path class="symbol-key-stem" d="M66 95v13"></path>
-                <path class="symbol-key-bit" d="M66 108h14M75 108v7"></path>
-                <circle class="symbol-dot" cx="50" cy="56" r="2.4"></circle>
-                <circle class="symbol-dot" cx="82" cy="56" r="2.4"></circle>
+                <path class="symbol-face" d="M28 62c0-22 14-39 32-39s32 17 32 39-14 38-32 38-32-16-32-38Z"></path>
+                <path class="symbol-cap" d="M36 37c7-14 34-18 49-2l-4 9c-13-6-27-6-40 0Z"></path>
+                <path class="symbol-cap-bill" d="M80 36c9 0 15 3 20 7-7 4-15 4-23 0Z"></path>
+                <circle class="symbol-eye" cx="50" cy="62" r="3.2"></circle>
+                <circle class="symbol-eye" cx="70" cy="62" r="3.2"></circle>
+                <circle class="symbol-cheek" cx="44" cy="72" r="4"></circle>
+                <circle class="symbol-cheek" cx="76" cy="72" r="4"></circle>
+                <path class="symbol-smile" d="M52 75c5 5 11 5 16 0"></path>
+                <path class="symbol-wheel" d="M35 102c6-11 15-17 25-17s19 6 25 17"></path>
               </svg>
             </span>
             <strong>남성</strong>
@@ -132,15 +133,16 @@
             <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
               <svg class="gender-symbol gender-symbol--female" viewBox="0 0 120 120">
                 <ellipse class="symbol-shadow" cx="60" cy="104" rx="33" ry="8"></ellipse>
-                <path class="symbol-key-body" d="M24 61c0-23 16-39 36-39s36 16 36 39-16 35-36 35S24 84 24 61Z"></path>
-                <path class="symbol-ribbon" d="M43 34c-8-7-18-2-16 8 7 2 13 0 18-5 4 6 11 8 19 5 2-10-9-15-18-8Z"></path>
-                <circle class="symbol-knot" cx="46" cy="37" r="4"></circle>
-                <path class="symbol-visor" d="M38 58c5-9 13-14 22-14s17 5 22 14c-5 9-13 14-22 14s-17-5-22-14Z"></path>
-                <path class="symbol-face-line" d="M48 60c4 3 8 4 12 4s8-1 12-4"></path>
-                <path class="symbol-key-stem" d="M60 96v13"></path>
-                <path class="symbol-key-bit" d="M60 109h-14M50 109v7"></path>
-                <circle class="symbol-dot" cx="45" cy="58" r="2.4"></circle>
-                <circle class="symbol-dot" cx="75" cy="58" r="2.4"></circle>
+                <path class="symbol-face" d="M28 62c0-22 14-39 32-39s32 17 32 39-14 38-32 38-32-16-32-38Z"></path>
+                <path class="symbol-ribbon" d="M43 35c-8-8-18-2-16 8 7 2 13 0 18-5 4 6 11 8 19 5 2-10-9-16-18-8Z"></path>
+                <circle class="symbol-knot" cx="46" cy="38" r="4"></circle>
+                <path class="symbol-hairline" d="M39 48c10-8 29-9 42 0"></path>
+                <circle class="symbol-eye" cx="50" cy="62" r="3.2"></circle>
+                <circle class="symbol-eye" cx="70" cy="62" r="3.2"></circle>
+                <circle class="symbol-cheek" cx="44" cy="72" r="4"></circle>
+                <circle class="symbol-cheek" cx="76" cy="72" r="4"></circle>
+                <path class="symbol-smile" d="M52 75c5 5 11 5 16 0"></path>
+                <path class="symbol-wheel" d="M35 102c6-11 15-17 25-17s19 6 25 17"></path>
               </svg>
             </span>
             <strong>여성</strong>
@@ -235,7 +237,7 @@
           <dialog class="role-dialog" id="role-dialog">
             <form method="dialog" class="role-dialog__content">
               <div class="role-dialog__header">
-                <strong>상태 변경</strong>
+                <strong id="role-dialog-title">상태 변경</strong>
                 <button class="role-dialog__close" id="role-dialog-close" type="button" aria-label="닫기">
                   <svg viewBox="0 0 24 24" aria-hidden="true">
                     <path d="M18 6 6 18"></path>
@@ -409,6 +411,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.17.14" defer></script>
+    <script src="/app.js?v=26.05.17.15" defer></script>
   </body>
 </html>

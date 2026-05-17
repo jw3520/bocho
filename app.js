@@ -6,7 +6,7 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.14";
+const APP_VERSION = "26.05.17.15";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 
 const curriculum = [
@@ -99,6 +99,7 @@ const elements = {
   roleStatusIcon: document.querySelector("#role-status-icon"),
   roleStatusLabel: document.querySelector("#role-status-label"),
   roleDialog: document.querySelector("#role-dialog"),
+  roleDialogTitle: document.querySelector("#role-dialog-title"),
   roleDialogClose: document.querySelector("#role-dialog-close"),
   roleDialogOptions: [...document.querySelectorAll("[data-profile-role-option]")],
   calendarPrevPeriod: document.querySelector("#calendar-prev-period"),
@@ -733,6 +734,10 @@ function updateRoleStatusUi() {
 
 function openRoleDialog() {
   updateRoleStatusUi();
+  const nickname = (loadOnboarding() || onboardingDraft)?.nickname || "사용자";
+  if (elements.roleDialogTitle) {
+    elements.roleDialogTitle.textContent = `${nickname}님의 상태 변경`;
+  }
   elements.roleDialog?.showModal();
 }
 
@@ -1186,6 +1191,7 @@ function renderSelectedDayPanel(day) {
 function renderTask(task) {
   const checked = isComplete(task.id) ? " checked" : "";
   const passed = isComplete(task.id);
+  const pictogram = getTaskPictogram(task.title);
 
   return `
     <article class="record-card${passed ? " is-passed" : ""}${celebratedTaskId === task.id ? " is-celebrating" : ""}" data-task-id="${task.id}" data-guide-open="${task.id}" role="button" tabindex="0" aria-label="${task.title} 상세 가이드 열기">
@@ -1196,9 +1202,30 @@ function renderTask(task) {
         <div class="record-card__content">
           <p class="record-card__note">${task.title}</p>
         </div>
-        <span class="record-card__pictogram" aria-hidden="true"></span>
+        <span class="record-card__pictogram" aria-hidden="true">${pictogram}</span>
+        <span class="record-card__arrow" aria-hidden="true">&gt;</span>
     </article>
   `;
+}
+
+function getTaskPictogram(title) {
+  const iconRules = [
+    [/자세|시트|거리/, "🪑"],
+    [/미러|거울|사각/, "🪞"],
+    [/기어|변속/, "⚙️"],
+    [/출발|시동|엔진/, "🔑"],
+    [/제동|브레이크/, "🛑"],
+    [/조향|핸들/, "🛞"],
+    [/차선|유지|변경/, "🛣️"],
+    [/회전|좌회전|우회전|유턴/, "↪️"],
+    [/주차|후진/, "🅿️"],
+    [/교차로|신호|비보호/, "🚦"],
+    [/골목|이면도로/, "🏘️"],
+    [/고속|합류|진출/, "🛣️"],
+    [/정리|복습|점검/, "✅"],
+  ];
+
+  return iconRules.find(([pattern]) => pattern.test(title))?.[1] || "📍";
 }
 
 function handleChecklistChange(event) {

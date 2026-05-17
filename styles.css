@@ -4022,8 +4022,8 @@ body {
 }
 
 .gender-card__icon svg {
-  width: 104px;
-  height: 104px;
+  width: 112px;
+  height: 112px;
   overflow: visible;
   fill: none;
   stroke: #1f2933;
@@ -4037,45 +4037,49 @@ body {
   stroke: none;
 }
 
-.gender-symbol .symbol-key-body {
+.gender-symbol .symbol-face {
+  fill: #fff3c4;
   stroke-width: 3.5;
 }
 
-.gender-symbol--male .symbol-key-body {
-  fill: #8fd8d0;
+.gender-symbol--male .symbol-face {
+  fill: #ffe89a;
 }
 
-.gender-symbol--female .symbol-key-body {
-  fill: #ffc7cf;
+.gender-symbol--female .symbol-face {
+  fill: #ffe5b9;
 }
 
-.gender-symbol .symbol-visor {
-  fill: rgba(255, 255, 255, 0.86);
-  stroke-width: 3;
-}
-
-.gender-symbol .symbol-face-line,
-.gender-symbol .symbol-helmet-band,
-.gender-symbol .symbol-key-stem,
-.gender-symbol .symbol-key-bit {
-  fill: none;
-  stroke-width: 3.8;
-}
-
-.gender-symbol--male .symbol-helmet-band,
-.gender-symbol--male .symbol-key-stem,
-.gender-symbol--male .symbol-key-bit {
-  stroke: #2f8d88;
-}
-
-.gender-symbol--female .symbol-key-stem,
-.gender-symbol--female .symbol-key-bit {
-  stroke: #d65f74;
-}
-
-.gender-symbol .symbol-dot {
+.gender-symbol .symbol-eye {
   fill: #1f2933;
   stroke: none;
+}
+
+.gender-symbol .symbol-smile,
+.gender-symbol .symbol-hairline {
+  fill: none;
+  stroke-width: 3.2;
+}
+
+.gender-symbol .symbol-cheek {
+  fill: rgba(243, 129, 139, 0.28);
+  stroke: none;
+}
+
+.gender-symbol .symbol-wheel {
+  fill: none;
+  stroke: #7b5539;
+  stroke-width: 5.5;
+}
+
+.gender-symbol .symbol-cap {
+  fill: #8fd8d0;
+  stroke-width: 3.2;
+}
+
+.gender-symbol .symbol-cap-bill {
+  fill: #62bdb5;
+  stroke-width: 3;
 }
 
 .gender-symbol .symbol-ribbon,
@@ -5719,7 +5723,13 @@ textarea {
   padding: 16px 18px 12px;
 }
 
+.drive-detail-panel__header > div {
+  display: contents;
+}
+
 .drive-detail-panel__header h3 {
+  grid-column: 1;
+  min-width: 0;
   margin: 0;
   color: #202631;
   font-size: 19px;
@@ -5728,15 +5738,15 @@ textarea {
 }
 
 .day-item-summary {
+  grid-column: 1 / -1;
   max-width: 100%;
   margin: 6px 0 0;
-  overflow: hidden;
+  overflow: visible;
   color: #7a838c;
   font-size: 13px;
   font-weight: 650;
-  line-height: 1.35;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  line-height: 1.45;
+  white-space: normal;
 }
 
 .drive-detail-panel .day-progress-text {
@@ -5761,8 +5771,8 @@ textarea {
 
 .drive-detail-panel .record-card {
   cursor: pointer;
-  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 18px;
-  gap: 12px;
+  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 30px 14px;
+  gap: 10px;
   align-items: center;
   min-height: 68px;
   padding: 11px 12px 11px 10px;
@@ -5787,31 +5797,20 @@ textarea {
 .drive-detail-panel .record-card__pictogram {
   position: relative;
   display: inline-grid;
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 12px;
   background: #e9f7f5;
+  font-size: 15px;
+  line-height: 1;
 }
 
-.drive-detail-panel .record-card__pictogram::before {
-  width: 6px;
-  height: 6px;
-  border-top: 2px solid var(--primary-dark);
-  border-right: 2px solid var(--primary-dark);
-  content: "";
-  transform: translateX(-1px) rotate(45deg);
-}
-
-.drive-detail-panel .record-card__pictogram::after {
-  position: absolute;
-  left: 4px;
-  bottom: 4px;
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: rgba(40, 141, 132, 0.22);
-  content: "";
+.drive-detail-panel .record-card__arrow {
+  color: #a1abb5;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .drive-detail-panel .guide-thumb,
