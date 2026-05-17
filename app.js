@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.00";
+const APP_VERSION = "26.05.18.01";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -1180,7 +1180,9 @@ function renderRoadExperience() {
           <div class="progress-map-finish" aria-hidden="true"><span></span></div>
           <button class="car-customize-button" type="button" data-car-customize-open>차량 변경</button>
           <div class="progress-map-car progress-map-car--${vehicleState.type}" style="${getVehicleStyle()}" aria-hidden="true">
+            <span class="progress-map-car__shine"></span>
             <span class="progress-map-car__cabin"></span>
+            <span class="progress-map-car__roof"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-right"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--rear-left"></span>

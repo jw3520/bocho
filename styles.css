@@ -5628,13 +5628,17 @@ textarea {
   left: var(--car-x);
   z-index: 4;
   display: block;
-  width: 38px;
+  width: 46px;
   height: 22px;
-  border-radius: 16px 9px 9px 16px;
+  border-radius: 18px 10px 10px 18px;
   background:
-    linear-gradient(90deg, var(--car-body-dark) 0 11%, transparent 11%),
-    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 72%, #ffffff) 0%, var(--car-body) 62%, var(--car-body-dark) 100%);
-  box-shadow: 0 8px 14px rgba(31, 35, 40, 0.22);
+    radial-gradient(ellipse at 65% 50%, color-mix(in srgb, var(--car-body) 62%, #ffffff) 0 22%, transparent 23%),
+    linear-gradient(90deg, var(--car-body-dark) 0 8%, transparent 8% 92%, color-mix(in srgb, var(--car-body) 72%, #ffffff) 92%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 72%, #ffffff) 0%, var(--car-body) 48%, color-mix(in srgb, var(--car-body) 78%, #000000) 100%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--car-body-dark) 62%, transparent),
+    inset 7px 0 10px rgba(255, 255, 255, 0.22),
+    0 8px 14px rgba(31, 35, 40, 0.22);
   filter: none;
   transform: translate(-50%, -50%) rotate(var(--car-angle));
   transform-origin: center;
@@ -5643,63 +5647,93 @@ textarea {
 .progress-map-car::before,
 .progress-map-car::after {
   position: absolute;
-  right: 4px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.82);
+  right: 1px;
+  width: 3px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
   content: "";
 }
 
 .progress-map-car::before {
-  top: 5px;
+  top: 4px;
 }
 
 .progress-map-car::after {
-  bottom: 5px;
+  bottom: 4px;
+}
+
+.progress-map-car__shine {
+  position: absolute;
+  inset: 3px 6px 3px 9px;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.36), transparent 46%, rgba(0, 0, 0, 0.08));
+  pointer-events: none;
 }
 
 .progress-map-car__cabin {
   position: absolute;
-  top: 5px;
-  left: 13px;
-  width: 14px;
-  height: 12px;
-  border-radius: 8px 5px 5px 8px;
-  background: var(--car-cabin);
-  box-shadow: inset 0 0 0 1px rgba(196, 139, 28, 0.18);
+  top: 4px;
+  left: 17px;
+  width: 17px;
+  height: 14px;
+  border-radius: 9px 5px 5px 9px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, 0.82) 0 30%, transparent 31% 68%, rgba(255, 255, 255, 0.74) 69%),
+    linear-gradient(180deg, var(--car-cabin), color-mix(in srgb, var(--car-cabin) 75%, #6d7781));
+  box-shadow:
+    inset 0 0 0 1px rgba(31, 35, 40, 0.12),
+    0 1px 3px rgba(31, 35, 40, 0.12);
+}
+
+.progress-map-car__roof {
+  position: absolute;
+  top: 8px;
+  left: 21px;
+  width: 9px;
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.48);
+  box-shadow: 0 0 0 1px rgba(31, 35, 40, 0.06);
 }
 
 .progress-map-car--sedan {
   width: 46px;
-  height: 19px;
-  border-radius: 18px 8px 8px 18px;
+  height: 23px;
+  border-radius: 19px 9px 9px 19px;
 }
 
 .progress-map-car--sedan .progress-map-car__cabin {
-  top: 3px;
+  top: 4px;
   left: 17px;
-  width: 16px;
-  height: 11px;
-  border-radius: 9px 4px 4px 7px;
+  width: 17px;
+  height: 14px;
+  border-radius: 10px 5px 5px 8px;
 }
 
 .progress-map-car--compact {
-  width: 34px;
-  height: 24px;
-  border-radius: 13px 9px 9px 13px;
+  width: 36px;
+  height: 25px;
+  border-radius: 14px 10px 10px 14px;
   background:
-    linear-gradient(90deg, var(--car-body-dark) 0 12%, transparent 12%),
-    radial-gradient(circle at 70% 50%, color-mix(in srgb, var(--car-body) 82%, #ffffff) 0 22%, transparent 23%),
-    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 76%, #ffffff) 0%, var(--car-body) 64%, var(--car-body-dark) 100%);
+    radial-gradient(ellipse at 64% 50%, color-mix(in srgb, var(--car-body) 66%, #ffffff) 0 30%, transparent 31%),
+    linear-gradient(90deg, var(--car-body-dark) 0 10%, transparent 10% 90%, color-mix(in srgb, var(--car-body) 75%, #ffffff) 90%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 76%, #ffffff) 0%, var(--car-body) 55%, var(--car-body-dark) 100%);
 }
 
 .progress-map-car--compact .progress-map-car__cabin {
   top: 5px;
   left: 12px;
-  width: 12px;
-  height: 13px;
-  border-radius: 7px 4px 4px 7px;
+  width: 13px;
+  height: 14px;
+  border-radius: 8px 5px 5px 8px;
+}
+
+.progress-map-car--compact .progress-map-car__roof {
+  top: 9px;
+  left: 15px;
+  width: 7px;
+  height: 6px;
 }
 
 .progress-map-car--compact .progress-map-car__wheel {
@@ -5708,19 +5742,31 @@ textarea {
 }
 
 .progress-map-car--suv {
-  width: 45px;
-  height: 27px;
-  border-radius: 9px 7px 7px 9px;
+  width: 48px;
+  height: 29px;
+  border-radius: 10px 7px 7px 10px;
   background:
-    linear-gradient(90deg, var(--car-body-dark) 0 9%, transparent 9%),
-    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 76%, #ffffff) 0 35%, var(--car-body) 36% 70%, var(--car-body-dark) 100%);
+    linear-gradient(90deg, var(--car-body-dark) 0 9%, transparent 9% 91%, color-mix(in srgb, var(--car-body) 68%, #ffffff) 91%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 78%, #ffffff) 0 28%, var(--car-body) 29% 72%, var(--car-body-dark) 100%);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--car-body-dark) 68%, transparent),
+    inset 0 5px 7px rgba(255, 255, 255, 0.2),
+    0 9px 16px rgba(31, 35, 40, 0.24);
 }
 
 .progress-map-car--suv .progress-map-car__cabin {
-  top: 4px;
+  top: 5px;
   left: 14px;
-  width: 19px;
-  height: 13px;
+  width: 21px;
+  height: 16px;
+  border-radius: 5px;
+}
+
+.progress-map-car--suv .progress-map-car__roof {
+  top: 9px;
+  left: 19px;
+  width: 12px;
+  height: 8px;
   border-radius: 4px;
 }
 
