@@ -6,8 +6,21 @@ const UPDATE_SEEN_STORAGE_KEY = "BOCHO_UPDATE_SEEN";
 const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
-const APP_VERSION = "26.05.17.16";
+const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
+const APP_VERSION = "26.05.17.17";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
+const VEHICLE_COLORS = [
+  { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
+  { id: "mint", label: "민트", body: "#54c7b8", bodyDark: "#2f8d88", cabin: "#d9fff8" },
+  { id: "blue", label: "블루", body: "#5d9cec", bodyDark: "#3267b7", cabin: "#d8e9ff" },
+  { id: "pink", label: "핑크", body: "#f3818b", bodyDark: "#c94f5f", cabin: "#ffe1e5" },
+  { id: "black", label: "블랙", body: "#56636e", bodyDark: "#2f363d", cabin: "#dfe5e8" },
+];
+const VEHICLE_TYPES = [
+  { id: "basic", label: "기본 차량" },
+  { id: "sedan", label: "승용차" },
+  { id: "suv", label: "SUV" },
+];
 
 const curriculum = [
   {
@@ -102,6 +115,12 @@ const elements = {
   roleDialogTitle: document.querySelector("#role-dialog-title"),
   roleDialogClose: document.querySelector("#role-dialog-close"),
   roleDialogOptions: [...document.querySelectorAll("[data-profile-role-option]")],
+  carDialog: document.querySelector("#car-dialog"),
+  carDialogClose: document.querySelector("#car-dialog-close"),
+  carDialogCancel: document.querySelector("#car-dialog-cancel"),
+  carDialogApply: document.querySelector("#car-dialog-apply"),
+  carColorOptions: document.querySelector("#car-color-options"),
+  carTypeOptions: document.querySelector("#car-type-options"),
   calendarPrevPeriod: document.querySelector("#calendar-prev-period"),
   calendarNextPeriod: document.querySelector("#calendar-next-period"),
   calendarTodayButton: document.querySelector("#calendar-today-button"),
@@ -172,6 +191,8 @@ let celebratedTaskId = null;
 let activeGuideTaskId = null;
 let detailSwipeStart = null;
 let suppressNextDetailClick = false;
+let vehicleState = loadVehicleState();
+let vehicleDraft = { ...vehicleState };
 let swRegistrationRef = null;
 let reloadingForServiceWorker = false;
 let onboardingDraft = loadOnboarding() || {
@@ -329,6 +350,26 @@ function loadOnboarding() {
   }
 }
 
+function normalizeVehicleState(value = {}) {
+  const candidate = value && typeof value === "object" ? value : {};
+  const color = VEHICLE_COLORS.some((item) => item.id === candidate.color) ? candidate.color : "yellow";
+  const type = VEHICLE_TYPES.some((item) => item.id === candidate.type) ? candidate.type : "basic";
+
+  return { color, type };
+}
+
+function loadVehicleState() {
+  try {
+    return normalizeVehicleState(JSON.parse(localStorage.getItem(VEHICLE_STORAGE_KEY)));
+  } catch (error) {
+    return normalizeVehicleState();
+  }
+}
+
+function saveVehicleState() {
+  localStorage.setItem(VEHICLE_STORAGE_KEY, JSON.stringify(vehicleState));
+}
+
 function saveOnboarding() {
   localStorage.setItem(ONBOARDING_KEY, JSON.stringify(onboardingDraft));
 }
@@ -431,6 +472,12 @@ function renderCurriculum() {
   elements.roleDialogClose?.addEventListener("click", closeRoleDialog);
   elements.roleDialogOptions.forEach((button) => button.addEventListener("click", handleProfileRoleSelect));
   elements.roleDialog?.addEventListener("click", handleRoleDialogBackdropClick);
+  elements.carDialogClose?.addEventListener("click", closeCarDialog);
+  elements.carDialogCancel?.addEventListener("click", closeCarDialog);
+  elements.carDialogApply?.addEventListener("click", applyVehicleDraft);
+  elements.carDialog?.addEventListener("click", handleCarDialogBackdropClick);
+  elements.carColorOptions?.addEventListener("click", handleVehicleColorSelect);
+  elements.carTypeOptions?.addEventListener("click", handleVehicleTypeSelect);
   document.addEventListener("click", closeMonthPickerOnOutsideClick);
   elements.calendarPrevPeriod?.addEventListener("click", () => moveCalendarPeriod(-1));
   elements.calendarNextPeriod?.addEventListener("click", () => moveCalendarPeriod(1));
@@ -764,6 +811,95 @@ function handleProfileRoleSelect(event) {
   closeRoleDialog();
 }
 
+function getVehicleColor(colorId = vehicleState.color) {
+  return VEHICLE_COLORS.find((color) => color.id === colorId) || VEHICLE_COLORS[0];
+}
+
+function getVehicleStyle(state = vehicleState) {
+  const color = getVehicleColor(state.color);
+
+  return `--car-body:${color.body}; --car-body-dark:${color.bodyDark}; --car-cabin:${color.cabin};`;
+}
+
+function renderVehicleOptions() {
+  if (elements.carColorOptions) {
+    elements.carColorOptions.innerHTML = VEHICLE_COLORS.map(
+      (color) => `
+        <button class="car-color-option${vehicleDraft.color === color.id ? " is-selected" : ""}" type="button" data-vehicle-color="${color.id}" aria-pressed="${vehicleDraft.color === color.id}" aria-label="${color.label}">
+          <span style="background:${color.body}"></span>
+          <strong>${color.label}</strong>
+        </button>
+      `,
+    ).join("");
+  }
+
+  if (elements.carTypeOptions) {
+    elements.carTypeOptions.innerHTML = VEHICLE_TYPES.map(
+      (type) => `
+        <button class="car-type-option${vehicleDraft.type === type.id ? " is-selected" : ""}" type="button" data-vehicle-type="${type.id}" aria-pressed="${vehicleDraft.type === type.id}">
+          ${type.label}
+        </button>
+      `,
+    ).join("");
+  }
+}
+
+function openCarDialog() {
+  vehicleDraft = { ...vehicleState };
+  renderVehicleOptions();
+  elements.carDialog?.showModal();
+}
+
+function closeCarDialog() {
+  elements.carDialog?.close();
+}
+
+function handleCarDialogBackdropClick(event) {
+  if (event.target === elements.carDialog) {
+    closeCarDialog();
+  }
+}
+
+function handleVehicleColorSelect(event) {
+  const button = event.target.closest("[data-vehicle-color]");
+
+  if (!button) {
+    return;
+  }
+
+  vehicleDraft.color = button.dataset.vehicleColor;
+  renderVehicleOptions();
+}
+
+function handleVehicleTypeSelect(event) {
+  const button = event.target.closest("[data-vehicle-type]");
+
+  if (!button) {
+    return;
+  }
+
+  vehicleDraft.type = button.dataset.vehicleType;
+  renderVehicleOptions();
+}
+
+function applyVehicleDraft() {
+  vehicleState = normalizeVehicleState(vehicleDraft);
+  saveVehicleState();
+  updateVehicleUi();
+  closeCarDialog();
+}
+
+function updateVehicleUi() {
+  const car = elements.list.querySelector(".progress-map-car");
+
+  if (!car) {
+    return;
+  }
+
+  car.className = `progress-map-car progress-map-car--${vehicleState.type}`;
+  car.setAttribute("style", getVehicleStyle());
+}
+
 function renderDayFilter() {
   ensureSelectedDay();
   if (!elements.dayFilter) {
@@ -1038,7 +1174,15 @@ function renderRoadExperience() {
             <path class="progress-map-road__dash" d="${ROAD_PATH_D}"></path>
           </svg>
           <div class="progress-map-finish" aria-hidden="true"><span></span></div>
-          <div class="progress-map-car" aria-hidden="true">
+          <button class="car-customize-button" type="button" data-car-customize-open aria-label="차량 변경">
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M4 15h16"></path>
+              <path d="M6 15l2-5h8l2 5"></path>
+              <circle cx="8" cy="17" r="1.5"></circle>
+              <circle cx="16" cy="17" r="1.5"></circle>
+            </svg>
+          </button>
+          <div class="progress-map-car progress-map-car--${vehicleState.type}" style="${getVehicleStyle()}" aria-hidden="true">
             <span class="progress-map-car__cabin"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>
             <span class="progress-map-car__wheel progress-map-car__wheel--front-right"></span>
@@ -1193,15 +1337,19 @@ function renderTask(task) {
   const passed = isComplete(task.id);
 
   return `
-    <article class="record-card${passed ? " is-passed" : ""}${celebratedTaskId === task.id ? " is-celebrating" : ""}" data-task-id="${task.id}" data-guide-open="${task.id}" role="button" tabindex="0" aria-label="${task.title} 상세 가이드 열기">
-        <label class="pass-button${checked ? " is-passed" : ""}" aria-label="${task.title} PASS">
-          <input type="checkbox" data-task-checkbox="${task.id}"${checked}>
-          <span>${passed ? "DONE" : "PASS"}</span>
-        </label>
+    <article class="record-card${passed ? " is-passed" : ""}${celebratedTaskId === task.id ? " is-celebrating" : ""}" data-task-id="${task.id}">
+        <div class="pass-button-zone" data-pass-zone>
+          <label class="pass-button${checked ? " is-passed" : ""}" aria-label="${task.title} PASS">
+            <input type="checkbox" data-task-checkbox="${task.id}"${checked}>
+            <span>${passed ? "DONE" : "PASS"}</span>
+          </label>
+        </div>
         <div class="record-card__content">
           <p class="record-card__note">${task.title}</p>
         </div>
-        <span class="record-card__arrow" aria-hidden="true">&gt;</span>
+        <button class="guide-open-zone" type="button" data-guide-open="${task.id}" aria-label="${task.title} 상세 가이드 열기">
+          <span class="record-card__arrow" aria-hidden="true">&gt;</span>
+        </button>
     </article>
   `;
 }
@@ -1245,7 +1393,22 @@ function handleDayCardClick(event) {
     return;
   }
 
-  if (event.target.closest(".pass-button")) {
+  if (event.target.closest("[data-car-customize-open]")) {
+    openCarDialog();
+    return;
+  }
+
+  const passZone = event.target.closest("[data-pass-zone]");
+
+  if (passZone) {
+    if (!event.target.closest(".pass-button")) {
+      const checkbox = passZone.querySelector("[data-task-checkbox]");
+
+      if (checkbox) {
+        checkbox.checked = !checkbox.checked;
+        checkbox.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    }
     return;
   }
 
@@ -1279,7 +1442,7 @@ function selectRoadDay(dayId) {
 function handleDetailSwipeStart(event) {
   const panel = event.target.closest(".drive-detail-panel");
 
-  if (!panel || event.target.closest(".pass-button")) {
+  if (!panel || event.target.closest("[data-pass-zone]") || event.target.closest("[data-guide-open]")) {
     detailSwipeStart = null;
     return;
   }

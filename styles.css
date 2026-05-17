@@ -3983,13 +3983,15 @@ body {
 
 .gender-grid {
   gap: 14px;
-  align-content: center;
+  align-content: start;
+  padding-top: 4px;
 }
 
 .gender-card {
-  min-height: 220px;
-  gap: 14px;
-  padding: 22px 12px;
+  justify-items: center;
+  min-height: 196px;
+  gap: 12px;
+  padding: 18px 12px 20px;
   border: 0;
   border-radius: 28px;
   background: rgba(255, 255, 255, 0.96);
@@ -4000,13 +4002,14 @@ body {
   box-shadow: 0 0 0 2px rgba(77, 182, 172, 0.28), 0 8px 18px rgba(46, 87, 86, 0.08);
 }
 
-.gender-card__icon {
+.gender-card .gender-card__icon {
   display: grid;
-  width: 110px;
-  height: 110px;
+  width: 116px;
+  height: 116px;
   place-items: center;
   border-radius: 0;
   background: transparent;
+  justify-self: center;
 }
 
 .gender-card[data-gender-option="female"] {
@@ -4024,6 +4027,7 @@ body {
 .gender-card__icon svg {
   width: 112px;
   height: 112px;
+  transform: translateX(-1px);
   overflow: visible;
   fill: none;
   stroke: #1f2933;
@@ -4042,12 +4046,25 @@ body {
   stroke-width: 3.5;
 }
 
+.gender-symbol .symbol-hoodie {
+  fill: #f5faf9;
+  stroke-width: 3.5;
+}
+
 .gender-symbol--male .symbol-face {
   fill: #ffe89a;
 }
 
+.gender-symbol--male .symbol-hoodie {
+  fill: #e4f7f5;
+}
+
 .gender-symbol--female .symbol-face {
   fill: #ffe5b9;
+}
+
+.gender-symbol--female .symbol-hoodie {
+  fill: #fff0f2;
 }
 
 .gender-symbol .symbol-eye {
@@ -5528,6 +5545,7 @@ textarea {
 }
 
 .progress-map-stage {
+  position: relative;
   width: max(100%, 390px);
   height: 220px;
   min-height: 220px;
@@ -5610,9 +5628,9 @@ textarea {
   height: 22px;
   border-radius: 16px 9px 9px 16px;
   background:
-    linear-gradient(90deg, #c88e20 0 11%, transparent 11%),
-    linear-gradient(180deg, #ffe58a 0%, #f6c54b 62%, #dca12a 100%);
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.86), 0 8px 14px rgba(31, 35, 40, 0.22);
+    linear-gradient(90deg, var(--car-body-dark) 0 11%, transparent 11%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 72%, #ffffff) 0%, var(--car-body) 62%, var(--car-body-dark) 100%);
+  box-shadow: 0 8px 14px rgba(31, 35, 40, 0.22);
   filter: none;
   transform: translate(-50%, -50%) rotate(var(--car-angle));
   transform-origin: center;
@@ -5644,8 +5662,163 @@ textarea {
   width: 14px;
   height: 12px;
   border-radius: 8px 5px 5px 8px;
-  background: rgba(255, 245, 190, 0.9);
+  background: var(--car-cabin);
   box-shadow: inset 0 0 0 1px rgba(196, 139, 28, 0.18);
+}
+
+.progress-map-car--sedan {
+  width: 42px;
+  height: 20px;
+  border-radius: 15px 8px 8px 15px;
+}
+
+.progress-map-car--suv {
+  width: 42px;
+  height: 25px;
+  border-radius: 12px 8px 8px 12px;
+}
+
+.progress-map-car--suv .progress-map-car__cabin {
+  top: 5px;
+  left: 12px;
+  width: 17px;
+  height: 14px;
+  border-radius: 6px;
+}
+
+.car-customize-button {
+  position: absolute;
+  right: 13px;
+  bottom: 13px;
+  z-index: 20;
+  display: inline-grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.96);
+  color: var(--primary-dark);
+  box-shadow: 0 8px 18px rgba(46, 87, 86, 0.16);
+}
+
+.car-customize-button svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2.2;
+}
+
+.car-dialog {
+  width: min(360px, calc(100vw - 34px));
+  border: 0;
+  border-radius: 28px;
+  padding: 0;
+  background: transparent;
+}
+
+.car-dialog::backdrop {
+  background: rgba(31, 35, 40, 0.32);
+  backdrop-filter: blur(6px);
+}
+
+.car-dialog__content {
+  display: grid;
+  gap: 18px;
+  padding: 24px;
+  border-radius: 28px;
+  background: #ffffff;
+  box-shadow: 0 22px 46px rgba(31, 35, 40, 0.2);
+}
+
+.car-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.car-dialog__header strong {
+  color: #1f2328;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.car-dialog__section {
+  display: grid;
+  gap: 10px;
+}
+
+.car-dialog__section > span {
+  color: #7a838c;
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.car-color-options {
+  display: flex;
+  gap: 10px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+}
+
+.car-color-option {
+  display: grid;
+  gap: 6px;
+  justify-items: center;
+  min-width: 54px;
+  border: 0;
+  background: transparent;
+  color: #56636e;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.car-color-option span {
+  display: block;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 1px rgba(31, 35, 40, 0.1), 0 4px 10px rgba(31, 35, 40, 0.1);
+}
+
+.car-color-option.is-selected span {
+  box-shadow: 0 0 0 4px rgba(77, 182, 172, 0.18), inset 0 0 0 2px #ffffff;
+}
+
+.car-color-option.is-selected strong {
+  color: var(--primary-dark);
+}
+
+.car-type-options {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.car-type-option {
+  min-height: 42px;
+  border: 0;
+  border-radius: 15px;
+  background: #f2f4f6;
+  color: #56636e;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.car-type-option.is-selected {
+  background: #e9f7f5;
+  color: var(--primary-dark);
+  box-shadow: inset 0 0 0 1px rgba(77, 182, 172, 0.18);
+}
+
+.car-dialog__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
 .progress-map-car__wheel {
@@ -5770,12 +5943,21 @@ textarea {
 }
 
 .drive-detail-panel .record-card {
-  cursor: pointer;
-  grid-template-columns: minmax(72px, auto) minmax(0, 1fr) 14px;
-  gap: 12px;
+  cursor: default;
+  grid-template-columns: minmax(92px, auto) minmax(0, 1fr) 48px;
+  gap: 8px;
   align-items: center;
   min-height: 68px;
   padding: 11px 12px 11px 10px;
+}
+
+.drive-detail-panel .pass-button-zone {
+  display: grid;
+  min-width: 92px;
+  min-height: 52px;
+  place-items: center;
+  border-radius: 18px;
+  cursor: pointer;
 }
 
 .drive-detail-panel .pass-button {
@@ -5798,6 +5980,17 @@ textarea {
   text-align: center;
   font-size: 15px;
   font-weight: 850;
+}
+
+.drive-detail-panel .guide-open-zone {
+  display: grid;
+  width: 48px;
+  min-height: 52px;
+  place-items: center;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  cursor: pointer;
 }
 
 .drive-detail-panel .record-card__arrow {
