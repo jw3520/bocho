@@ -4032,18 +4032,39 @@ body {
   fill: #fff8ec;
 }
 
+.gender-card__icon .driver-shadow {
+  fill: rgba(20, 23, 26, 0.08);
+  stroke: none;
+}
+
+.gender-card__icon .driver-neck {
+  fill: #f2c9a6;
+  stroke-width: 3;
+}
+
+.gender-card__icon .driver-shirt {
+  fill: #4db6ac;
+  stroke-width: 4;
+}
+
+.gender-card__icon--female .driver-shirt {
+  fill: #f3818b;
+}
+
 .gender-card__icon .driver-seat {
   fill: rgba(255, 255, 255, 0.38);
   stroke-width: 4;
 }
 
 .gender-card__icon .driver-hair,
-.gender-card__icon .driver-bangs {
+.gender-card__icon .driver-bangs,
+.gender-card__icon .driver-hair-back {
   fill: #263238;
 }
 
 .gender-card__icon--female .driver-hair,
-.gender-card__icon--female .driver-bangs {
+.gender-card__icon--female .driver-bangs,
+.gender-card__icon--female .driver-hair-back {
   fill: #5a3f38;
 }
 
@@ -4055,6 +4076,16 @@ body {
 .gender-card__icon .driver-cheek {
   stroke: #f2a6a6;
   stroke-width: 4;
+}
+
+.gender-card__icon .driver-eye {
+  fill: #14171a;
+  stroke: none;
+}
+
+.gender-card__icon .driver-side-hair {
+  stroke: #5a3f38;
+  stroke-width: 5;
 }
 
 .gender-card__icon .wheel {
@@ -4124,6 +4155,24 @@ body {
   color: #616974;
   font-size: 13px;
   font-weight: 700;
+}
+
+.settings-footer {
+  margin-top: 18px;
+  padding: 6px 4px calc(env(safe-area-inset-bottom) + 18px);
+  text-align: center;
+}
+
+.settings-footer p {
+  margin: 0;
+  color: #8b95a1;
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.settings-footer strong {
+  color: #5d6874;
+  font-weight: 800;
 }
 
 .calendar-period-row {

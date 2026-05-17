@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.17.08">
+    <link rel="stylesheet" href="/styles.css?v=26.05.17.09">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -115,15 +115,16 @@
           <button class="gender-card" type="button" data-gender-option="male">
             <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
               <svg viewBox="0 0 120 120">
-                <path class="driver-seat" d="M36 104c4-16 14-25 26-25s22 9 26 25"></path>
-                <path class="driver-head" d="M35 58c0-17 11-30 27-30s27 13 27 30-11 29-27 29-27-12-27-29Z"></path>
-                <path class="driver-hair" d="M38 42c4-14 16-21 27-20 13 1 22 9 25 22-11-7-19-8-28-8-10 0-17 2-24 6Z"></path>
-                <circle cx="53" cy="60" r="2.3"></circle>
-                <circle cx="72" cy="60" r="2.3"></circle>
-                <path class="driver-cheek" d="M44 68c3-2 6-2 8 0M72 68c3-2 6-2 8 0"></path>
-                <path class="driver-mouth" d="M56 75c4 4 9 4 13 0"></path>
-                <path class="wheel" d="M28 105c5-15 18-24 34-24s29 9 34 24"></path>
-                <path class="wheel-center" d="M44 102c5-6 11-9 18-9s13 3 18 9"></path>
+                <path class="driver-shadow" d="M30 101c7-18 18-28 32-28s25 10 32 28"></path>
+                <path class="driver-neck" d="M53 73h18v14H53Z"></path>
+                <path class="driver-shirt" d="M34 103c5-18 16-27 28-27s23 9 28 27Z"></path>
+                <path class="driver-head" d="M35 52c0-18 11-30 27-30s27 12 27 30-11 31-27 31-27-13-27-31Z"></path>
+                <path class="driver-hair" d="M37 45c2-16 13-25 28-25 12 0 22 7 25 21-8-5-18-7-28-7-11 0-19 3-25 11Z"></path>
+                <circle class="driver-eye" cx="53" cy="56" r="2.4"></circle>
+                <circle class="driver-eye" cx="72" cy="56" r="2.4"></circle>
+                <path class="driver-mouth" d="M55 68c4 4 10 4 14 0"></path>
+                <path class="wheel" d="M33 105c6-13 17-20 29-20s23 7 29 20"></path>
+                <path class="wheel-center" d="M49 103c4-5 8-7 13-7s9 2 13 7"></path>
               </svg>
             </span>
             <strong>남성</strong>
@@ -131,17 +132,18 @@
           <button class="gender-card" type="button" data-gender-option="female">
             <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
               <svg viewBox="0 0 120 120">
-                <path class="driver-seat" d="M36 104c4-16 14-25 26-25s22 9 26 25"></path>
-                <path class="driver-hair" d="M33 62c-4-24 8-40 29-40s33 16 29 40c-8-11-12-25-29-25S41 51 33 62Z"></path>
-                <path class="driver-head" d="M36 58c0-17 11-30 26-30s26 13 26 30-11 29-26 29-26-12-26-29Z"></path>
-                <path class="driver-braid" d="M35 58c-8 6-9 18-2 27M89 58c8 6 9 18 2 27"></path>
-                <path class="driver-bangs" d="M43 39c7-7 23-10 39 0-7 0-12 2-16 5-5-4-14-5-23-5Z"></path>
-                <circle cx="53" cy="60" r="2.3"></circle>
-                <circle cx="72" cy="60" r="2.3"></circle>
-                <path class="driver-cheek" d="M44 68c3-2 6-2 8 0M72 68c3-2 6-2 8 0"></path>
-                <path class="driver-mouth" d="M56 75c4 4 9 4 13 0"></path>
-                <path class="wheel" d="M28 105c5-15 18-24 34-24s29 9 34 24"></path>
-                <path class="wheel-center" d="M44 102c5-6 11-9 18-9s13 3 18 9"></path>
+                <path class="driver-shadow" d="M30 101c7-18 18-28 32-28s25 10 32 28"></path>
+                <path class="driver-hair-back" d="M32 59c-3-23 9-38 30-38s33 15 30 38c-2 16-10 27-30 27S34 75 32 59Z"></path>
+                <path class="driver-neck" d="M53 73h18v14H53Z"></path>
+                <path class="driver-shirt" d="M34 103c5-18 16-27 28-27s23 9 28 27Z"></path>
+                <path class="driver-head" d="M36 54c0-17 11-29 26-29s26 12 26 29-11 30-26 30-26-13-26-30Z"></path>
+                <path class="driver-bangs" d="M39 43c6-13 18-19 31-15 8 2 14 8 18 17-12-5-20-5-27-2-7-4-14-4-22 0Z"></path>
+                <path class="driver-side-hair" d="M39 50c-6 8-8 21-3 32M85 50c6 8 8 21 3 32"></path>
+                <circle class="driver-eye" cx="53" cy="57" r="2.4"></circle>
+                <circle class="driver-eye" cx="72" cy="57" r="2.4"></circle>
+                <path class="driver-mouth" d="M55 69c4 4 10 4 14 0"></path>
+                <path class="wheel" d="M33 105c6-13 17-20 29-20s23 7 29 20"></path>
+                <path class="wheel-center" d="M49 103c4-5 8-7 13-7s9 2 13 7"></path>
               </svg>
             </span>
             <strong>여성</strong>
@@ -313,6 +315,9 @@
                 <button class="secondary-button secondary-button--danger" id="logout-button" type="button">로그아웃</button>
               </article>
             </div>
+            <footer class="settings-footer">
+              <p><strong>Made by Team ATOZ</strong></p>
+            </footer>
           </section>
         </section>
 
@@ -407,6 +412,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.17.08" defer></script>
+    <script src="/app.js?v=26.05.17.09" defer></script>
   </body>
 </html>
