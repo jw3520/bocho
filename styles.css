@@ -5279,7 +5279,7 @@ textarea {
 }
 
 .progress-map-car {
-  z-index: 4;
+  z-index: 6;
 }
 
 .progress-map-finish {
@@ -5650,7 +5650,7 @@ textarea {
 .progress-map-car {
   top: var(--car-y);
   left: var(--car-x);
-  z-index: 4;
+  z-index: 6;
   display: block;
   width: 58px;
   height: 36px;
@@ -5706,26 +5706,27 @@ textarea {
 .car-svg-body {
   fill: var(--car-body);
   stroke: color-mix(in srgb, var(--car-body-dark) 72%, #1f2328);
-  stroke-width: 2.6;
+  stroke-width: 2.9;
   filter: drop-shadow(0 5px 5px rgba(31, 35, 40, 0.22));
 }
 
-.car-svg-hood,
-.car-svg-trunk {
+.car-svg-nose,
+.car-svg-tail {
   fill: color-mix(in srgb, var(--car-body) 70%, #ffffff);
   stroke: color-mix(in srgb, var(--car-body-dark) 58%, transparent);
   stroke-width: 1.2;
 }
 
-.car-svg-glass {
-  fill: color-mix(in srgb, var(--car-cabin) 64%, #9da9b4);
-  stroke: rgba(31, 35, 40, 0.28);
+.car-svg-windshield,
+.car-svg-rear-window {
+  fill: color-mix(in srgb, var(--car-cabin) 42%, #3d4c59);
+  stroke: rgba(31, 35, 40, 0.42);
   stroke-width: 1.5;
 }
 
 .car-svg-roof {
-  fill: color-mix(in srgb, var(--car-cabin) 78%, #ffffff);
-  stroke: rgba(31, 35, 40, 0.16);
+  fill: color-mix(in srgb, var(--car-cabin) 62%, #6d7a86);
+  stroke: rgba(31, 35, 40, 0.24);
   stroke-width: 1.2;
 }
 
@@ -5738,7 +5739,7 @@ textarea {
 .car-svg-highlight,
 .car-svg-rail,
 .car-svg-contour,
-.car-svg-side-glass {
+.car-svg-center-line {
   fill: none;
   stroke-linecap: round;
 }
@@ -5755,16 +5756,24 @@ textarea {
 }
 
 .car-svg-contour,
-.car-svg-side-glass {
+.car-svg-center-line {
   stroke: rgba(31, 35, 40, 0.2);
   stroke-width: 1.2;
 }
 
-.car-svg-light {
+.car-svg-light,
+.car-svg-tail-light {
   fill: none;
-  stroke: rgba(255, 245, 205, 0.96);
   stroke-linecap: round;
   stroke-width: 3.2;
+}
+
+.car-svg-light {
+  stroke: rgba(255, 245, 205, 0.96);
+}
+
+.car-svg-tail-light {
+  stroke: rgba(255, 96, 96, 0.9);
 }
 
 .car-customize-button {

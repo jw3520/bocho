@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.02";
+const APP_VERSION = "26.05.18.03";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -1182,44 +1182,50 @@ function renderRoadExperience() {
           <div class="progress-map-car progress-map-car--${vehicleState.type}" style="${getVehicleStyle()}" aria-hidden="true">
             <svg class="progress-map-car-svg" viewBox="0 0 120 70" focusable="false">
               <g class="car-svg-shape car-svg-shape--sedan">
-                <ellipse class="car-svg-shadow" cx="61" cy="62" rx="44" ry="6"></ellipse>
-                <path class="car-svg-tire" d="M20 17h9v17h-9zM20 39h9v17h-9zM94 17h9v17h-9zM94 39h9v17h-9z"></path>
-                <path class="car-svg-body" d="M14 36c0-14 7-24 21-29 14-4 40-4 54 0 14 5 21 15 21 29S103 60 89 65c-14 4-40 4-54 0-14-5-21-15-21-29Z"></path>
-                <path class="car-svg-hood" d="M18 36c5-9 13-14 25-15h10v30H43c-12-1-20-6-25-15Z"></path>
-                <path class="car-svg-trunk" d="M78 21h9c10 2 17 7 20 15-3 8-10 13-20 15h-9Z"></path>
-                <path class="car-svg-glass" d="M49 18h28c8 5 12 11 12 18s-4 13-12 18H49c-7-5-10-11-10-18s3-13 10-18Z"></path>
-                <path class="car-svg-roof" d="M55 24h17c5 3 8 7 8 12s-3 9-8 12H55c-4-3-7-7-7-12s3-9 7-12Z"></path>
-                <path class="car-svg-side-glass" d="M46 21c-5 4-8 9-8 15s3 11 8 15M80 21c6 4 9 9 9 15s-3 11-9 15"></path>
-                <path class="car-svg-contour" d="M32 15c17-8 46-8 62 1M32 57c17 8 46 8 62-1"></path>
-                <path class="car-svg-highlight" d="M28 19c15-7 46-8 63-1"></path>
-                <path class="car-svg-light" d="M15 28h7M15 44h7M104 27h5M104 45h5"></path>
+                <ellipse class="car-svg-shadow" cx="60" cy="63" rx="43" ry="5"></ellipse>
+                <path class="car-svg-tire" d="M20 16h10a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H20zM20 40h10a3 3 0 0 1 3 3v11a3 3 0 0 1-3 3H20zM90 16h10v17H90a3 3 0 0 1-3-3V19a3 3 0 0 1 3-3ZM90 40h10v17H90a3 3 0 0 1-3-3V43a3 3 0 0 1 3-3Z"></path>
+                <path class="car-svg-body" d="M17 36c0-13 7-23 20-28 13-4 36-4 49 0 11 4 18 13 18 28s-7 24-18 28c-13 4-36 4-49 0-13-5-20-15-20-28Z"></path>
+                <path class="car-svg-nose" d="M18 36c5-8 12-13 23-14h10v28H41c-11-1-18-6-23-14Z"></path>
+                <path class="car-svg-tail" d="M78 22h8c9 2 15 7 17 14-2 7-8 12-17 14h-8Z"></path>
+                <path class="car-svg-windshield" d="M47 23h12v26H47c-5-4-7-8-7-13s2-9 7-13Z"></path>
+                <path class="car-svg-rear-window" d="M73 23h8c5 4 8 8 8 13s-3 9-8 13h-8Z"></path>
+                <path class="car-svg-roof" d="M57 20h18c5 5 8 10 8 16s-3 11-8 16H57c-5-5-8-10-8-16s3-11 8-16Z"></path>
+                <path class="car-svg-center-line" d="M62 23v26"></path>
+                <path class="car-svg-contour" d="M33 14c16-7 41-7 57 0M33 58c16 7 41 7 57 0"></path>
+                <path class="car-svg-highlight" d="M30 20c12-6 34-7 48-3"></path>
+                <path class="car-svg-light" d="M15 28h8M15 44h8"></path>
+                <path class="car-svg-tail-light" d="M101 27h5M101 45h5"></path>
               </g>
               <g class="car-svg-shape car-svg-shape--compact">
-                <ellipse class="car-svg-shadow" cx="60" cy="62" rx="37" ry="6"></ellipse>
-                <path class="car-svg-tire" d="M23 18h9v16h-9zM23 39h9v16h-9zM88 18h9v16h-9zM88 39h9v16h-9z"></path>
-                <path class="car-svg-body" d="M18 36c0-15 8-25 23-29 10-3 28-3 38 0 15 4 23 14 23 29S94 61 79 65c-10 3-28 3-38 0-15-4-23-14-23-29Z"></path>
-                <path class="car-svg-hood" d="M22 36c5-8 12-13 23-13h8v26h-8c-11 0-18-5-23-13Z"></path>
-                <path class="car-svg-trunk" d="M75 23h3c10 2 17 6 20 13-3 7-10 11-20 13h-3Z"></path>
-                <path class="car-svg-glass" d="M49 20h26c7 4 10 9 10 16s-3 12-10 16H49c-6-4-9-9-9-16s3-12 9-16Z"></path>
-                <path class="car-svg-roof" d="M55 26h15c4 3 6 6 6 10s-2 7-6 10H55c-4-3-6-6-6-10s2-7 6-10Z"></path>
-                <path class="car-svg-side-glass" d="M47 23c-4 3-6 8-6 13s2 10 6 13M78 23c5 3 7 8 7 13s-2 10-7 13"></path>
-                <path class="car-svg-contour" d="M34 16c14-7 39-7 53 1M34 56c14 7 39 7 53-1"></path>
-                <path class="car-svg-highlight" d="M32 19c13-6 39-7 55-1"></path>
-                <path class="car-svg-light" d="M19 29h6M19 43h6M98 29h4M98 43h4"></path>
+                <ellipse class="car-svg-shadow" cx="60" cy="63" rx="35" ry="5"></ellipse>
+                <path class="car-svg-tire" d="M25 17h9a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-9zM25 40h9a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-9zM86 17h9v16h-9a3 3 0 0 1-3-3V20a3 3 0 0 1 3-3ZM86 40h9v16h-9a3 3 0 0 1-3-3V43a3 3 0 0 1 3-3Z"></path>
+                <path class="car-svg-body" d="M22 36c0-14 8-24 22-28 9-3 25-3 34 0 13 4 20 14 20 28S91 60 78 64c-9 3-25 3-34 0-14-4-22-14-22-28Z"></path>
+                <path class="car-svg-nose" d="M24 36c5-8 12-12 22-13h9v26h-9c-10-1-17-5-22-13Z"></path>
+                <path class="car-svg-tail" d="M76 23h3c9 2 15 6 18 13-3 7-9 11-18 13h-3Z"></path>
+                <path class="car-svg-windshield" d="M50 24h10v24H50c-5-3-7-8-7-12s2-9 7-12Z"></path>
+                <path class="car-svg-rear-window" d="M72 24h5c5 3 8 8 8 12s-3 9-8 12h-5Z"></path>
+                <path class="car-svg-roof" d="M58 22h16c4 4 7 9 7 14s-3 10-7 14H58c-4-4-7-9-7-14s3-10 7-14Z"></path>
+                <path class="car-svg-center-line" d="M64 25v22"></path>
+                <path class="car-svg-contour" d="M36 16c13-6 36-6 50 0M36 56c13 6 36 6 50 0"></path>
+                <path class="car-svg-highlight" d="M35 20c12-5 32-6 45-2"></path>
+                <path class="car-svg-light" d="M20 29h7M20 43h7"></path>
+                <path class="car-svg-tail-light" d="M96 29h5M96 43h5"></path>
               </g>
               <g class="car-svg-shape car-svg-shape--suv">
-                <ellipse class="car-svg-shadow" cx="60" cy="62" rx="46" ry="7"></ellipse>
-                <path class="car-svg-tire" d="M14 16h11v18H14zM14 39h11v18H14zM95 16h11v18H95zM95 39h11v18H95z"></path>
-                <path class="car-svg-body" d="M11 36c0-18 8-29 24-32h50c16 3 24 14 24 32S101 65 85 68H35C19 65 11 54 11 36Z"></path>
-                <path class="car-svg-hood" d="M15 36c5-10 13-15 25-16h11v32H40c-12-1-20-6-25-16Z"></path>
-                <path class="car-svg-trunk" d="M76 20h9c12 2 19 7 22 16-3 9-10 14-22 16h-9Z"></path>
-                <path class="car-svg-glass" d="M49 17h30c9 5 13 11 13 19s-4 14-13 19H49c-8-5-12-11-12-19s4-14 12-19Z"></path>
-                <path class="car-svg-roof" d="M54 24h21c6 4 9 8 9 12s-3 8-9 12H54c-5-4-8-8-8-12s3-8 8-12Z"></path>
-                <path class="car-svg-side-glass" d="M46 20c-6 4-9 10-9 16s3 12 9 16M82 20c7 4 10 10 10 16s-3 12-10 16"></path>
-                <path class="car-svg-rail" d="M40 12h40M40 60h40"></path>
-                <path class="car-svg-contour" d="M26 16c20-9 52-9 69 1M26 56c20 9 52 9 69-1"></path>
-                <path class="car-svg-highlight" d="M25 18c19-8 52-9 70 1"></path>
-                <path class="car-svg-light" d="M12 28h7M12 44h7M103 28h6M103 44h6"></path>
+                <ellipse class="car-svg-shadow" cx="60" cy="63" rx="47" ry="6"></ellipse>
+                <path class="car-svg-tire" d="M14 15h12a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H14zM14 39h12a3 3 0 0 1 3 3v13a3 3 0 0 1-3 3H14zM94 15h12v19H94a3 3 0 0 1-3-3V18a3 3 0 0 1 3-3ZM94 39h12v19H94a3 3 0 0 1-3-3V42a3 3 0 0 1 3-3Z"></path>
+                <path class="car-svg-body" d="M12 36c0-17 8-28 24-31h49c15 3 23 14 23 31s-8 28-23 31H36C20 64 12 53 12 36Z"></path>
+                <path class="car-svg-nose" d="M16 36c5-9 13-14 25-15h12v30H41c-12-1-20-6-25-15Z"></path>
+                <path class="car-svg-tail" d="M77 21h8c11 2 18 7 21 15-3 8-10 13-21 15h-8Z"></path>
+                <path class="car-svg-windshield" d="M48 22h12v28H48c-6-4-9-9-9-14s3-10 9-14Z"></path>
+                <path class="car-svg-rear-window" d="M73 22h9c6 4 9 9 9 14s-3 10-9 14h-9Z"></path>
+                <path class="car-svg-roof" d="M57 18h19c6 5 9 11 9 18s-3 13-9 18H57c-6-5-9-11-9-18s3-13 9-18Z"></path>
+                <path class="car-svg-center-line" d="M64 22v28"></path>
+                <path class="car-svg-rail" d="M39 12h42M39 60h42"></path>
+                <path class="car-svg-contour" d="M28 15c19-8 50-8 68 0M28 57c19 8 50 8 68 0"></path>
+                <path class="car-svg-highlight" d="M27 19c18-7 49-8 65-2"></path>
+                <path class="car-svg-light" d="M11 28h8M11 44h8"></path>
+                <path class="car-svg-tail-light" d="M104 28h5M104 44h5"></path>
               </g>
             </svg>
           </div>
