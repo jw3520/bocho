@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.17.18";
+const APP_VERSION = "26.05.18.00";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -22,8 +22,8 @@ const VEHICLE_COLORS = [
   { id: "purple", label: "퍼플", body: "#9b7ee7", bodyDark: "#6f52b8", cabin: "#ebe3ff" },
 ];
 const VEHICLE_TYPES = [
-  { id: "basic", label: "기본" },
   { id: "sedan", label: "승용차" },
+  { id: "compact", label: "경차" },
   { id: "suv", label: "SUV" },
 ];
 
@@ -358,7 +358,7 @@ function loadOnboarding() {
 function normalizeVehicleState(value = {}) {
   const candidate = value && typeof value === "object" ? value : {};
   const color = VEHICLE_COLORS.some((item) => item.id === candidate.color) ? candidate.color : "yellow";
-  const type = VEHICLE_TYPES.some((item) => item.id === candidate.type) ? candidate.type : "basic";
+  const type = VEHICLE_TYPES.some((item) => item.id === candidate.type) ? candidate.type : "sedan";
 
   return { color, type };
 }

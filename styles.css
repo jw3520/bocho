@@ -5640,12 +5640,6 @@ textarea {
   transform-origin: center;
 }
 
-.progress-map-car--basic {
-  width: 38px;
-  height: 22px;
-  border-radius: 16px 9px 9px 16px;
-}
-
 .progress-map-car::before,
 .progress-map-car::after {
   position: absolute;
@@ -5688,6 +5682,29 @@ textarea {
   width: 16px;
   height: 11px;
   border-radius: 9px 4px 4px 7px;
+}
+
+.progress-map-car--compact {
+  width: 34px;
+  height: 24px;
+  border-radius: 13px 9px 9px 13px;
+  background:
+    linear-gradient(90deg, var(--car-body-dark) 0 12%, transparent 12%),
+    radial-gradient(circle at 70% 50%, color-mix(in srgb, var(--car-body) 82%, #ffffff) 0 22%, transparent 23%),
+    linear-gradient(180deg, color-mix(in srgb, var(--car-body) 76%, #ffffff) 0%, var(--car-body) 64%, var(--car-body-dark) 100%);
+}
+
+.progress-map-car--compact .progress-map-car__cabin {
+  top: 5px;
+  left: 12px;
+  width: 12px;
+  height: 13px;
+  border-radius: 7px 4px 4px 7px;
+}
+
+.progress-map-car--compact .progress-map-car__wheel {
+  width: 7px;
+  height: 5px;
 }
 
 .progress-map-car--suv {
