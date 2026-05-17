@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.01";
+const APP_VERSION = "26.05.18.02";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -1180,13 +1180,48 @@ function renderRoadExperience() {
           <div class="progress-map-finish" aria-hidden="true"><span></span></div>
           <button class="car-customize-button" type="button" data-car-customize-open>차량 변경</button>
           <div class="progress-map-car progress-map-car--${vehicleState.type}" style="${getVehicleStyle()}" aria-hidden="true">
-            <span class="progress-map-car__shine"></span>
-            <span class="progress-map-car__cabin"></span>
-            <span class="progress-map-car__roof"></span>
-            <span class="progress-map-car__wheel progress-map-car__wheel--front-left"></span>
-            <span class="progress-map-car__wheel progress-map-car__wheel--front-right"></span>
-            <span class="progress-map-car__wheel progress-map-car__wheel--rear-left"></span>
-            <span class="progress-map-car__wheel progress-map-car__wheel--rear-right"></span>
+            <svg class="progress-map-car-svg" viewBox="0 0 120 70" focusable="false">
+              <g class="car-svg-shape car-svg-shape--sedan">
+                <ellipse class="car-svg-shadow" cx="61" cy="62" rx="44" ry="6"></ellipse>
+                <path class="car-svg-tire" d="M20 17h9v17h-9zM20 39h9v17h-9zM94 17h9v17h-9zM94 39h9v17h-9z"></path>
+                <path class="car-svg-body" d="M14 36c0-14 7-24 21-29 14-4 40-4 54 0 14 5 21 15 21 29S103 60 89 65c-14 4-40 4-54 0-14-5-21-15-21-29Z"></path>
+                <path class="car-svg-hood" d="M18 36c5-9 13-14 25-15h10v30H43c-12-1-20-6-25-15Z"></path>
+                <path class="car-svg-trunk" d="M78 21h9c10 2 17 7 20 15-3 8-10 13-20 15h-9Z"></path>
+                <path class="car-svg-glass" d="M49 18h28c8 5 12 11 12 18s-4 13-12 18H49c-7-5-10-11-10-18s3-13 10-18Z"></path>
+                <path class="car-svg-roof" d="M55 24h17c5 3 8 7 8 12s-3 9-8 12H55c-4-3-7-7-7-12s3-9 7-12Z"></path>
+                <path class="car-svg-side-glass" d="M46 21c-5 4-8 9-8 15s3 11 8 15M80 21c6 4 9 9 9 15s-3 11-9 15"></path>
+                <path class="car-svg-contour" d="M32 15c17-8 46-8 62 1M32 57c17 8 46 8 62-1"></path>
+                <path class="car-svg-highlight" d="M28 19c15-7 46-8 63-1"></path>
+                <path class="car-svg-light" d="M15 28h7M15 44h7M104 27h5M104 45h5"></path>
+              </g>
+              <g class="car-svg-shape car-svg-shape--compact">
+                <ellipse class="car-svg-shadow" cx="60" cy="62" rx="37" ry="6"></ellipse>
+                <path class="car-svg-tire" d="M23 18h9v16h-9zM23 39h9v16h-9zM88 18h9v16h-9zM88 39h9v16h-9z"></path>
+                <path class="car-svg-body" d="M18 36c0-15 8-25 23-29 10-3 28-3 38 0 15 4 23 14 23 29S94 61 79 65c-10 3-28 3-38 0-15-4-23-14-23-29Z"></path>
+                <path class="car-svg-hood" d="M22 36c5-8 12-13 23-13h8v26h-8c-11 0-18-5-23-13Z"></path>
+                <path class="car-svg-trunk" d="M75 23h3c10 2 17 6 20 13-3 7-10 11-20 13h-3Z"></path>
+                <path class="car-svg-glass" d="M49 20h26c7 4 10 9 10 16s-3 12-10 16H49c-6-4-9-9-9-16s3-12 9-16Z"></path>
+                <path class="car-svg-roof" d="M55 26h15c4 3 6 6 6 10s-2 7-6 10H55c-4-3-6-6-6-10s2-7 6-10Z"></path>
+                <path class="car-svg-side-glass" d="M47 23c-4 3-6 8-6 13s2 10 6 13M78 23c5 3 7 8 7 13s-2 10-7 13"></path>
+                <path class="car-svg-contour" d="M34 16c14-7 39-7 53 1M34 56c14 7 39 7 53-1"></path>
+                <path class="car-svg-highlight" d="M32 19c13-6 39-7 55-1"></path>
+                <path class="car-svg-light" d="M19 29h6M19 43h6M98 29h4M98 43h4"></path>
+              </g>
+              <g class="car-svg-shape car-svg-shape--suv">
+                <ellipse class="car-svg-shadow" cx="60" cy="62" rx="46" ry="7"></ellipse>
+                <path class="car-svg-tire" d="M14 16h11v18H14zM14 39h11v18H14zM95 16h11v18H95zM95 39h11v18H95z"></path>
+                <path class="car-svg-body" d="M11 36c0-18 8-29 24-32h50c16 3 24 14 24 32S101 65 85 68H35C19 65 11 54 11 36Z"></path>
+                <path class="car-svg-hood" d="M15 36c5-10 13-15 25-16h11v32H40c-12-1-20-6-25-16Z"></path>
+                <path class="car-svg-trunk" d="M76 20h9c12 2 19 7 22 16-3 9-10 14-22 16h-9Z"></path>
+                <path class="car-svg-glass" d="M49 17h30c9 5 13 11 13 19s-4 14-13 19H49c-8-5-12-11-12-19s4-14 12-19Z"></path>
+                <path class="car-svg-roof" d="M54 24h21c6 4 9 8 9 12s-3 8-9 12H54c-5-4-8-8-8-12s3-8 8-12Z"></path>
+                <path class="car-svg-side-glass" d="M46 20c-6 4-9 10-9 16s3 12 9 16M82 20c7 4 10 10 10 16s-3 12-10 16"></path>
+                <path class="car-svg-rail" d="M40 12h40M40 60h40"></path>
+                <path class="car-svg-contour" d="M26 16c20-9 52-9 69 1M26 56c20 9 52 9 69-1"></path>
+                <path class="car-svg-highlight" d="M25 18c19-8 52-9 70 1"></path>
+                <path class="car-svg-light" d="M12 28h7M12 44h7M103 28h6M103 44h6"></path>
+              </g>
+            </svg>
           </div>
           <div class="progress-map-nodes">
             ${curriculum.map((day, index) => renderRoadDayNode(day, index, mapPoints[index])).join("")}
