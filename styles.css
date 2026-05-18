@@ -5674,6 +5674,7 @@ textarea {
 .progress-map-car--sedan {
   width: 50px;
   height: 25px;
+  --car-base-angle: -3deg;
 }
 
 .progress-map-car--compact {
