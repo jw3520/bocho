@@ -5723,15 +5723,15 @@ textarea {
 
 .progress-map-car--sedan .progress-map-car-window-tint {
   position: absolute;
-  top: 19%;
-  right: 14%;
+  top: 20%;
+  right: 27%;
   display: block;
-  width: 21%;
-  height: 54%;
+  width: 13%;
+  height: 58%;
   border: 0;
-  border-radius: 36% 48% 48% 36%;
+  border-radius: 30% 46% 46% 30%;
   background:
-    linear-gradient(135deg, transparent 0 21%, rgba(255, 255, 255, 0.68) 22% 31%, transparent 32% 58%, rgba(255, 255, 255, 0.32) 59% 66%, transparent 67%);
+    linear-gradient(135deg, transparent 0 28%, rgba(255, 255, 255, 0.72) 29% 43%, transparent 44% 100%);
   box-shadow: none;
   pointer-events: none;
   transform: skewX(-8deg);
@@ -5740,13 +5740,13 @@ textarea {
 .progress-map-car--sedan .progress-map-car-window-tint::before {
   position: absolute;
   top: 0;
-  left: -308%;
+  left: -390%;
   display: block;
-  width: 106%;
+  width: 118%;
   height: 100%;
   border: 0;
-  border-radius: 46% 34% 34% 46%;
-  background: linear-gradient(135deg, transparent 0 21%, rgba(255, 255, 255, 0.66) 22% 31%, transparent 32% 58%, rgba(255, 255, 255, 0.3) 59% 66%, transparent 67%);
+  border-radius: 46% 30% 30% 46%;
+  background: linear-gradient(135deg, transparent 0 28%, rgba(255, 255, 255, 0.7) 29% 43%, transparent 44% 100%);
   box-shadow: none;
   content: "";
 }
