@@ -4037,14 +4037,31 @@ body {
 }
 
 .gender-symbol .gender-hero-shadow {
-  fill: rgba(31, 35, 40, 0.09);
+  fill: rgba(31, 35, 40, 0.1);
   stroke: none;
 }
 
+.gender-symbol .gender-hero-body {
+  fill: rgba(255, 209, 85, 0.48);
+  stroke: rgba(32, 38, 45, 0.18);
+  stroke-width: 2.4;
+}
+
 .gender-symbol .gender-hero-face {
-  fill: #ffe36e;
+  fill: url("#gender-face-male");
   stroke: #20262d;
-  stroke-width: 3.2;
+  stroke-width: 3;
+  filter: drop-shadow(0 8px 8px rgba(132, 95, 22, 0.15));
+}
+
+.gender-symbol--female .gender-hero-face {
+  fill: url("#gender-face-female");
+}
+
+.gender-symbol .gender-hero-face-shine {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.58);
+  stroke-width: 4.4;
 }
 
 .gender-symbol .gender-hero-hair {
@@ -4056,7 +4073,8 @@ body {
 .gender-symbol .gender-hero-pin {
   fill: #f3819a;
   stroke: #20262d;
-  stroke-width: 2.8;
+  stroke-width: 2.6;
+  filter: drop-shadow(0 3px 3px rgba(120, 45, 68, 0.14));
 }
 
 .gender-symbol .gender-hero-pin-dot {
@@ -4070,34 +4088,39 @@ body {
   stroke: none;
 }
 
+.gender-symbol .gender-hero-eye-light {
+  fill: #ffffff;
+  stroke: none;
+}
+
 .gender-symbol .gender-hero-cheek {
   fill: none;
-  stroke: rgba(230, 115, 92, 0.48);
-  stroke-width: 2.6;
+  stroke: rgba(240, 119, 107, 0.56);
+  stroke-width: 3.2;
 }
 
 .gender-symbol .gender-hero-beak {
-  fill: #ffb63d;
+  fill: #ffb84b;
   stroke: #20262d;
   stroke-width: 2.6;
 }
 
 .gender-symbol .gender-hero-hand {
   fill: none;
-  stroke: #d9a02f;
-  stroke-width: 5.2;
+  stroke: #e3a936;
+  stroke-width: 6.2;
 }
 
 .gender-symbol .gender-hero-steer {
   fill: none;
-  stroke: #7a4f2c;
-  stroke-width: 5.4;
+  stroke: #7b5438;
+  stroke-width: 7;
 }
 
 .gender-symbol .gender-hero-steer-core {
   fill: none;
-  stroke: #7a4f2c;
-  stroke-width: 3.4;
+  stroke: #7b5438;
+  stroke-width: 3.8;
 }
 
 .gender-card strong {

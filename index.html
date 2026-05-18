@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.18.12">
+    <link rel="stylesheet" href="/styles.css?v=26.05.18.13">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -115,16 +115,28 @@
           <button class="gender-card" type="button" data-gender-option="male">
             <span class="gender-card__icon gender-card__icon--male" aria-hidden="true">
               <svg class="gender-symbol gender-symbol--male" viewBox="0 0 160 132">
-                <ellipse class="gender-hero-shadow" cx="80" cy="118" rx="44" ry="7"></ellipse>
-                <path class="gender-hero-face" d="M49 53c0-20 14-36 32-36s32 16 32 36-14 37-32 37-32-17-32-37Z"></path>
-                <path class="gender-hero-hair" d="M71 20l8-12 6 13 12-8"></path>
-                <circle class="gender-hero-eye" cx="69" cy="54" r="3.4"></circle>
-                <circle class="gender-hero-eye" cx="93" cy="54" r="3.4"></circle>
-                <path class="gender-hero-cheek" d="M57 64c5 2 10 2 15 0M90 64c5 2 10 2 15 0"></path>
-                <path class="gender-hero-beak" d="M74 62h14l-7 8Z"></path>
-                <path class="gender-hero-hand" d="M49 91c9-7 20-10 32-10s23 3 32 10"></path>
-                <path class="gender-hero-steer" d="M45 101c8-14 21-22 36-22s28 8 36 22"></path>
-                <path class="gender-hero-steer-core" d="M65 97h32M81 80v18"></path>
+                <defs>
+                  <radialGradient id="gender-face-male" cx="36%" cy="25%" r="68%">
+                    <stop offset="0%" stop-color="#fff4a7"></stop>
+                    <stop offset="58%" stop-color="#ffe26a"></stop>
+                    <stop offset="100%" stop-color="#ffc94e"></stop>
+                  </radialGradient>
+                </defs>
+                <ellipse class="gender-hero-shadow" cx="80" cy="116" rx="45" ry="8"></ellipse>
+                <path class="gender-hero-body" d="M55 82c7-11 16-16 26-16s19 5 26 16c-5 13-14 21-26 21s-21-8-26-21Z"></path>
+                <path class="gender-hero-face" d="M45 50c0-20 15-35 36-35s36 15 36 35c0 22-15 39-36 39S45 72 45 50Z"></path>
+                <path class="gender-hero-face-shine" d="M58 32c8-9 20-13 34-10"></path>
+                <path class="gender-hero-hair" d="M72 18l8-11 6 12 11-7"></path>
+                <circle class="gender-hero-eye" cx="69" cy="50" r="4"></circle>
+                <circle class="gender-hero-eye" cx="93" cy="50" r="4"></circle>
+                <circle class="gender-hero-eye-light" cx="70.5" cy="48.5" r="1"></circle>
+                <circle class="gender-hero-eye-light" cx="94.5" cy="48.5" r="1"></circle>
+                <path class="gender-hero-cheek" d="M57 61c5 2 11 2 16 0M89 61c5 2 11 2 16 0"></path>
+                <path class="gender-hero-beak" d="M73 58h16l-8 8Z"></path>
+                <path class="gender-hero-hand gender-hero-hand--left" d="M52 87c7-5 15-7 25-7"></path>
+                <path class="gender-hero-hand gender-hero-hand--right" d="M85 80c10 0 18 2 25 7"></path>
+                <path class="gender-hero-steer" d="M45 98c8-14 21-22 36-22s28 8 36 22"></path>
+                <path class="gender-hero-steer-core" d="M63 95h36M81 77v19"></path>
               </svg>
             </span>
             <strong>남성</strong>
@@ -132,17 +144,29 @@
           <button class="gender-card" type="button" data-gender-option="female">
             <span class="gender-card__icon gender-card__icon--female" aria-hidden="true">
               <svg class="gender-symbol gender-symbol--female" viewBox="0 0 160 132">
-                <ellipse class="gender-hero-shadow" cx="80" cy="118" rx="44" ry="7"></ellipse>
-                <path class="gender-hero-face" d="M49 53c0-20 14-36 32-36s32 16 32 36-14 37-32 37-32-17-32-37Z"></path>
-                <path class="gender-hero-pin" d="M98 25c7-5 15-5 21 1-5 7-13 9-21 4Z"></path>
-                <circle class="gender-hero-pin-dot" cx="100" cy="28" r="3.8"></circle>
-                <circle class="gender-hero-eye" cx="69" cy="54" r="3.4"></circle>
-                <circle class="gender-hero-eye" cx="93" cy="54" r="3.4"></circle>
-                <path class="gender-hero-cheek" d="M57 64c5 2 10 2 15 0M90 64c5 2 10 2 15 0"></path>
-                <path class="gender-hero-beak" d="M74 62h14l-7 8Z"></path>
-                <path class="gender-hero-hand" d="M49 91c9-7 20-10 32-10s23 3 32 10"></path>
-                <path class="gender-hero-steer" d="M45 101c8-14 21-22 36-22s28 8 36 22"></path>
-                <path class="gender-hero-steer-core" d="M65 97h32M81 80v18"></path>
+                <defs>
+                  <radialGradient id="gender-face-female" cx="36%" cy="25%" r="68%">
+                    <stop offset="0%" stop-color="#fff4a7"></stop>
+                    <stop offset="58%" stop-color="#ffe26a"></stop>
+                    <stop offset="100%" stop-color="#ffc94e"></stop>
+                  </radialGradient>
+                </defs>
+                <ellipse class="gender-hero-shadow" cx="80" cy="116" rx="45" ry="8"></ellipse>
+                <path class="gender-hero-body" d="M55 82c7-11 16-16 26-16s19 5 26 16c-5 13-14 21-26 21s-21-8-26-21Z"></path>
+                <path class="gender-hero-face" d="M45 50c0-20 15-35 36-35s36 15 36 35c0 22-15 39-36 39S45 72 45 50Z"></path>
+                <path class="gender-hero-face-shine" d="M58 32c8-9 20-13 34-10"></path>
+                <path class="gender-hero-pin" d="M98 24c7-6 16-5 22 2-6 7-15 9-22 4Z"></path>
+                <circle class="gender-hero-pin-dot" cx="99" cy="28" r="4"></circle>
+                <circle class="gender-hero-eye" cx="69" cy="50" r="4"></circle>
+                <circle class="gender-hero-eye" cx="93" cy="50" r="4"></circle>
+                <circle class="gender-hero-eye-light" cx="70.5" cy="48.5" r="1"></circle>
+                <circle class="gender-hero-eye-light" cx="94.5" cy="48.5" r="1"></circle>
+                <path class="gender-hero-cheek" d="M57 61c5 2 11 2 16 0M89 61c5 2 11 2 16 0"></path>
+                <path class="gender-hero-beak" d="M73 58h16l-8 8Z"></path>
+                <path class="gender-hero-hand gender-hero-hand--left" d="M52 87c7-5 15-7 25-7"></path>
+                <path class="gender-hero-hand gender-hero-hand--right" d="M85 80c10 0 18 2 25 7"></path>
+                <path class="gender-hero-steer" d="M45 98c8-14 21-22 36-22s28 8 36 22"></path>
+                <path class="gender-hero-steer-core" d="M63 95h36M81 77v19"></path>
               </svg>
             </span>
             <strong>여성</strong>
@@ -436,6 +460,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.18.12" defer></script>
+    <script src="/app.js?v=26.05.18.13" defer></script>
   </body>
 </html>
