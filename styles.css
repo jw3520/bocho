@@ -5634,6 +5634,7 @@ textarea {
   height: 100%;
   object-fit: contain;
   pointer-events: none;
+  filter: saturate(0.92) contrast(1.06);
 }
 
 .progress-map-car--sedan {
@@ -5656,42 +5657,50 @@ textarea {
   inset: 0;
   display: block;
   background: var(--car-body);
-  mix-blend-mode: color;
-  opacity: 0.96;
+  mix-blend-mode: normal;
+  opacity: 0.88;
   pointer-events: none;
-  mask: var(--vehicle-mask) center / contain no-repeat;
-  -webkit-mask: var(--vehicle-mask) center / contain no-repeat;
+  mask: var(--vehicle-body-mask) center / contain no-repeat;
+  -webkit-mask: var(--vehicle-body-mask) center / contain no-repeat;
+}
+
+.progress-map-car-paint::after {
+  position: absolute;
+  inset: 0;
+  display: block;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent 30% 70%, rgba(0, 0, 0, 0.16));
+  content: "";
 }
 
 .progress-map-car--sedan {
   --vehicle-mask: url("/public/ref/vehicle-sedan.png");
+  --vehicle-body-mask: url("/public/ref/vehicle-sedan-body-mask.png");
 }
 
 .progress-map-car--compact {
   --vehicle-mask: url("/public/ref/vehicle-compact.png");
+  --vehicle-body-mask: url("/public/ref/vehicle-compact-body-mask.png");
 }
 
 .progress-map-car--suv {
   --vehicle-mask: url("/public/ref/vehicle-suv.png");
+  --vehicle-body-mask: url("/public/ref/vehicle-suv-body-mask.png");
 }
 
 .progress-map-car--color-yellow .progress-map-car-paint {
-  opacity: 0.28;
+  opacity: 0.36;
 }
 
 .progress-map-car--color-black .progress-map-car-paint {
-  mix-blend-mode: multiply;
-  opacity: 0.92;
+  opacity: 0.9;
 }
 
 .progress-map-car--color-white .progress-map-car-paint {
-  mix-blend-mode: screen;
-  opacity: 0.72;
+  opacity: 0.78;
 }
 
 .progress-map-car--color-gray .progress-map-car-paint {
-  mix-blend-mode: luminosity;
-  opacity: 0.72;
+  opacity: 0.82;
 }
 
 .progress-map-car-glass {

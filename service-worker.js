@@ -1,4 +1,4 @@
-const CACHE_VERSION = "bocho-pwa-26.05.18.08";
+const CACHE_VERSION = "bocho-pwa-26.05.18.09";
 const APP_SHELL_ASSETS = [
   "/",
   "/index.html",
@@ -10,6 +10,9 @@ const APP_SHELL_ASSETS = [
   "/public/ref/vehicle-sedan.png",
   "/public/ref/vehicle-compact.png",
   "/public/ref/vehicle-suv.png",
+  "/public/ref/vehicle-sedan-body-mask.png",
+  "/public/ref/vehicle-compact-body-mask.png",
+  "/public/ref/vehicle-suv-body-mask.png",
   "/public/manifest.json",
   "/public/intro-car-outpaint.png",
   "/public/icons/icon-192.png",
