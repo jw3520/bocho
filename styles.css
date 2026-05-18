@@ -5760,6 +5760,22 @@ textarea {
   --vehicle-body-mask: url("/public/ref/vehicle-compact-body-mask.png");
 }
 
+.progress-map-car--compact .progress-map-car-window-tint {
+  position: absolute;
+  top: 13%;
+  right: 17%;
+  display: block;
+  width: 31%;
+  height: 74%;
+  border: 1px solid rgba(29, 83, 102, 0.34);
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0 15%, transparent 16% 48%, rgba(255, 255, 255, 0.28) 49% 58%, transparent 59%),
+    linear-gradient(180deg, rgba(196, 239, 248, 0.95), rgba(96, 185, 212, 0.82));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
+  clip-path: polygon(0 0, 72% 4%, 100% 26%, 100% 74%, 72% 96%, 0 100%);
+  pointer-events: none;
+}
+
 .progress-map-car--suv {
   --vehicle-mask: url("/public/ref/vehicle-suv.png");
   --vehicle-body-mask: url("/public/ref/vehicle-suv-body-mask.png");
