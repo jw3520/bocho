@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.10";
+const APP_VERSION = "26.05.18.11";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -27,9 +27,9 @@ const VEHICLE_TYPES = [
   { id: "suv", label: "SUV" },
 ];
 const VEHICLE_IMAGES = {
-  sedan: "/public/ref/vehicle-sedan.png",
-  compact: "/public/ref/vehicle-compact.png",
-  suv: "/public/ref/vehicle-suv.png",
+  sedan: "/public/ref/vehicle-sedan-neutral.png",
+  compact: "/public/ref/vehicle-compact-neutral.png",
+  suv: "/public/ref/vehicle-suv-neutral.png",
 };
 const curriculum = [
   {
