@@ -5708,6 +5708,10 @@ textarea {
   content: "";
 }
 
+.progress-map-car--sedan .progress-map-car-paint::after {
+  content: none;
+}
+
 .progress-map-car-window-tint {
   display: none;
 }
