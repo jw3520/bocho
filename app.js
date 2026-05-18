@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.19.00";
+const APP_VERSION = "26.05.19.01";
 const SHARE_URL = "https://bocho.kr/";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
@@ -1245,7 +1245,7 @@ function getRoadCarPosition(progress) {
   return {
     x: position.x,
     y: Math.min(82, position.y + 36),
-    angle: 90,
+    angle: 270,
   };
 }
 
