@@ -5657,6 +5657,11 @@ textarea {
   transform-origin: center;
 }
 
+.progress-map-car::before,
+.progress-map-car::after {
+  content: none;
+}
+
 .progress-map-car-image {
   display: block;
   width: 100%;
