@@ -4059,17 +4059,35 @@ body {
   stroke-width: 3.2;
 }
 
-.gender-symbol .gender-hero-pin {
-  fill: #f3819a;
-  stroke: #20262d;
-  stroke-width: 2.6;
-  filter: drop-shadow(0 3px 3px rgba(120, 45, 68, 0.14));
+.gender-symbol .gender-hero-wreath {
+  filter: drop-shadow(0 3px 3px rgba(120, 45, 68, 0.12));
 }
 
-.gender-symbol .gender-hero-pin-dot {
-  fill: #ffd1dc;
+.gender-symbol .gender-hero-wreath-vine {
+  fill: none;
+  stroke: #63b66d;
+  stroke-width: 3;
+}
+
+.gender-symbol .gender-hero-leaf {
+  fill: #80c983;
   stroke: #20262d;
-  stroke-width: 2.2;
+  stroke-width: 1.8;
+}
+
+.gender-symbol .gender-hero-flower circle {
+  fill: #ff8fab;
+  stroke: #20262d;
+  stroke-width: 1.7;
+}
+
+.gender-symbol .gender-hero-flower--accent circle {
+  fill: #ffd166;
+}
+
+.gender-symbol .gender-hero-flower .gender-hero-flower-core {
+  fill: #fff7d6;
+  stroke-width: 1.5;
 }
 
 .gender-symbol .gender-hero-eye {

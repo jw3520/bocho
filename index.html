@@ -29,7 +29,7 @@
       .onboarding-screen[data-onboarding-step="welcome"] p { max-width: 310px; margin: 0 auto; color: #6d7781; font-size: 17px; font-weight: 600; line-height: 1.48; }
       .is-boot-loading .onboarding-screen[data-onboarding-step="welcome"] .onboarding-actions { visibility: hidden; pointer-events: none; }
     </style>
-    <link rel="stylesheet" href="/styles.css?v=26.05.18.17">
+    <link rel="stylesheet" href="/styles.css?v=26.05.18.18">
     <title>전운보초</title>
   </head>
   <body class="is-boot-loading">
@@ -150,8 +150,39 @@
                 </defs>
                 <path class="gender-hero-face" d="M45 50c0-20 15-35 36-35s36 15 36 35c0 22-15 39-36 39S45 72 45 50Z"></path>
                 <path class="gender-hero-face-shine" d="M58 32c8-9 20-13 34-10"></path>
-                <path class="gender-hero-pin" d="M98 24c7-6 16-5 22 2-6 7-15 9-22 4Z"></path>
-                <circle class="gender-hero-pin-dot" cx="99" cy="28" r="4"></circle>
+                <g class="gender-hero-wreath">
+                  <path class="gender-hero-wreath-vine" d="M55 29c14-13 36-17 54-6"></path>
+                  <path class="gender-hero-leaf" d="M63 25c-6-4-12-2-15 3 6 3 12 2 15-3Z"></path>
+                  <path class="gender-hero-leaf" d="M102 18c5-5 12-5 16 0-5 5-11 6-16 0Z"></path>
+                  <g class="gender-hero-flower" transform="translate(60 27)">
+                    <circle cx="0" cy="-4" r="4"></circle>
+                    <circle cx="4" cy="0" r="4"></circle>
+                    <circle cx="0" cy="4" r="4"></circle>
+                    <circle cx="-4" cy="0" r="4"></circle>
+                    <circle class="gender-hero-flower-core" cx="0" cy="0" r="3"></circle>
+                  </g>
+                  <g class="gender-hero-flower gender-hero-flower--accent" transform="translate(78 20)">
+                    <circle cx="0" cy="-4" r="4"></circle>
+                    <circle cx="4" cy="0" r="4"></circle>
+                    <circle cx="0" cy="4" r="4"></circle>
+                    <circle cx="-4" cy="0" r="4"></circle>
+                    <circle class="gender-hero-flower-core" cx="0" cy="0" r="3"></circle>
+                  </g>
+                  <g class="gender-hero-flower" transform="translate(96 22)">
+                    <circle cx="0" cy="-4" r="4"></circle>
+                    <circle cx="4" cy="0" r="4"></circle>
+                    <circle cx="0" cy="4" r="4"></circle>
+                    <circle cx="-4" cy="0" r="4"></circle>
+                    <circle class="gender-hero-flower-core" cx="0" cy="0" r="3"></circle>
+                  </g>
+                  <g class="gender-hero-flower gender-hero-flower--accent" transform="translate(111 29)">
+                    <circle cx="0" cy="-3.5" r="3.5"></circle>
+                    <circle cx="3.5" cy="0" r="3.5"></circle>
+                    <circle cx="0" cy="3.5" r="3.5"></circle>
+                    <circle cx="-3.5" cy="0" r="3.5"></circle>
+                    <circle class="gender-hero-flower-core" cx="0" cy="0" r="2.8"></circle>
+                  </g>
+                </g>
                 <circle class="gender-hero-eye" cx="69" cy="50" r="4"></circle>
                 <circle class="gender-hero-eye" cx="93" cy="50" r="4"></circle>
                 <circle class="gender-hero-eye-light" cx="70.5" cy="48.5" r="1"></circle>
@@ -454,6 +485,6 @@
       </div>
     </dialog>
 
-    <script src="/app.js?v=26.05.18.17" defer></script>
+    <script src="/app.js?v=26.05.18.18" defer></script>
   </body>
 </html>
