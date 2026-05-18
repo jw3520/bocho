@@ -5695,8 +5695,8 @@ textarea {
   mix-blend-mode: normal;
   opacity: 0.98;
   pointer-events: none;
-  mask: var(--vehicle-body-mask) center / contain no-repeat;
-  -webkit-mask: var(--vehicle-body-mask) center / contain no-repeat;
+  mask: var(--vehicle-paint-mask, var(--vehicle-body-mask)) center / contain no-repeat;
+  -webkit-mask: var(--vehicle-paint-mask, var(--vehicle-body-mask)) center / contain no-repeat;
 }
 
 .progress-map-car-paint::after {
@@ -5711,28 +5711,58 @@ textarea {
   display: none;
 }
 
+.progress-map-car-window-tint::after {
+  position: absolute;
+  top: 16%;
+  left: 16%;
+  width: 54%;
+  height: 20%;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.54);
+  content: "";
+  transform: rotate(-18deg);
+}
+
 .progress-map-car--sedan {
   --vehicle-mask: url("/public/ref/vehicle-sedan.png");
   --vehicle-body-mask: url("/public/ref/vehicle-sedan-body-mask.png");
+  --vehicle-paint-mask: var(--vehicle-body-mask);
+}
+
+.progress-map-car--sedan .progress-map-car-window-tint {
+  position: absolute;
+  top: 17%;
+  right: 13%;
+  display: block;
+  width: 24%;
+  height: 58%;
+  border: 1px solid rgba(29, 83, 102, 0.34);
+  border-radius: 42% 30% 30% 42%;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.54) 0 18%, transparent 19% 48%, rgba(255, 255, 255, 0.24) 49% 60%, transparent 61%),
+    linear-gradient(180deg, rgba(196, 239, 248, 0.96), rgba(96, 185, 212, 0.8));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  pointer-events: none;
 }
 
 .progress-map-car--compact {
   --vehicle-mask: url("/public/ref/vehicle-compact.png");
   --vehicle-body-mask: url("/public/ref/vehicle-compact-body-mask.png");
+  --vehicle-paint-mask: var(--vehicle-mask);
 }
 
 .progress-map-car--compact .progress-map-car-window-tint {
   position: absolute;
-  top: 17%;
-  right: 29%;
+  top: 14%;
+  right: 25%;
   display: block;
-  width: 22%;
-  height: 66%;
+  width: 30%;
+  height: 72%;
   border: 1px solid rgba(29, 83, 102, 0.38);
-  border-radius: 48% 28% 28% 48%;
+  border-radius: 44% 24% 24% 44%;
   background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.62) 0 20%, transparent 21% 46%, rgba(255, 255, 255, 0.28) 47% 58%, transparent 59%),
-    linear-gradient(180deg, rgba(196, 239, 248, 0.94), rgba(96, 185, 212, 0.82));
+    linear-gradient(135deg, rgba(255, 255, 255, 0.58) 0 18%, transparent 19% 48%, rgba(255, 255, 255, 0.26) 49% 60%, transparent 61%),
+    linear-gradient(180deg, rgba(196, 239, 248, 0.96), rgba(96, 185, 212, 0.82));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
   pointer-events: none;
 }
@@ -5740,6 +5770,7 @@ textarea {
 .progress-map-car--suv {
   --vehicle-mask: url("/public/ref/vehicle-suv.png");
   --vehicle-body-mask: url("/public/ref/vehicle-suv-body-mask.png");
+  --vehicle-paint-mask: var(--vehicle-mask);
 }
 
 .progress-map-car--color-yellow .progress-map-car-paint {
