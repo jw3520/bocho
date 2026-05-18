@@ -4036,17 +4036,6 @@ body {
   stroke-width: 3.2;
 }
 
-.gender-symbol .gender-hero-shadow {
-  fill: rgba(31, 35, 40, 0.1);
-  stroke: none;
-}
-
-.gender-symbol .gender-hero-body {
-  fill: rgba(255, 209, 85, 0.48);
-  stroke: rgba(32, 38, 45, 0.18);
-  stroke-width: 2.4;
-}
-
 .gender-symbol .gender-hero-face {
   fill: url("#gender-face-male");
   stroke: #20262d;
@@ -4106,10 +4095,10 @@ body {
 }
 
 .gender-symbol .gender-hero-wing {
-  fill: none;
-  stroke: #e3a936;
-  stroke-width: 8;
-  filter: drop-shadow(0 2px 2px rgba(128, 88, 22, 0.1));
+  fill: #ffd966;
+  stroke: #20262d;
+  stroke-width: 2.8;
+  filter: drop-shadow(0 2px 2px rgba(128, 88, 22, 0.12));
 }
 
 .gender-symbol .gender-hero-steer {
