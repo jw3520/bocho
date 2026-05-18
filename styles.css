@@ -5772,7 +5772,7 @@ textarea {
     linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0 15%, transparent 16% 48%, rgba(255, 255, 255, 0.28) 49% 58%, transparent 59%),
     linear-gradient(180deg, rgba(196, 239, 248, 0.95), rgba(96, 185, 212, 0.82));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68);
-  clip-path: polygon(0 0, 88% 2%, 100% 24%, 96% 72%, 74% 96%, 0 100%);
+  clip-path: polygon(7% 4%, 80% 4%, 100% 26%, 100% 74%, 80% 96%, 7% 96%);
   pointer-events: none;
 }
 
