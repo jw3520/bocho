@@ -5758,11 +5758,11 @@ textarea {
 
 .progress-map-car--compact .progress-map-car-window-tint {
   position: absolute;
-  top: 16%;
-  right: 28%;
+  top: 14%;
+  right: 26%;
   display: block;
-  width: 23%;
-  height: 68%;
+  width: 26%;
+  height: 72%;
   border: 1px solid rgba(29, 83, 102, 0.38);
   border-radius: 48% 28% 28% 48%;
   background:
