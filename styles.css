@@ -5682,6 +5682,10 @@ textarea {
   height: 22px;
 }
 
+.progress-map-car--compact .progress-map-car-image {
+  filter: saturate(0.68) contrast(1.18);
+}
+
 .progress-map-car--suv {
   width: 32px;
   height: 58px;
@@ -6755,4 +6759,8 @@ svg {
   overflow: hidden !important;
   clip: rect(0 0 0 0) !important;
   white-space: nowrap !important;
+}
+
+.progress-map-car--compact .progress-map-car-image {
+  filter: saturate(0.68) contrast(1.18) !important;
 }
