@@ -5619,8 +5619,8 @@ textarea {
   left: var(--car-x);
   z-index: 4;
   display: block;
-  width: 70px;
-  height: 40px;
+  width: 60px;
+  height: 32px;
   background: transparent;
   box-shadow: none;
   filter: none;
@@ -5637,18 +5637,18 @@ textarea {
 }
 
 .progress-map-car--sedan {
-  width: 72px;
-  height: 36px;
+  width: 58px;
+  height: 29px;
 }
 
 .progress-map-car--compact {
-  width: 74px;
-  height: 38px;
+  width: 62px;
+  height: 31px;
 }
 
 .progress-map-car--suv {
-  width: 74px;
-  height: 40px;
+  width: 60px;
+  height: 33px;
 }
 
 .progress-map-car-paint {
@@ -5657,7 +5657,7 @@ textarea {
   display: block;
   background: var(--car-body);
   mix-blend-mode: color;
-  opacity: 0.78;
+  opacity: 0.96;
   pointer-events: none;
   mask: var(--vehicle-mask) center / contain no-repeat;
   -webkit-mask: var(--vehicle-mask) center / contain no-repeat;
@@ -5676,7 +5676,7 @@ textarea {
 }
 
 .progress-map-car--color-yellow .progress-map-car-paint {
-  opacity: 0.18;
+  opacity: 0.28;
 }
 
 .progress-map-car--color-black .progress-map-car-paint {
@@ -5692,6 +5692,69 @@ textarea {
 .progress-map-car--color-gray .progress-map-car-paint {
   mix-blend-mode: luminosity;
   opacity: 0.72;
+}
+
+.progress-map-car-glass {
+  position: absolute;
+  display: block;
+  pointer-events: none;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.82) 0 18%, transparent 19% 42%, rgba(255, 255, 255, 0.46) 43% 55%, transparent 56%),
+    linear-gradient(180deg, rgba(185, 236, 246, 0.92), rgba(96, 185, 212, 0.72));
+  border: 1px solid rgba(29, 83, 102, 0.45);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
+  mix-blend-mode: normal;
+  opacity: 0.86;
+}
+
+.progress-map-car--sedan .progress-map-car-glass--front {
+  top: 22%;
+  right: 14%;
+  width: 23%;
+  height: 50%;
+  border-radius: 36% 48% 48% 36%;
+  transform: skewX(-8deg);
+}
+
+.progress-map-car--sedan .progress-map-car-glass--rear {
+  top: 20%;
+  left: 12%;
+  width: 24%;
+  height: 52%;
+  border-radius: 44% 34% 34% 44%;
+  transform: skewX(-8deg);
+}
+
+.progress-map-car--compact .progress-map-car-glass--front {
+  top: 18%;
+  right: 16%;
+  width: 22%;
+  height: 58%;
+  border-radius: 32% 48% 48% 32%;
+}
+
+.progress-map-car--compact .progress-map-car-glass--rear {
+  top: 18%;
+  left: 14%;
+  width: 26%;
+  height: 58%;
+  border-radius: 46% 32% 32% 46%;
+}
+
+.progress-map-car--suv .progress-map-car-glass--front {
+  top: 18%;
+  right: 11%;
+  width: 21%;
+  height: 62%;
+  border-radius: 34% 48% 48% 34%;
+}
+
+.progress-map-car--suv .progress-map-car-glass--rear {
+  top: 18%;
+  left: 11%;
+  width: 24%;
+  height: 62%;
+  border-radius: 46% 32% 32% 46%;
 }
 
 .car-customize-button {

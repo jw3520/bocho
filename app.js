@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.07";
+const APP_VERSION = "26.05.18.08";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -844,6 +844,8 @@ function renderVehicleArtwork(type = vehicleState.type) {
   return `
     <img class="progress-map-car-image" src="${src}" alt="" loading="eager" decoding="async">
     <span class="progress-map-car-paint" aria-hidden="true"></span>
+    <span class="progress-map-car-glass progress-map-car-glass--front" aria-hidden="true"></span>
+    <span class="progress-map-car-glass progress-map-car-glass--rear" aria-hidden="true"></span>
   `;
 }
 
