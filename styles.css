@@ -5708,10 +5708,6 @@ textarea {
   content: "";
 }
 
-.progress-map-car--sedan .progress-map-car-paint::after {
-  content: none;
-}
-
 .progress-map-car-window-tint {
   display: none;
 }
@@ -5758,11 +5754,11 @@ textarea {
 
 .progress-map-car--compact .progress-map-car-window-tint {
   position: absolute;
-  top: 12%;
+  top: 17%;
   right: 29%;
   display: block;
   width: 22%;
-  height: 70%;
+  height: 66%;
   border: 1px solid rgba(29, 83, 102, 0.38);
   border-radius: 48% 28% 28% 48%;
   background:
@@ -5770,30 +5766,6 @@ textarea {
     linear-gradient(180deg, rgba(196, 239, 248, 0.94), rgba(96, 185, 212, 0.82));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
   pointer-events: none;
-}
-
-.progress-map-car--compact .progress-map-car-window-tint::before,
-.progress-map-car--compact .progress-map-car-window-tint::after {
-  position: absolute;
-  left: -262%;
-  display: block;
-  width: 244%;
-  height: 16%;
-  border: 1px solid rgba(29, 83, 102, 0.26);
-  border-radius: 999px;
-  background:
-    linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0 16%, transparent 17% 54%, rgba(255, 255, 255, 0.22) 55% 64%, transparent 65%),
-    linear-gradient(180deg, rgba(196, 239, 248, 0.9), rgba(96, 185, 212, 0.72));
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.56);
-  content: "";
-}
-
-.progress-map-car--compact .progress-map-car-window-tint::before {
-  top: -12%;
-}
-
-.progress-map-car--compact .progress-map-car-window-tint::after {
-  bottom: -12%;
 }
 
 .progress-map-car--suv {
