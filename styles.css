@@ -5619,7 +5619,7 @@ textarea {
   left: var(--car-x);
   z-index: 4;
   display: block;
-  width: 68px;
+  width: 72px;
   height: 38px;
   background: transparent;
   box-shadow: none;
@@ -5628,69 +5628,97 @@ textarea {
   transform-origin: center;
 }
 
-.progress-map-car-image {
+.progress-map-car-svg {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  transform-origin: center;
+  overflow: visible;
 }
 
 .progress-map-car--sedan {
-  width: 58px;
-  height: 50px;
+  width: 70px;
+  height: 37px;
 }
 
 .progress-map-car--compact {
-  width: 74px;
-  height: 34px;
+  width: 64px;
+  height: 36px;
 }
 
 .progress-map-car--suv {
-  width: 62px;
-  height: 42px;
+  width: 76px;
+  height: 41px;
 }
 
-.progress-map-car--suv .progress-map-car-image {
-  transform: rotate(90deg) scale(1.12);
+.vehicle-shadow {
+  fill: rgba(31, 35, 40, 0.18);
+  stroke: none;
 }
 
-.progress-map-car--color-black .progress-map-car-image {
-  filter: grayscale(1) brightness(0.46) contrast(1.35);
+.vehicle-tire {
+  fill: #20262d;
+  stroke: rgba(255, 255, 255, 0.22);
+  stroke-width: 1;
 }
 
-.progress-map-car--color-white .progress-map-car-image {
-  filter: grayscale(0.7) brightness(1.35) contrast(0.9);
+.vehicle-body {
+  fill: var(--car-body);
+  stroke: color-mix(in srgb, var(--car-body-dark) 74%, #1f2328);
+  stroke-width: 3;
+  filter: drop-shadow(0 5px 5px rgba(31, 35, 40, 0.2));
 }
 
-.progress-map-car--color-gray .progress-map-car-image {
-  filter: grayscale(1) brightness(0.9) contrast(1.05);
+.vehicle-hood,
+.vehicle-trunk {
+  fill: color-mix(in srgb, var(--car-body) 74%, #ffffff);
+  stroke: color-mix(in srgb, var(--car-body-dark) 52%, transparent);
+  stroke-width: 1.5;
 }
 
-.progress-map-car--color-green .progress-map-car-image {
-  filter: hue-rotate(88deg) saturate(1.25) brightness(0.98);
+.vehicle-roof {
+  fill: color-mix(in srgb, var(--car-cabin) 64%, #5e6872);
+  stroke: rgba(31, 35, 40, 0.28);
+  stroke-width: 1.6;
 }
 
-.progress-map-car--color-mint .progress-map-car-image {
-  filter: hue-rotate(128deg) saturate(1.1) brightness(1.05);
+.vehicle-glass {
+  fill: color-mix(in srgb, var(--car-cabin) 50%, #35424f);
+  stroke: rgba(31, 35, 40, 0.38);
+  stroke-width: 1.5;
 }
 
-.progress-map-car--color-blue .progress-map-car-image {
-  filter: hue-rotate(185deg) saturate(1.15) brightness(1.02);
+.vehicle-window-line,
+.vehicle-rail {
+  fill: none;
+  stroke: rgba(31, 35, 40, 0.24);
+  stroke-linecap: round;
+  stroke-width: 1.5;
 }
 
-.progress-map-car--color-red .progress-map-car-image {
-  filter: hue-rotate(-35deg) saturate(1.4) brightness(1.02);
+.vehicle-rail {
+  stroke-width: 2.4;
 }
 
-.progress-map-car--color-pink .progress-map-car-image {
-  filter: hue-rotate(-12deg) saturate(1.15) brightness(1.12);
+.vehicle-highlight {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.62);
+  stroke-linecap: round;
+  stroke-width: 3;
 }
 
-.progress-map-car--color-purple .progress-map-car-image {
-  filter: hue-rotate(235deg) saturate(1.05) brightness(1.06);
+.vehicle-headlight,
+.vehicle-tail-light {
+  fill: none;
+  stroke-linecap: round;
+  stroke-width: 4;
+}
+
+.vehicle-headlight {
+  stroke: rgba(255, 248, 202, 0.96);
+}
+
+.vehicle-tail-light {
+  stroke: rgba(255, 93, 93, 0.92);
 }
 
 .car-customize-button {
