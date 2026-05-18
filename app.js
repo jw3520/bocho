@@ -7,7 +7,7 @@ const LAST_UPDATE_CHECK_STORAGE_KEY = "BOCHO_LAST_UPDATE_CHECK";
 const UPDATE_BANNER_TOKEN_STORAGE_KEY = "BOCHO_UPDATE_TOKEN";
 const UPDATE_BANNER_DISMISSED_STORAGE_KEY = "BOCHO_UPDATE_BANNER_DISMISSED";
 const VEHICLE_STORAGE_KEY = "jeonwoon-bocho-vehicle-v1";
-const APP_VERSION = "26.05.18.06";
+const APP_VERSION = "26.05.18.07";
 const UPDATE_CHECK_ASSETS = ["/index.html", "/app.js", "/styles.css", "/service-worker.js"];
 const VEHICLE_COLORS = [
   { id: "yellow", label: "기본", body: "#f6c54b", bodyDark: "#c88e20", cabin: "#fff1a8" },
@@ -26,6 +26,11 @@ const VEHICLE_TYPES = [
   { id: "compact", label: "경차" },
   { id: "suv", label: "SUV" },
 ];
+const VEHICLE_IMAGES = {
+  sedan: "/public/ref/vehicle-sedan.png",
+  compact: "/public/ref/vehicle-compact.png",
+  suv: "/public/ref/vehicle-suv.png",
+};
 const curriculum = [
   {
     id: "day1",
@@ -829,63 +834,16 @@ function getVehicleClassName(state = vehicleState) {
   return `progress-map-car progress-map-car--${state.type} progress-map-car--color-${state.color}`;
 }
 
-function renderVehicleArtwork(type = vehicleState.type) {
-  const sedan = `
-    <g class="vehicle-art vehicle-art--sedan">
-      <ellipse class="vehicle-shadow" cx="90" cy="86" rx="61" ry="7"></ellipse>
-      <path class="vehicle-tire" d="M36 17h13c4 0 7 3 7 7v12c0 4-3 7-7 7H36zM36 53h13c4 0 7 3 7 7v12c0 4-3 7-7 7H36zM128 17h14v26h-14c-4 0-7-3-7-7V24c0-4 3-7 7-7ZM128 53h14v26h-14c-4 0-7-3-7-7V60c0-4 3-7 7-7Z"></path>
-      <path class="vehicle-body" d="M24 48c0-17 9-30 26-36 17-6 61-6 79 0 16 6 27 19 30 36-3 17-14 30-30 36-18 6-62 6-79 0-17-6-26-19-26-36Z"></path>
-      <path class="vehicle-hood" d="M114 20h15c14 5 23 14 27 28-4 14-13 23-27 28h-15c6-8 9-17 9-28s-3-20-9-28Z"></path>
-      <path class="vehicle-trunk" d="M29 48c5-13 13-22 25-27h15c-5 8-8 17-8 27s3 19 8 27H54c-12-5-20-14-25-27Z"></path>
-      <path class="vehicle-glass vehicle-glass--rear" d="M64 25h24v46H64c-7-7-10-15-10-23s3-16 10-23Z"></path>
-      <path class="vehicle-roof" d="M86 21h28c8 8 12 17 12 27s-4 19-12 27H86c-8-8-12-17-12-27s4-19 12-27Z"></path>
-      <path class="vehicle-glass vehicle-glass--front" d="M113 25h17c8 6 14 14 17 23-3 9-9 17-17 23h-17c5-7 8-15 8-23s-3-16-8-23Z"></path>
-      <path class="vehicle-window-line" d="M91 24v48M115 26c6 6 9 13 9 22s-3 16-9 22"></path>
-      <path class="vehicle-highlight" d="M41 25c20-9 54-11 79-6M40 70c22 9 58 10 84 4"></path>
-      <path class="vehicle-headlight" d="M153 38h8M153 58h8"></path>
-      <path class="vehicle-tail-light" d="M20 38h7M20 58h7"></path>
-    </g>
-  `;
-  const compact = `
-    <g class="vehicle-art vehicle-art--compact">
-      <ellipse class="vehicle-shadow" cx="90" cy="86" rx="51" ry="7"></ellipse>
-      <path class="vehicle-tire" d="M42 18h12c4 0 7 3 7 7v11c0 4-3 7-7 7H42zM42 53h12c4 0 7 3 7 7v11c0 4-3 7-7 7H42zM122 18h12v25h-12c-4 0-7-3-7-7V25c0-4 3-7 7-7ZM122 53h12v25h-12c-4 0-7-3-7-7V60c0-4 3-7 7-7Z"></path>
-      <path class="vehicle-body" d="M33 48c0-18 10-30 29-36 14-5 42-5 56 0 18 6 29 18 29 36s-11 30-29 36c-14 5-42 5-56 0-19-6-29-18-29-36Z"></path>
-      <path class="vehicle-hood" d="M111 22h8c13 4 22 13 25 26-3 13-12 22-25 26h-8c5-8 7-17 7-26s-2-18-7-26Z"></path>
-      <path class="vehicle-trunk" d="M37 48c5-12 13-20 25-25h8c-5 7-7 16-7 25s2 18 7 25h-8c-12-5-20-13-25-25Z"></path>
-      <path class="vehicle-glass vehicle-glass--rear" d="M65 27h22v42H65c-6-6-9-13-9-21s3-15 9-21Z"></path>
-      <path class="vehicle-roof" d="M85 23h27c7 7 10 15 10 25s-3 18-10 25H85c-7-7-10-15-10-25s3-18 10-25Z"></path>
-      <path class="vehicle-glass vehicle-glass--front" d="M111 27h9c8 5 14 13 17 21-3 8-9 16-17 21h-9c4-6 7-13 7-21s-3-15-7-21Z"></path>
-      <path class="vehicle-window-line" d="M91 26v44M112 29c5 5 7 12 7 19s-2 14-7 19"></path>
-      <path class="vehicle-highlight" d="M50 24c19-8 47-9 69-5M50 70c19 8 48 9 69 4"></path>
-      <path class="vehicle-headlight" d="M143 39h7M143 57h7"></path>
-      <path class="vehicle-tail-light" d="M29 39h7M29 57h7"></path>
-    </g>
-  `;
-  const suv = `
-    <g class="vehicle-art vehicle-art--suv">
-      <ellipse class="vehicle-shadow" cx="90" cy="86" rx="64" ry="8"></ellipse>
-      <path class="vehicle-tire" d="M28 15h15c4 0 7 3 7 7v15c0 4-3 7-7 7H28zM28 52h15c4 0 7 3 7 7v15c0 4-3 7-7 7H28zM137 15h15v29h-15c-4 0-7-3-7-7V22c0-4 3-7 7-7ZM137 52h15v29h-15c-4 0-7-3-7-7V59c0-4 3-7 7-7Z"></path>
-      <path class="vehicle-body" d="M20 48c0-21 10-34 30-40h80c20 6 30 19 30 40s-10 34-30 40H50C30 82 20 69 20 48Z"></path>
-      <path class="vehicle-hood" d="M118 17h13c15 5 24 15 27 31-3 16-12 26-27 31h-13c6-9 9-19 9-31s-3-22-9-31Z"></path>
-      <path class="vehicle-trunk" d="M24 48c5-15 14-25 27-30h17c-6 9-9 19-9 30s3 21 9 30H51c-13-5-22-15-27-30Z"></path>
-      <path class="vehicle-glass vehicle-glass--rear" d="M64 22h28v52H64c-8-8-12-17-12-26s4-18 12-26Z"></path>
-      <path class="vehicle-roof" d="M91 18h32c9 9 13 19 13 30s-4 21-13 30H91c-9-9-13-19-13-30s4-21 13-30Z"></path>
-      <path class="vehicle-glass vehicle-glass--front" d="M122 22h11c10 7 17 16 20 26-3 10-10 19-20 26h-11c6-8 9-17 9-26s-3-18-9-26Z"></path>
-      <path class="vehicle-rail" d="M54 14h70M54 82h70"></path>
-      <path class="vehicle-window-line" d="M96 21v54M123 25c7 7 10 14 10 23s-3 16-10 23"></path>
-      <path class="vehicle-highlight" d="M39 22c24-10 64-12 92-5M39 74c24 10 64 12 92 5"></path>
-      <path class="vehicle-headlight" d="M157 37h8M157 59h8"></path>
-      <path class="vehicle-tail-light" d="M14 37h8M14 59h8"></path>
-    </g>
-  `;
+function getVehicleImageSrc(type = vehicleState.type) {
+  return VEHICLE_IMAGES[type] || VEHICLE_IMAGES.sedan;
+}
 
-  const artwork = { sedan, compact, suv }[type] || sedan;
+function renderVehicleArtwork(type = vehicleState.type) {
+  const src = getVehicleImageSrc(type);
 
   return `
-    <svg class="progress-map-car-svg" viewBox="0 0 180 96" focusable="false">
-      ${artwork}
-    </svg>
+    <img class="progress-map-car-image" src="${src}" alt="" loading="eager" decoding="async">
+    <span class="progress-map-car-paint" aria-hidden="true"></span>
   `;
 }
 
